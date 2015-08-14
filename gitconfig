@@ -1,0 +1,36 @@
+[user]
+	name = Adam Miller
+	email = admiller@redhat.com
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = auto
+
+[merge]
+  summary=true
+  tool = vimdiff
+[gc]
+  auto=1
+[push]
+  default = simple
+[alias]
+  hist = log --all --pretty=format:\"%h %cd %s (%an)\"
+[alias]
+  hist = log --all --pretty=format:\"%h %cd %s (%an)\"
+  ci = commit -v
+  ch = cherry-pick -x
+  co = checkout
+  br = branch -v
+  st = status
+  tag = tag -a
+  log1 = log --oneline
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  diffc = diff --cached
+  diffst = diff --stat
+
+[branch]
+	autosetuprebase = always
