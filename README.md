@@ -16,6 +16,7 @@ Create symlinks so apps can find the dotfiles but they will update on a `git pul
     ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
     ln -s ~/dotfiles/gitconfig ~/.gitconfig
     ln -s ~/dotfiles/inputrc ~/.inputrc
+    ln -s ~/dotfiles/bashrc ~/.bashrc
 
 ## Notes
 
