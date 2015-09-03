@@ -158,6 +158,7 @@ __my_vcs_prompt () {
 # 'set show-mode-in-prompt on' (requires bash 4.3+ and readline 6.3+)
 #### YES I KNOW THIS IS "SLOWER" ... shhhhh
 PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;33m${USER}\e[0;34m@\e[0;33m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+export PROMPT_COMMAND
 
 #PS1="$NORMAL[$S_RED\t$NORMAL|$S_ORANGE\u$S_BLUE@$S_ORANGE\h$NORMAL(\$?)$S_RED\$(__my_vcs_prompt) $CYAN\w$NORMAL]\$ "
 PS1="\$ "
