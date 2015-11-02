@@ -174,7 +174,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     output eDP1
-	position top
+    position top
     status_command i3status
 }
 
@@ -185,7 +185,7 @@ bar {
     output DP2-2
     output HDMI1
     output HDMI2
-	position top
+    position top
     tray_output none
 }
 
