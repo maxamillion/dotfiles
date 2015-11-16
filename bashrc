@@ -51,10 +51,10 @@ pullupstream () {
     pullup_startbranch=$(git describe --contains --all HEAD)
     git checkout $1
     git fetch upstream
-    git fetch upstream --tags
+    #git fetch upstream --tags
     git merge upstream/$1
     git push origin $1
-    git push origin --tags
+    #git push origin --tags
     git checkout ${pullup_startbranch}
   fi
 }

@@ -224,3 +224,6 @@ exec dunst
 
 # Because I'm lazy and like SELinux notifications
 exec seapplet
+
+# I'm too lazy to jack with bluetoothctl all the time
+exec blueman-applet
