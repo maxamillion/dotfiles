@@ -34,6 +34,8 @@ unset PROMPT_COMMAND
 
 alias fedpkg="fedpkg --user=maxamillion"
 
+alias fek="fedora-easy-karma --fas-username=maxamillion"
+
 alias prettyjson="python -mjson.tool"
 
 alias ansidev='export ANSIBLE_LIBRARY=${HOME}/src/dev/ansible-modules-core:${HOME}/src/dev/ansible-modules-extras'
