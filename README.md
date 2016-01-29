@@ -20,6 +20,6 @@ Create symlinks so apps can find the dotfiles but they will update on a `git pul
 
 ## Notes
 
-This does not cover [vim](http://www.vim.org/), I use [spf13](https://github.com/spf13/)'s 
-[vim.spf13](http://vim.spf13.com/) config distro because it's really nice, it does everything
-I want, is really easy to use and I'm really lazy.
+This does not cover [vim](http://www.vim.org/), I use the
+[vimified](https://github.com/zaiste/vimified) config distro because it's simple
+, it does everything I want, is easy to use and, I'm really lazy.
