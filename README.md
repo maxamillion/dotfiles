@@ -22,4 +22,4 @@ Create symlinks so apps can find the dotfiles but they will update on a `git pul
 
 This does not cover [vim](http://www.vim.org/), I use the
 [vimified](https://github.com/zaiste/vimified) config distro because it's simple
-, it does everything I want, is easy to use and, I'm really lazy.
+, it does everything I want, is easy to use, and I'm really lazy.
