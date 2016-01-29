@@ -86,7 +86,7 @@ nukeapps () {
       need_proxy=0
       ;;
     *)
-      printf "ERROR: unknown env $1\n"   
+      printf "ERROR: unknown env $1\n"
       ;;
   esac
 
@@ -97,14 +97,14 @@ nukeapps () {
   rhc_cmd="rhc domain show -l $osuser -p $ospw --config=$config"
   if [[ $(rpm --eval 0%{?rhel}%{?fedora}) -lt 7 ]]; then
     apps=( $(scl enable ruby193 "$rhc_cmd" | awk '/^  t/{print $1}') )
-  else 
+  else
     apps=( $( $rhc_cmd | awk '/^  t/{print $1}') )
   fi
 
   for app in ${apps[@]}
   do
     if [[ $(rpm --eval 0%{?rhel}%{?fedora}) -lt 7 ]]; then
-      scl enable ruby193 "rhc app-delete $app -l $osuser -p $ospw --config=$config --confirm" 
+      scl enable ruby193 "rhc app-delete $app -l $osuser -p $ospw --config=$config --confirm"
     else
       rhc app-delete $app -l $osuser -p $ospw --config=$config --confirm
     fi
@@ -117,7 +117,7 @@ gen_passwd () {
 
   if [[ -z $1 ]]; then
     tr -cd '[:graph:]' < /dev/urandom | fold -w30 | head -n1
-  else 
+  else
     tr -cd '[:graph:]' < /dev/urandom | fold -w$1 | head -n1
   fi
 
@@ -146,11 +146,11 @@ S_WHITE='\[\e[0;37m\]'
 
 
 ### UGLY HACK
-# This works and the vcs prompt from git bash completion did weird things to 
+# This works and the vcs prompt from git bash completion did weird things to
 # my PS1 ... meh
 __my_vcs_prompt () {
-  if [ -x /usr/bin/git ]; then 
-    if git branch &> /dev/null; then 
+  if [ -x /usr/bin/git ]; then
+    if git branch &> /dev/null; then
       printf "($(grep '*' <(git branch) | sed s/\*.//))";
     fi
   fi
@@ -160,16 +160,20 @@ __my_vcs_prompt () {
 # 'set show-mode-in-prompt on' (requires bash 4.3+ and readline 6.3+)
 #### YES I KNOW THIS IS "SLOWER" ... shhhhh
 if [[ $EUID -ne 0 ]]; then
-    PROMPT_COMMAND='printf "[\e[0;35m$(date +%H:%M:%S)\e[0;39m|\e[0;36m${USER}\e[0;34m@\e[0;36m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[0;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+    # New prompt - remote colorscheme
+    #PROMPT_COMMAND='printf "[\e[0;35m$(date +%H:%M:%S)\e[0;39m|\e[0;36m${USER}\e[0;34m@\e[0;36m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[0;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+
+    # New prompt - local colorscheme
+    PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;33m${USER}\e[0;34m@\e[0;33m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
 else
     PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;31m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
 fi
 export PROMPT_COMMAND
 
-# OLD PS1
+# OLD PS1 - local colorscheme
 ## PS1="$NORMAL[$S_RED\t$NORMAL|$S_ORANGE\u$S_BLUE@$S_ORANGE\h$NORMAL(\$?)$S_RED\$(__my_vcs_prompt) $CYAN\w$NORMAL]\$ "
 
-# OLD PS1 - new color theme
+# OLD PS1 - remote colorscheme
 #PS1="$NORMAL[$S_MAGENTA\t$NORMAL|$S_CYAN\u$S_BLUE@$S_CYAN\h$NORMAL(\$?)$S_RED\$(__my_vcs_prompt) $S_CYAN\w$NORMAL]\n\$ "
 
 PS1="\$ "
