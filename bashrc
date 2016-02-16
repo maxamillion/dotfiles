@@ -6,7 +6,9 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # Source private bash bits I don't want on github dotfiles repo
-. ~/.bashrc_private
+if [ -f ~/.bashrc_private ]; then
+    . ~/.bashrc_private
+fi
 
 # various reasons
 if [[ -n "$TMUX" ]]; then
@@ -160,11 +162,15 @@ __my_vcs_prompt () {
 # 'set show-mode-in-prompt on' (requires bash 4.3+ and readline 6.3+)
 #### YES I KNOW THIS IS "SLOWER" ... shhhhh
 if [[ $EUID -ne 0 ]]; then
-    # New prompt - remote colorscheme
-    #PROMPT_COMMAND='printf "[\e[0;35m$(date +%H:%M:%S)\e[0;39m|\e[0;36m${USER}\e[0;34m@\e[0;36m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[0;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
 
-    # New prompt - local colorscheme
-    PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;33m${USER}\e[0;34m@\e[0;33m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+    # Set laptop colorscheme conditionally
+    if [[ $HOSTNAME == "pseudogen" ]]; then
+        # New prompt - local colorscheme
+        PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;33m${USER}\e[0;34m@\e[0;33m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+    else
+        # New prompt - remote colorscheme
+        PROMPT_COMMAND='printf "[\e[0;35m$(date +%H:%M:%S)\e[0;39m|\e[0;36m${USER}\e[0;34m@\e[0;36m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[0;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+    fi
 else
     PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;31m${HOSTNAME}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
 fi
