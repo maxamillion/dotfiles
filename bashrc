@@ -16,6 +16,9 @@ if [[ -n "$TMUX" ]]; then
   alias man='TERM=xterm man'
   alias less='TERM=xterm less'
 fi
+if [[ -n "$STY" ]]; then
+  export TERM=screen-256color
+fi
 
 # vi mode because I'm not a fucking heathen
 set -o vi
