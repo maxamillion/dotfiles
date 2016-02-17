@@ -34,4 +34,8 @@ into `~/vimified/`.
 
 
 ## Notes
-
+This repository is more or less meant to be used along with my [workstation
+setup](https://github.com/maxamillion/ansible-maxamillion-workstation)
+which is configured using [Ansible](https://www.ansible.com/), but if there is
+any content here that others might find useful in it's own right then I'm happy
+to have shared. :)
