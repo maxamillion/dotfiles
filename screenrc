@@ -1,0 +1,12 @@
+# C-a :source .screenrc
+#
+
+defscrollback 10000
+
+hardstatus alwayslastline
+hardstatus string '%{= kw}[ %{= kg}%H%{= kw} ][%= %{= kw}%?%-Lw%?%{= kW}%n*%f %t%?%?%{= kw}%?%+Lw%?%?%= ][ %{r}%l%{w} ]%{w}[%{r} %m/%d/%y %C %A %{w}]%{w}'
+
+# Add cool line to make copying to x clipboard possible.
+# This binds C-a b to copy screen's copy buffer to the system clipboard.
+#### NOTE: This requires xsel package 
+bind b eval "writebuf" "exec sh -c 'xsel -bi </tmp/screen-exchange'"

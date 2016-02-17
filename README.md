@@ -14,6 +14,7 @@ Create symlinks so apps can find the dotfiles but they will update on a `git pul
     ln -s ~/dotfiles/i3-config ~/.config/i3/config
     ln -s ~/dotfiles/i3status-config ~/.config/i3status/config
     ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
+    ln -s ~/dotfiles/screenrc ~/.screenrc
     ln -s ~/dotfiles/gitconfig ~/.gitconfig
     ln -s ~/dotfiles/inputrc ~/.inputrc
     ln -s ~/dotfiles/bashrc ~/.bashrc
