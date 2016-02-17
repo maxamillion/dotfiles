@@ -15,7 +15,8 @@ general {
 order += "disk /"
 order += "disk /home/"
 order += "run_watch DHCP"
-order += "run_watch VPN"
+#order += "run_watch VPN"
+order += "path_exists VPN"
 order += "wireless wlp3s0"
 order += "ethernet enp0s25"
 order += "battery 0"
@@ -46,8 +47,12 @@ run_watch DHCP {
         pidfile = "/var/run/dhclient*.pid"
 }
 
-run_watch VPN {
-        pidfile = "/var/run/NetworkManager/nm-vpnc*.pid"
+#run_watch VPN {
+#        pidfile = "/var/run/NetworkManager/nm-vpnc*.pid"
+#}
+
+path_exists VPN {
+        path = "/proc/sys/net/ipv4/conf/redhat0/"
 }
 
 tztime local {
