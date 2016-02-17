@@ -49,6 +49,11 @@ if rpm -q vim-common &> /dev/null; then
     alias vless=$(rpm -ql vim-common | grep less.sh)
 fi
 
+yaml2json() {
+  python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < $1
+}
+
+
 ansible_git_repos=( "ansible" "ansible-modules-core" "ansible-modules-extras" )
 
 pullupstream () {
