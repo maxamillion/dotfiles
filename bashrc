@@ -187,7 +187,7 @@ else
         PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;31m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
     else
         # New prompt - local colorscheme
-        PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;36m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+        PROMPT_COMMAND='printf "[\e[0;35m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;36m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
     fi
 fi
 export PROMPT_COMMAND
