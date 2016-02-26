@@ -43,18 +43,34 @@ alias fek="fedora-easy-karma --fas-username=maxamillion"
 
 alias prettyjson="python -mjson.tool"
 
-alias ansidev='export ANSIBLE_LIBRARY=${HOME}/src/dev/ansible-modules-core:${HOME}/src/dev/ansible-modules-extras'
 
 if rpm -q vim-common &> /dev/null; then
     alias vless=$(rpm -ql vim-common | grep less.sh)
 fi
 
+
+###############################################################################
+# BEGIN: Misc functions
 yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < $1
 }
 
+gen_passwd () {
+    if [[ -z $1 ]]; then
+        tr -cd '[:graph:]' < /dev/urandom | fold -w30 | head -n1
+    else
+        tr -cd '[:graph:]' < /dev/urandom | fold -w$1 | head -n1
+    fi
+}
+# END: Misc functions
+###############################################################################
 
+
+
+###############################################################################
+# BEGIN: Git helpers
 ansible_git_repos=( "ansible" "ansible-modules-core" "ansible-modules-extras" )
+alias ansidev='export ANSIBLE_LIBRARY=${HOME}/src/dev/ansible-modules-core:${HOME}/src/dev/ansible-modules-extras'
 
 pullupstream () {
     if [[ -z "$1" ]]; then
@@ -81,14 +97,42 @@ pullansible() {
     done
 }
 
-gen_passwd () {
-    if [[ -z $1 ]]; then
-        tr -cd '[:graph:]' < /dev/urandom | fold -w30 | head -n1
-    else
-        tr -cd '[:graph:]' < /dev/urandom | fold -w$1 | head -n1
-    fi
+#
+# pretty_git_log and show_git_head are both shamelessly lifted from threebean's
+# lightsaber repo:
+#   https://github.com/ralphbean/lightsaber
+_hash="%C(yellow)%h%Creset"
+_relative_time="%Cgreen(%ar)%Creset"
+_author="%C(bold blue)<%an>%Creset"
+_refs="%C(red)%d%Creset"
+_subject="%s"
+
+_format="${_hash}}${_relative_time}}${_author}}${_refs} ${_subject}"
+
+show_git_head() {
+    pretty_git_log -1
+    git show -p --pretty="tformat:"
 }
 
+pretty_git_log() {
+    git log --graph --abbrev-commit --date=relative --pretty="tformat:${_format}" $* |
+        # Repalce (2 years ago) with (2 years)
+        #sed -Ee 's/(^[^<]*) ago)/\1)/' |
+        # Replace (2 years, 5 months) with (2 years)
+        #sed -Ee 's/(^[^<]*), [[:digit:]]+ .*months?)/\1)/' |
+        # Line columns up based on } delimiter
+        column -s '}' -t |
+        # Page only if we need to
+        less -FXRS
+}
+
+alias pgl="pretty_git_log"
+# END Git helpers
+###############################################################################
+
+
+###############################################################################
+# BEGIN: PROMPT and PS1 stuff
 RED='\[\e[0;31m\]'
 BRIGHTRED='\[\e[1;31m\]'
 GREEN='\[\e[1;32m\]'
@@ -156,3 +200,6 @@ export PROMPT_COMMAND
 
 PS1="\$ "
 export PS1
+
+# END: PROMPT and PS1 stuff
+###############################################################################
