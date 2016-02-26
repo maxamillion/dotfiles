@@ -2,7 +2,7 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+    . /etc/bashrc
 fi
 
 # Source private bash bits I don't want on github dotfiles repo
@@ -12,12 +12,12 @@ fi
 
 # various reasons
 if [[ -n "$TMUX" ]]; then
-  export TERM=screen-256color
-  alias man='TERM=xterm man'
-  alias less='TERM=xterm less'
+    export TERM=screen-256color
+    alias man='TERM=xterm man'
+    alias less='TERM=xterm less'
 fi
 if [[ -n "$STY" ]]; then
-  export TERM=screen-256color
+    export TERM=screen-256color
 fi
 
 # vi mode because I'm not a fucking heathen
@@ -50,25 +50,25 @@ if rpm -q vim-common &> /dev/null; then
 fi
 
 yaml2json() {
-  python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < $1
+    python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < $1
 }
 
 
 ansible_git_repos=( "ansible" "ansible-modules-core" "ansible-modules-extras" )
 
 pullupstream () {
-  if [[ -z "$1" ]]; then
-    printf "Error: must specify a branch name (e.g. - master, devel)\n"
-  else
-    pullup_startbranch=$(git describe --contains --all HEAD)
-    git checkout $1
-    git fetch upstream
-    #git fetch upstream --tags
-    git merge upstream/$1
-    git push origin $1
-    #git push origin --tags
-    git checkout ${pullup_startbranch}
-  fi
+    if [[ -z "$1" ]]; then
+        printf "Error: must specify a branch name (e.g. - master, devel)\n"
+    else
+        pullup_startbranch=$(git describe --contains --all HEAD)
+        git checkout $1
+        git fetch upstream
+        #git fetch upstream --tags
+        git merge upstream/$1
+        git push origin $1
+        #git push origin --tags
+        git checkout ${pullup_startbranch}
+    fi
 }
 
 pullansible() {
@@ -81,56 +81,12 @@ pullansible() {
     done
 }
 
-nukeapps () {
-  case $1 in
-    "int")
-      config="~/.openshift/express-int.conf"
-      need_proxy=1
-      ;;
-    "stg")
-      config="~/.openshift/express-stg.conf"
-      need_proxy=1
-      ;;
-    "prod")
-      config="~/.openshift/express.conf"
-      need_proxy=0
-      ;;
-    *)
-      printf "ERROR: unknown env $1\n"
-      ;;
-  esac
-
-  if [[ "$need_proxy" -eq "1" ]]; then
-    proxy
-  fi
-
-  rhc_cmd="rhc domain show -l $osuser -p $ospw --config=$config"
-  if [[ $(rpm --eval 0%{?rhel}%{?fedora}) -lt 7 ]]; then
-    apps=( $(scl enable ruby193 "$rhc_cmd" | awk '/^  t/{print $1}') )
-  else
-    apps=( $( $rhc_cmd | awk '/^  t/{print $1}') )
-  fi
-
-  for app in ${apps[@]}
-  do
-    if [[ $(rpm --eval 0%{?rhel}%{?fedora}) -lt 7 ]]; then
-      scl enable ruby193 "rhc app-delete $app -l $osuser -p $ospw --config=$config --confirm"
-    else
-      rhc app-delete $app -l $osuser -p $ospw --config=$config --confirm
-    fi
-  done
-
-  unproxy
-}
-
 gen_passwd () {
-
-  if [[ -z $1 ]]; then
-    tr -cd '[:graph:]' < /dev/urandom | fold -w30 | head -n1
-  else
-    tr -cd '[:graph:]' < /dev/urandom | fold -w$1 | head -n1
-  fi
-
+    if [[ -z $1 ]]; then
+        tr -cd '[:graph:]' < /dev/urandom | fold -w30 | head -n1
+    else
+        tr -cd '[:graph:]' < /dev/urandom | fold -w$1 | head -n1
+    fi
 }
 
 RED='\[\e[0;31m\]'
@@ -159,11 +115,11 @@ S_WHITE='\[\e[0;37m\]'
 # This works and the vcs prompt from git bash completion did weird things to
 # my PS1 ... meh
 __my_vcs_prompt () {
-  if [ -x /usr/bin/git ]; then
-    if git branch &> /dev/null; then
-      printf "($(grep '*' <(git branch) | sed s/\*.//))";
+    if [ -x /usr/bin/git ]; then
+        if git branch &> /dev/null; then
+            printf "($(grep '*' <(git branch) | sed s/\*.//))";
+        fi
     fi
-  fi
 }
 
 # Gaming PROMPT_COMMAND and PS1 for multi-line "prompt" with bash/readline
