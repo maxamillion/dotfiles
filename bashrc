@@ -109,11 +109,6 @@ _subject="%s"
 
 _format="${_hash}}${_relative_time}}${_author}}${_refs} ${_subject}"
 
-show_git_head() {
-    pretty_git_log -1
-    git show -p --pretty="tformat:"
-}
-
 pretty_git_log() {
     git log --graph --abbrev-commit --date=relative --pretty="tformat:${_format}" $* |
         # Repalce (2 years ago) with (2 years)
@@ -126,7 +121,14 @@ pretty_git_log() {
         less -FXRS
 }
 
+show_git_head() {
+    pretty_git_log -1
+    git show -p --pretty="tformat:"
+}
+
 alias pgl="pretty_git_log"
+alias sgh="show_git_head"
+alias sgl='git show --pretty="format:" --name-only'
 # END Git helpers
 ###############################################################################
 
