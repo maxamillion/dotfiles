@@ -126,9 +126,10 @@ show_git_head() {
     git show -p --pretty="tformat:"
 }
 
-alias pgl="pretty_git_log"
-alias sgh="show_git_head"
-alias sgl='git show --pretty="format:" --name-only'
+alias gg="git grep -n"
+alias gl="pretty_git_log"
+alias gh="show_git_head"
+alias gs='git show --pretty="format:" --name-only'
 # END Git helpers
 ###############################################################################
 
