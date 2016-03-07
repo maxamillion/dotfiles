@@ -126,10 +126,21 @@ show_git_head() {
     git show -p --pretty="tformat:"
 }
 
+alias g="git status -sb"
+alias ga="git add"
+alias gb="git branch -v"
+alias gc="git commit"
+alias gca="git commit --amend"
+alias gcm="git commit -m"
+alias gd="git diff"
+alias gf="git fetch"
+alias gfa="git fetch --all"
 alias gg="git grep -n"
 alias gl="pretty_git_log"
 alias gh="show_git_head"
 alias gs='git show --pretty="format:" --name-only'
+alias gp="git push"
+alias gsl="git stash list"
 # END Git helpers
 ###############################################################################
 
