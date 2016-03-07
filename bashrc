@@ -139,7 +139,8 @@ alias gg="git grep -n"
 alias gl="pretty_git_log"
 alias gh="show_git_head"
 alias gs='git show --pretty="format:" --name-only'
-alias gp="git push"
+alias gph="git push"
+alias gpl="git pull"
 alias gsl="git stash list"
 # END Git helpers
 ###############################################################################
