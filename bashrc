@@ -10,6 +10,12 @@ if [ -f ~/.bashrc_private ]; then
     . ~/.bashrc_private
 fi
 
+# Source bash-completions if available
+#   Yes, I know technically this should go in ~/.bash_profile but shhhhh
+if [ -f /etc/profile.d/bash_completion.sh ]; then
+    . /etc/profile.d/bash_completion.sh
+fi
+
 # various reasons
 if [[ -n "$TMUX" ]]; then
     export TERM=screen-256color
@@ -148,6 +154,7 @@ alias gsl="git stash list"
 
 # setup bash completion for the alias (if available)
 if [[ -f /usr/share/bash-completion/completions/git ]]; then
+    . /usr/share/bash-completion/completions/git
     __git_complete g    _git_main
     __git_complete ga   _git_add
     __git_complete gb   _git_branch
