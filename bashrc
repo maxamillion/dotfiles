@@ -126,7 +126,8 @@ show_git_head() {
     git show -p --pretty="tformat:"
 }
 
-alias g="git status -sb"
+# Various aliases
+alias g="git"
 alias ga="git add"
 alias gb="git branch -v"
 alias gc="git commit -s"
@@ -139,10 +140,31 @@ alias gfa="git fetch --all"
 alias gg="git grep -n"
 alias gl="pretty_git_log"
 alias gh="show_git_head"
-alias gs='git show --pretty="format:" --name-only'
 alias gph="git push"
 alias gpl="git pull"
+alias gs="git status -sb"
+alias gsh='git show --pretty="format:" --name-only'
 alias gsl="git stash list"
+
+# setup bash completion for the alias (if available)
+if [[ -f /usr/share/bash-completion/completions/git ]]; then
+    __git_complete g    _git_main
+    __git_complete ga   _git_add
+    __git_complete gb   _git_branch
+    __git_complete gc   _git_commit
+    __git_complete gca  _git_commit
+    __git_complete gcm  _git_commit
+    __git_complete gco  _git_checkout
+    __git_complete gd   _git_diff
+    __git_complete gf   _git_fetch
+    __git_complete gfa  _git_fetch
+    __git_complete gg   _git_grep
+    __git_complete gph  _git_push
+    __git_complete gpl  _git_pull
+    __git_complete gs   _git_status
+    __git_complete gsl  _git_stash
+fi
+
 # END Git helpers
 ###############################################################################
 
