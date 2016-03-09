@@ -129,7 +129,7 @@ show_git_head() {
 alias g="git status -sb"
 alias ga="git add"
 alias gb="git branch -v"
-alias gc="git commit"
+alias gc="git commit -s"
 alias gca="git commit --amend"
 alias gcm="git commit -m"
 alias gco="git checkout"
