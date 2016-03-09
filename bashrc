@@ -155,7 +155,7 @@ alias gsl="git stash list"
 # setup bash completion for the alias (if available)
 if [[ -f /usr/share/bash-completion/completions/git ]]; then
     . /usr/share/bash-completion/completions/git
-    __git_complete g    _git_main
+    __git_complete g    __git_main
     __git_complete ga   _git_add
     __git_complete gb   _git_branch
     __git_complete gc   _git_commit
