@@ -143,6 +143,8 @@ alias gco="git checkout"
 alias gd="git diff"
 alias gf="git fetch"
 alias gfa="git fetch --all"
+alias gfp="git format-patch"
+alias gfph="git format-patch HEAD~1"
 alias gg="git grep -n"
 alias gl="pretty_git_log"
 alias gh="show_git_head"
@@ -165,6 +167,7 @@ if [[ -f /usr/share/bash-completion/completions/git ]]; then
     __git_complete gd   _git_diff
     __git_complete gf   _git_fetch
     __git_complete gfa  _git_fetch
+    __git_complete gfp  _git_format_patch
     __git_complete gg   _git_grep
     __git_complete gph  _git_push
     __git_complete gpl  _git_pull
