@@ -19,3 +19,6 @@ autocmd FileType yaml setlocal expandtab sw=2 sts=2 ts=4
 
 " Set ruby to be 2 space tab width
 autocmd FileType ruby setlocal expandtab sw=2 sts=2 ts=4
+
+" pymode rope is stupid slow, just disable it
+let g:pymode_rope=0
