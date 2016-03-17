@@ -1,6 +1,7 @@
 # dotfiles
 Small handful of my dotfiles
 
+
 ## Usage
 
 Clone this repo
@@ -19,6 +20,7 @@ Create symlinks so apps can find the dotfiles but they will update on a `git pul
     ln -s ~/dotfiles/inputrc ~/.inputrc
     ln -s ~/dotfiles/bashrc ~/.bashrc
 
+
 ## Vim
 For [vim](http://www.vim.org/), I use the
 [vimified](https://github.com/zaiste/vimified)
@@ -26,12 +28,18 @@ config distro because it's simple, it does everything I want, is easy to use,
 and I'm really lazy.
 
 My modifications to the default vimified setup are are contained in the
-`local.vimrc` and `after.vimrc` files in this repository. After you have
-installed [vimified](https://github.com/zaiste/vimified), symlink these files
-into `~/vimified/`.
+`local.vimrc` and `after.vimrc` files in this repository. The following is how
+I set it all up including installing [vimified](https://github.com/zaiste/vimified),
+and then symlink these files into `~/vimified/`.
 
+    cd
+    git clone git://github.com/zaiste/vimified.git
+    ln -sfn vimified/ ~/.vim
+    ln -sfn vimified/vimrc ~/.vimrc
+    cd ~/vimified
     ln -s ~/dotfiles/local.vimrc ~/vimified/local.vimrc
     ln -s ~/dotfiles/after.vimrc ~/vimified/after.vimrc
+    vim +BundleInstall +qall
 
 
 ## Notes
