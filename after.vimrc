@@ -2,6 +2,10 @@ set norelativenumber
 set number
 set cursorline
 
+" Needed because vim 7.4 yaml syntax is really slow and cpu intensive. This is a
+" more simple and faster syntaxer.
+Bundle 'stephpy/vim-yaml'
+
 colorscheme badwolf
 
 let g:syntastic_check_on_wq = 0
