@@ -221,7 +221,7 @@ short_hostname=${HOSTNAME%%.*}
 if [[ $EUID -ne 0 ]]; then
 
     # Set laptop colorscheme conditionally
-    if [[ ${short_hostname} == "pseudogen" ]]; then
+    if [[ ${short_hostname} == "stream" ]]; then
         # New prompt - local colorscheme
         PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;33m${USER}\e[0;34m@\e[0;33m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
     else
@@ -230,7 +230,7 @@ if [[ $EUID -ne 0 ]]; then
     fi
 else
     # Set laptop colorscheme conditionally
-    if [[ ${short_hostname} == "pseudogen" ]]; then
+    if [[ ${short_hostname} == "stream" ]]; then
         # New prompt - local colorscheme
         PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;31m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
     else
