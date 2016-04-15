@@ -30,6 +30,8 @@ fi
 set -o vi
 bind '"\e.":yank-last-arg'
 
+export EDITOR=vim
+
 # Make dir completion better
 #complete -r cd &> /dev/null
 #complete -p cd &> /dev/null
@@ -49,6 +51,7 @@ alias fek="fedora-easy-karma --fas-username=maxamillion"
 
 alias prettyjson="python -mjson.tool"
 
+alias sharedir='python -m SimpleHTTPServer'
 
 if rpm -q vim-common &> /dev/null; then
     alias vless=$(rpm -ql vim-common | grep less.sh)
