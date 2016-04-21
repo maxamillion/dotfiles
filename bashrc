@@ -1,4 +1,7 @@
-# ~/.bashrc
+#!/bin/bash
+# Shebang is for syntastic vim plugin tips
+###########################################################################
+#~/.bashrc
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -54,21 +57,21 @@ alias prettyjson="python -mjson.tool"
 alias sharedir='python -m SimpleHTTPServer'
 
 if rpm -q vim-common &> /dev/null; then
-    alias vless=$(rpm -ql vim-common | grep less.sh)
+    alias vless="$(rpm -ql vim-common | grep less.sh)"
 fi
 
 
 ###############################################################################
 # BEGIN: Misc functions
 yaml2json() {
-    python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < $1
+    python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"
 }
 
 gen_passwd () {
     if [[ -z $1 ]]; then
         tr -cd '[:graph:]' < /dev/urandom | fold -w30 | head -n1
     else
-        tr -cd '[:graph:]' < /dev/urandom | fold -w$1 | head -n1
+        tr -cd '[:graph:]' < /dev/urandom | fold -w"$1" | head -n1
     fi
 }
 # END: Misc functions
@@ -86,20 +89,20 @@ pullupstream () {
         printf "Error: must specify a branch name (e.g. - master, devel)\n"
     else
         pullup_startbranch=$(git describe --contains --all HEAD)
-        git checkout $1
+        git checkout "$1"
         git fetch upstream
         #git fetch upstream --tags
-        git merge upstream/$1
-        git push origin $1
+        git merge "upstream/$1"
+        git push origin "$1"
         #git push origin --tags
-        git checkout ${pullup_startbranch}
+        git checkout "${pullup_startbranch}"
     fi
 }
 
 pullansible() {
-    for i in ${ansible_git_repos[@]}
+    for i in "${ansible_git_repos[@]}"
     do
-        pushd ~/src/dev/${i} &> /dev/null
+        pushd ~/src/dev/"${i}" &> /dev/null
             printf "===== %s =====\n" "$i"
             pullupstream devel
         popd
@@ -119,7 +122,7 @@ _subject="%s"
 _format="${_hash}}${_relative_time}}${_author}}${_refs} ${_subject}"
 
 pretty_git_log() {
-    git log --graph --abbrev-commit --date=relative --pretty="tformat:${_format}" $* |
+    git log --graph --abbrev-commit --date=relative --pretty="tformat:${_format}" "$*" |
         # Repalce (2 years ago) with (2 years)
         #sed -Ee 's/(^[^<]*) ago)/\1)/' |
         # Replace (2 years, 5 months) with (2 years)
@@ -184,25 +187,6 @@ fi
 
 ###############################################################################
 # BEGIN: PROMPT and PS1 stuff
-RED='\[\e[0;31m\]'
-BRIGHTRED='\[\e[1;31m\]'
-GREEN='\[\e[1;32m\]'
-ORANGE='\[\e[0;33m\]'
-YELLOW='\[\e[1;33m\]'
-BLUE='\[\e[1;34m\]'
-MAGENTA='\[\e[0;35m\]'
-CYAN='\[\e[1;36m\]'
-WHITE='\[\e[1;37m\]'
-NORMAL='\[\e[0;39m\]'
-
-#Solarized colors
-S_RED='\[\e[0;31m\]'
-S_GREEN='\[\e[0;32m\]]'
-S_ORANGE='\[\e[0;33m\]'
-S_BLUE='\[\e[0;34m\]'
-S_MAGENTA='\[\e[0;35m\]'
-S_CYAN='\[\e[0;36m\]'
-S_WHITE='\[\e[0;37m\]'
 
 
 
@@ -212,42 +196,109 @@ S_WHITE='\[\e[0;37m\]'
 __my_vcs_prompt () {
     if [ -x /usr/bin/git ]; then
         if git branch &> /dev/null; then
-            printf "($(grep '*' <(git branch) | sed s/\*.//))";
+            printf "(%s)" "$(grep '\*' <(git branch) | sed s/\*.//)";
         fi
     fi
 }
 
 # Gaming PROMPT_COMMAND and PS1 for multi-line "prompt" with bash/readline
 # 'set show-mode-in-prompt on' (requires bash 4.3+ and readline 6.3+)
-short_hostname=${HOSTNAME%%.*}
-#### YES I KNOW THIS IS "SLOWER" ... shhhhh
-if [[ $EUID -ne 0 ]]; then
+__prompt_command() {
+    local exit_code=$?
 
-    # Set laptop colorscheme conditionally
-    if [[ ${short_hostname} == "pseudogen" ]]; then
-        # New prompt - local colorscheme
-        PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;33m${USER}\e[0;34m@\e[0;33m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+    local short_hostname=${HOSTNAME%%.*}
+
+    local prompt_out=""
+
+    # colors
+    local red_c='\e[0;31m'
+    local white_c='\e[0m'
+    local yellow_c='\e[0;33m'
+    local blue_c='\e[0;34m'
+    local teal_c='\e[1;36m'
+    local cyan_c='\e[0;36m'
+    local purple_c='\e[0;35m'
+
+    local normal_c=$white_c
+    #### YES I KNOW THIS IS "SLOWER" ... shhhhh
+    if [[ $EUID -ne 0 ]]; then
+
+        # Set laptop colorscheme conditionally
+        if [[ ${short_hostname} == "pseudogen" ]]; then
+            # New prompt - local colorscheme
+            local date_c=$red_c
+            local user_c=$yellow_c
+            local at_c=$blue_c
+            local host_c=$yellow_c
+            local exit_c=$white_c
+            local vcs_c=$red_c
+            local pwd_c=$teal_c
+        else
+            # New prompt - remote colorscheme
+            local date_c=$purple_c
+            local user_c=$cyan_c
+            local at_c=$blue_c
+            local host_c=$cyan_c
+            local exit_c=$white_c
+            local vcs_c=$red_c
+            local pwd_c=$cyan_c
+        fi
     else
-        # New prompt - remote colorscheme
-        PROMPT_COMMAND='printf "[\e[0;35m$(date +%H:%M:%S)\e[0;39m|\e[0;36m${USER}\e[0;34m@\e[0;36m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[0;36m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+        # Set laptop colorscheme conditionally
+        if [[ ${short_hostname} == "pseudogen" ]]; then
+            # New prompt - local colorscheme
+            local date_c=$red_c
+            local user_c=$red_c
+            local at_c=$blue_c
+            local host_c=$red_c
+            local exit_c=$white_c
+            local vcs_c=$red_c
+            local pwd_c=$white_c
+        else
+            # New prompt - local colorscheme
+            local date_c=$purple_c
+            local user_c=$red_c
+            local at_c=$blue_c
+            local host_c=$cyan_c
+            local exit_c=$white_c
+            local vcs_c=$red_c
+            local pwd_c=$white_c
+        fi
+
     fi
-else
-    # Set laptop colorscheme conditionally
-    if [[ ${short_hostname} == "pseudogen" ]]; then
-        # New prompt - local colorscheme
-        PROMPT_COMMAND='printf "[\e[0;31m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;31m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+
+    prompt_out+="$normal_c"
+    prompt_out+="["
+    prompt_out+="$date_c"
+    prompt_out+="%(%H:%M:%S)T"
+    prompt_out+="$normal_c"
+    prompt_out+="|"
+    prompt_out+="$user_c"
+    prompt_out+="${USER}"
+    prompt_out+="$at_c"
+    prompt_out+="@"
+    prompt_out+="$host_c"
+    prompt_out+="${short_hostname}"
+    prompt_out+="$exit_c"
+    prompt_out+="(${exit_code})"
+    prompt_out+="$vcs_c"
+    prompt_out+="$(__my_vcs_prompt)"
+    prompt_out+="$pwd_c"
+    if [[ $PWD =~ $HOME ]]; then
+        prompt_out+=" ~${PWD#${HOME}}"
     else
-        # New prompt - local colorscheme
-        PROMPT_COMMAND='printf "[\e[0;35m$(date +%H:%M:%S)\e[0;39m|\e[0;31m${USER}\e[0;39m@\e[0;36m${short_hostname}\e[0;39m($?)\e[0;31m$(__my_vcs_prompt)\e[1;39m $(if [[ "$PWD" =~ "$HOME"  ]]; then printf "~${PWD#${HOME}}"; else printf $PWD; fi)\e[0;39m]\n"'
+        prompt_out+=" $PWD"
     fi
-fi
-export PROMPT_COMMAND
+    prompt_out+="$normal_c"
+    prompt_out+="]"
 
-# OLD PS1 - local colorscheme
-## PS1="$NORMAL[$S_RED\t$NORMAL|$S_ORANGE\u$S_BLUE@$S_ORANGE\h$NORMAL(\$?)$S_RED\$(__my_vcs_prompt) $CYAN\w$NORMAL]\$ "
+    printf "$prompt_out\n"
 
-# OLD PS1 - remote colorscheme
-#PS1="$NORMAL[$S_MAGENTA\t$NORMAL|$S_CYAN\u$S_BLUE@$S_CYAN\h$NORMAL(\$?)$S_RED\$(__my_vcs_prompt) $S_CYAN\w$NORMAL]\n\$ "
+    return $exit_code
+}
+
+
+export PROMPT_COMMAND=__prompt_command
 
 PS1="\$ "
 export PS1
