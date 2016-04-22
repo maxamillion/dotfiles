@@ -225,7 +225,7 @@ __prompt_command() {
 
         # Set laptop colorscheme conditionally
         if [[ ${short_hostname} == "pseudogen" ]]; then
-            # New prompt - local colorscheme
+            # non-root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$yellow_c
             local at_c=$blue_c
@@ -234,7 +234,7 @@ __prompt_command() {
             local vcs_c=$red_c
             local pwd_c=$teal_c
         else
-            # New prompt - remote colorscheme
+            # non-root prompt - remote colorscheme
             local date_c=$purple_c
             local user_c=$cyan_c
             local at_c=$blue_c
@@ -246,7 +246,7 @@ __prompt_command() {
     else
         # Set laptop colorscheme conditionally
         if [[ ${short_hostname} == "pseudogen" ]]; then
-            # New prompt - local colorscheme
+            # root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$red_c
             local at_c=$blue_c
@@ -255,10 +255,10 @@ __prompt_command() {
             local vcs_c=$red_c
             local pwd_c=$white_c
         else
-            # New prompt - local colorscheme
+            # root prompt - remote colorscheme
             local date_c=$purple_c
             local user_c=$red_c
-            local at_c=$white_c
+            local at_c=$blue_c
             local host_c=$cyan_c
             local exit_c=$white_c
             local vcs_c=$red_c
