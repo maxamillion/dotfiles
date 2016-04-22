@@ -258,7 +258,7 @@ __prompt_command() {
             # New prompt - local colorscheme
             local date_c=$purple_c
             local user_c=$red_c
-            local at_c=$blue_c
+            local at_c=$white_c
             local host_c=$cyan_c
             local exit_c=$white_c
             local vcs_c=$red_c
