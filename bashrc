@@ -249,7 +249,7 @@ __prompt_command() {
             # root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$red_c
-            local at_c=$blue_c
+            local at_c=$white_c
             local host_c=$red_c
             local exit_c=$white_c
             local vcs_c=$red_c
