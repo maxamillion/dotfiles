@@ -292,7 +292,7 @@ __prompt_command() {
     prompt_out+="$normal_c"
     prompt_out+="]"
 
-    printf "$prompt_out\n"
+    printf "$prompt_out\n" -1
 
     return $exit_code
 }
