@@ -8,7 +8,11 @@ Bundle 'stephpy/vim-yaml'
 
 colorscheme badwolf
 
+" For sanity
 let g:syntastic_check_on_wq = 0
+
+" For sphinx, the default is something else and it drives me nuts
+let g:syntastic_rst_checkers = ['sphinx']
 
 " Random filetypes
 "
