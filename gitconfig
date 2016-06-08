@@ -36,3 +36,11 @@
     autosetuprebase = always
 [diff]
     guitool = meld
+
+[tig "bind"]
+#   The --trust-exit-code option is useful when you are viewing a diff with lots of
+#   files and you want to quit part of the way through: just exit vim with :cq (instead
+#   of the normal :qa), and it will return an error code, triggering git difftool to
+#   exit without showing any more files.
+#   https://github.com/jonas/tig/issues/26#issuecomment-212007755
+    generic = D !git difftool --tool=vimdiff --no-prompt --no-prompt --trust-exit-code %(commit)^!
