@@ -33,6 +33,9 @@ fi
 set -o vi
 bind '"\e.":yank-last-arg'
 
+# local hostnames for my machines to set local PS1 colorscheme vs remote
+_localhosts=("pseudogen" "stream")
+
 export EDITOR=vim
 
 # Make dir completion better
@@ -223,8 +226,8 @@ __prompt_command() {
     #### YES I KNOW THIS IS "SLOWER" ... shhhhh
     if [[ $EUID -ne 0 ]]; then
 
-        # Set laptop colorscheme conditionally
-        if [[ ${short_hostname} == "pseudogen" ]]; then
+        # Set local colorscheme conditionally
+        if [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
             # non-root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$yellow_c
@@ -244,8 +247,8 @@ __prompt_command() {
             local pwd_c=$cyan_c
         fi
     else
-        # Set laptop colorscheme conditionally
-        if [[ ${short_hostname} == "pseudogen" ]]; then
+        # Set local colorscheme conditionally
+        if [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
             # root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$red_c
