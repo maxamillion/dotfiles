@@ -77,6 +77,19 @@ gen_passwd () {
         tr -cd '[:graph:]' < /dev/urandom | fold -w"$1" | head -n1
     fi
 }
+cleandocker() {
+    # Clean exited containers
+    for container in $(docker ps -a | awk '/Exited/{ print $1}')
+    do
+        docker rm $container
+    done
+
+    # Clean dangling images
+    for i in $(docker images -f 'dangling=true' -q)
+    do
+        docker rmi $i
+    done
+}
 # END: Misc functions
 ###############################################################################
 
@@ -160,7 +173,7 @@ alias gh="show_git_head"
 alias gph="git push"
 alias gpl="git pull"
 alias gs="git status -sb"
-alias gsh='git show --pretty="format:" --name-only'
+alias gsh="git show --pretty='format:' --name-only"
 alias gsl="git stash list"
 
 # setup bash completion for the alias (if available)
