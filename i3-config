@@ -15,8 +15,9 @@ focus_follows_mouse no
 bindsym $mod+m exec arandr
 bindsym $mod+c exec caja --no-desktop
 
-# use mate-screensaver instead
-#bindsym $mod+ctrl+l exec i3lock -c 000000
+# FIXME - mate-screensaver is broken rawhide 20160623
+## use mate-screensaver instead
+bindsym $mod+ctrl+l exec i3lock -c 000000
 #bindsym $mod+l exec i3lock -c 000000
 
 
@@ -38,11 +39,9 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-#bindsym $mod+Return exec xfce4-terminal
-#bindsym $mod+t exec xfce4-terminal
 #
-bindsym $mod+Return exec mate-terminal
-bindsym $mod+t exec mate-terminal
+bindsym $mod+Return exec terminology
+bindsym $mod+t exec terminology
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -210,8 +209,9 @@ exec nm-applet
 exec_always mate-power-manager
 exec_always mate-volume-control-applet
 
+# FIXME - mate-screensaver is broken rawhide 20160623
 # lockscreen and such
-exec mate-screensaver
+#exec mate-screensaver
 
 # Run mate-settings-daemon for gnome-keyring
 # gnome-keyring-daemon is handled by ~/.profile
