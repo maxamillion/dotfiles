@@ -59,10 +59,6 @@ alias prettyjson="python -mjson.tool"
 
 alias sharedir='python -m SimpleHTTPServer'
 
-# Because RelEng/sigul
-# https://docs.pagure.org/releng/sop_sigul_client_setup.html
-alias sigul='NSS_HASH_ALG_SUPPORT=+MD5 sigul'
-
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
 fi
