@@ -195,10 +195,7 @@ bar {
 #
 # UPDATE: nmtui allows me to stay lazy and not need the applet, i3status gives
 # all needed info.
-exec nm-applet
-# UPDATE2: Apparently not in RHEL7, Fedora only :(
-# UPDATE3: need to exec_always in RHEL7 for whatever reason
-#exec_always nm-applet
+#exec nm-applet
 
 # mate-power-manager handles general power management, laptop lid close/suspend
 # and screen dimming.
