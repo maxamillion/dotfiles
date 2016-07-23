@@ -17,14 +17,13 @@ order += "disk /home/"
 order += "run_watch DHCP"
 order += "run_watch VPN"
 #order += "path_exists VPN"
-order += "wireless wlp3s0"
+order += "wireless wlp58s0"
 order += "ethernet enp0s25"
 order += "battery 0"
-order += "battery 1"
 order += "load"
 order += "tztime local"
 
-wireless wlp3s0 {
+wireless wlp58s0 {
         format_up = "W: (%quality at %essid) %ip"
         format_down = "W: down"
 }
@@ -37,10 +36,6 @@ ethernet enp0s25 {
 
 battery 0 {
         format = "B0 %status %percentage %remaining"
-}
-
-battery 1 {
-        format = "B1 %status %percentage %remaining"
 }
 
 run_watch DHCP {

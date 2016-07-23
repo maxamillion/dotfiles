@@ -40,8 +40,8 @@ floating_modifier $mod
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
 #
-bindsym $mod+Return exec terminology
-bindsym $mod+t exec terminology
+bindsym $mod+Return exec mate-terminal
+bindsym $mod+t exec mate-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -173,18 +173,16 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    output eDP1
+    output eDP-1
     position top
     status_command i3status
 }
 
 bar {
-    output DP1
-    output DP2
-    output DP2-1
-    output DP2-2
-    output HDMI1
-    output HDMI2
+    output DP-1
+    output DP-2
+    output HDMI-1
+    output HDMI-2
     position top
     tray_output none
 }
