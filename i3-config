@@ -180,6 +180,7 @@ bar {
 
 bar {
     output DP-1
+    output DP-1-1
     output DP-2
     output HDMI-1
     output HDMI-2
