@@ -125,6 +125,26 @@ pullansible() {
     done
 }
 
+# 'git gc' on all src repos in my homedir
+gceverything() {
+    for dir in ~/src/*;
+    do
+        if [[ "$(basename ${dir})" != 'dev' ]]
+        then
+            pushd ${dir}
+                git gc
+            popd &> /dev/null
+        fi
+    done
+
+    for dir in ~/src/dev/*;
+    do
+        pushd ${dir}
+            git gc
+        popd &> /dev/null
+    done
+}
+
 #
 # pretty_git_log and show_git_head are both shamelessly lifted from threebean's
 # lightsaber repo:
@@ -175,6 +195,8 @@ alias gpl="git pull"
 alias gs="git status -sb"
 alias gsh="git show --pretty='format:' --name-only"
 alias gsl="git stash list"
+alias gho="git hash-object"
+alias gcf="git cat-file"
 
 # setup bash completion for the alias (if available)
 if [[ -f /usr/share/bash-completion/completions/git ]]; then
