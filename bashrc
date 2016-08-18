@@ -63,6 +63,13 @@ if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
 fi
 
+# Ensure gpg-agent starts with --enable-ssh-support
+if [ ! -f /run/user/$(id -u)/gpg-agent.env ]; then
+    killall gpg-agent;
+    eval $(gpg-agent --daemon --enable-ssh-support > /run/user/$(id -u)/gpg-agent.env);
+fi
+. /run/user/$(id -u)/gpg-agent.env
+
 
 ###############################################################################
 # BEGIN: Misc functions
