@@ -64,9 +64,16 @@ if rpm -q vim-common &> /dev/null; then
 fi
 
 # Ensure gpg-agent starts with --enable-ssh-support
-if [ ! -f /run/user/$(id -u)/gpg-agent.env ]; then
-    killall gpg-agent &> /dev/null;
-    eval $(gpg-agent --daemon --enable-ssh-support > /run/user/$(id -u)/gpg-agent.env);
+if [[ $EUID -ne 0 ]]; then
+    if [[ ! -f /run/user/$(id -u)/gpg-agent.env ]]; then
+        killall gpg-agent &> /dev/null;
+        eval $( \
+            gpg-agent \
+                --daemon \
+                --enable-ssh-support \
+                > /run/user/$(id -u)/gpg-agent.env
+        )
+    fi
 fi
 . /run/user/$(id -u)/gpg-agent.env
 
