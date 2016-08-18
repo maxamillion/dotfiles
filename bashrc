@@ -65,7 +65,7 @@ fi
 
 # Ensure gpg-agent starts with --enable-ssh-support
 if [ ! -f /run/user/$(id -u)/gpg-agent.env ]; then
-    killall gpg-agent;
+    killall gpg-agent &> /dev/null;
     eval $(gpg-agent --daemon --enable-ssh-support > /run/user/$(id -u)/gpg-agent.env);
 fi
 . /run/user/$(id -u)/gpg-agent.env
