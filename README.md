@@ -11,9 +11,16 @@ Clone this repo
 
 Create symlinks so apps can find the dotfiles but they will update on a `git pull`
 
+    # Ensure the needed dirs exist
+    mkdir -p ~/.config/{dunst,i3,i3status}
+    mkdir ~/.gnupg
+
+    # Symlink the conf files
     ln -s ~/dotfiles/dunstrc ~/.config/dunst/dunstrc
     ln -s ~/dotfiles/i3-config ~/.config/i3/config
     ln -s ~/dotfiles/i3status-config ~/.config/i3status/config
+    ln -s ~/dotfiles/gpg.conf ~/.gnupg/gpg.conf
+    ln -s ~/dotfiles/gpg-agent.conf ~/.gnupg/gpg-agent.conf
     ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
     ln -s ~/dotfiles/screenrc ~/.screenrc
     ln -s ~/dotfiles/gitconfig ~/.gitconfig
