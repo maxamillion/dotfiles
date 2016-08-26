@@ -75,7 +75,9 @@ if [[ $EUID -ne 0 ]]; then
         )
     fi
 fi
-. /run/user/$(id -u)/gpg-agent.env
+if [[ -f /run/user/$(id -u)/gpg-agent.env ]]; then
+    . /run/user/$(id -u)/gpg-agent.env
+fi
 
 
 ###############################################################################
