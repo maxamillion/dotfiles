@@ -80,6 +80,10 @@ fi
 if [[ -f /run/user/$(id -u)/gpg-agent.env ]]; then
     . /run/user/$(id -u)/gpg-agent.env
 fi
+# Make sure gnome keyring doesn't do anything with ssh keys
+if [[ $(gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh) != "false" ]]; then
+    gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
+fi
 
 
 ###############################################################################
