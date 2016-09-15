@@ -6,6 +6,9 @@ set cursorline
 " more simple and faster syntaxer.
 Bundle 'stephpy/vim-yaml'
 
+" Ansible
+Bundle 'chase/vim-ansible-yaml'
+
 colorscheme badwolf
 
 " For sanity
