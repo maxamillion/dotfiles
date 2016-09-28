@@ -35,7 +35,7 @@ autocmd FileType ruby setlocal expandtab sw=2 sts=2 ts=4
 " various bits of pymode are slow, turn off things we don't use
 let g:pymode = 1
 let g:pymode_indent = 1
-let g:pymode_folding = 1
+let g:pymode_folding = 0
 let g:pymode_motion = 1
 let g:pymode_doc = 0
 let g:pymode_virtualenv = 0
