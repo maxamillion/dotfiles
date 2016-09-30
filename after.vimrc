@@ -44,6 +44,6 @@ let g:pymode_run = 1
 let g:pymode_syntax = 1
 let g:pymode_syntax_slow_sync = 1
 let g:pymode_rope = 0
-let g:pymode_lint = 1
+let g:pymode_lint = 0
 let g:pymode_lint_checkers = ['pyflakes', 'pep8']
 let g:pymode_trim_whitespaces = 1
