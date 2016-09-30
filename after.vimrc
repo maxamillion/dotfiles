@@ -49,5 +49,5 @@ let g:pymode_lint_checkers = ['pyflakes', 'pep8']
 let g:pymode_trim_whitespaces = 1
 
 " Syntastic shortcuts because I'm lazy
-cnoreabbrev SC SyntasticCheck
+cnoreabbrev SC w <bar> SyntasticCheck
 cnoreabbrev SR SyntasticReset
