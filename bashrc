@@ -170,33 +170,37 @@ gceverything() {
     done
 }
 
-#
-# pretty_git_log and show_git_head are both shamelessly lifted from threebean's
-# lightsaber repo:
-#   https://github.com/ralphbean/lightsaber
-_hash="%C(yellow)%h%Creset"
-_relative_time="%Cgreen(%ar)%Creset"
-_author="%C(bold blue)<%an>%Creset"
-_refs="%C(red)%d%Creset"
-_subject="%s"
+#!/bin/bash
+_hash="%C(bold blue)%h%C(reset)"
+_time="%C(bold cyan)%aD%C(reset)"
+_relative_time="%C(bold green)(%ar)%C(reset)"
+_subject="%C(white)%s%C(reset)"
+_author="%C(dim white)- %an%C(reset)"
+_refs="%C(bold yellow)%d%C(reset)"
 
-_format="${_hash}}${_relative_time}}${_author}}${_refs} ${_subject}"
+_format="${_hash} - ${_relative_time} ${_subject} ${_author}${_refs}"
 
 pretty_git_log() {
-    git log --graph --abbrev-commit --date=relative --pretty="tformat:${_format}" "$*" |
-        # Repalce (2 years ago) with (2 years)
-        #sed -Ee 's/(^[^<]*) ago)/\1)/' |
-        # Replace (2 years, 5 months) with (2 years)
-        #sed -Ee 's/(^[^<]*), [[:digit:]]+ .*months?)/\1)/' |
-        # Line columns up based on } delimiter
-        column -s '}' -t |
-        # Page only if we need to
-        less -FXRS
+    # For whatever reason appending an empty string onto git causes a change in
+    # format so we need a conditional
+    if [[ -n "$*" ]]; then
+        git log --graph \
+            --abbrev-commit \
+            --decorate \
+            --all \
+            --format=format:"${_format}" "$*"
+    else
+        git log --graph \
+            --abbrev-commit \
+            --decorate \
+            --all \
+            --format=format:"${_format}"
+    fi
 }
 
 show_git_head() {
-    pretty_git_log -1
-    git show -p --pretty="tformat:"
+    pretty_git_log "-1" && \
+        git --no-pager show -p --pretty="tformat:"
 }
 
 # Various aliases
