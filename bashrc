@@ -146,7 +146,17 @@ pullansible() {
         pushd ~/src/dev/"${i}" &> /dev/null
             printf "===== %s =====\n" "$i"
             pullupstream devel
-        popd
+        popd &> /dev/null
+    done
+}
+
+showansible() {
+    for i in "${ansible_git_repos[@]}"
+    do
+        pushd ~/src/dev/"${i}" &> /dev/null
+            printf "===== %s =====\n" "$i"
+            printf "= %s\n" "$(grep '\*' <(git branch) | sed s/\*.//)"
+        popd &> /dev/null
     done
 }
 
