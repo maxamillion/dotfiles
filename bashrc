@@ -231,6 +231,7 @@ alias gl="pretty_git_log"
 alias gh="show_git_head"
 alias gph="git push"
 alias gpl="git pull"
+alias gpr="git pull --rebase"
 alias gs="git status -sb"
 alias gsh="git show --pretty='format:' --name-only"
 alias gsl="git stash list"
@@ -254,6 +255,7 @@ if [[ -f /usr/share/bash-completion/completions/git ]]; then
     __git_complete gg   _git_grep
     __git_complete gph  _git_push
     __git_complete gpl  _git_pull
+    __git_complete gpr  _git_pull
     __git_complete gs   _git_status
     __git_complete gsl  _git_stash
 fi
