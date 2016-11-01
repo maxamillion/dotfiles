@@ -52,12 +52,16 @@ export PATH=$PATH:$HOME/node_modules/.bin
 #FIXME - F19+ PROMPT_COMMAND does stupid shit with escape sequences
 unset PROMPT_COMMAND
 
+# Fedora aliases
 alias fedpkg="fedpkg --user=maxamillion"
-
 alias fek="fedora-easy-karma --fas-username=maxamillion"
 
-alias prettyjson="python -mjson.tool"
+# ansible aliases
+alias a="ansible"
+alias ap="ansible-playbook"
 
+# random/various aliases
+alias prettyjson="python -mjson.tool"
 alias sharedir='python -m SimpleHTTPServer'
 
 if rpm -q vim-common &> /dev/null; then
