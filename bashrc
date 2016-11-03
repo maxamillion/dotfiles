@@ -63,6 +63,8 @@ alias ap="ansible-playbook"
 # random/various aliases
 alias prettyjson="python -mjson.tool"
 alias sharedir='python -m SimpleHTTPServer'
+alias pu='pullupstream'
+alias pa='pullansible'
 
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
