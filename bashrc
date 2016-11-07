@@ -70,31 +70,6 @@ if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
 fi
 
-# Ensure gpg-agent starts with --enable-ssh-support when on local machines
-if [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
-    if [[ $EUID -ne 0 ]]; then
-        if [[ ! -f /run/user/$(id -u)/gpg-agent.env ]]; then
-            if [[ -f /usr/bin/gpg-agent ]]; then
-                killall gpg-agent &> /dev/null;
-                eval $( \
-                    gpg-agent \
-                        --daemon \
-                        --enable-ssh-support \
-                        > /run/user/$(id -u)/gpg-agent.env
-                )
-            fi
-        fi
-    fi
-    if [[ -f /run/user/$(id -u)/gpg-agent.env ]]; then
-        . /run/user/$(id -u)/gpg-agent.env
-    fi
-    # Make sure gnome keyring doesn't do anything with ssh keys
-    if [[ $(gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh) != "false" ]]; then
-        gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
-    fi
-fi
-
-
 ###############################################################################
 # BEGIN: Misc functions
 yaml2json() {
