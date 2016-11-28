@@ -66,6 +66,12 @@ alias sharedir='python -m SimpleHTTPServer'
 alias pu='pullupstream'
 alias pa='pullansible'
 
+# kinit aliases
+alias kr='kinit admiller@REDHAT.COM'
+alias kf='kinit maxamillion@FEDORAPROJECT.ORG'
+alias kfs='kinit maxamillion@STG.FEDORAPROJECT.ORG'
+
+
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
 fi
