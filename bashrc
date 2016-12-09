@@ -70,6 +70,9 @@ alias pa='pullansible'
 alias kr='kinit admiller@REDHAT.COM'
 alias kf='kinit maxamillion@FEDORAPROJECT.ORG'
 alias kfs='kinit maxamillion@STG.FEDORAPROJECT.ORG'
+alias ksr='kswitch -p admiller@REDHAT.COM'
+alias ksf='kswitch -p maxamillion@FEDORAPROJECT.ORG'
+alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
 
 
 if rpm -q vim-common &> /dev/null; then
