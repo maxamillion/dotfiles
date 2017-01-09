@@ -51,3 +51,6 @@ let g:pymode_trim_whitespaces = 1
 " Syntastic shortcuts because I'm lazy
 cnoreabbrev SC w <bar> SyntasticCheck
 cnoreabbrev SR SyntasticReset
+
+" Set airline to use powerline fancy font symbols
+let g:airline_powerline_fonts = 1
