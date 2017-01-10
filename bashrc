@@ -33,10 +33,6 @@ fi
 set -o vi
 bind '"\e.":yank-last-arg'
 
-# local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("pseudogen" "stream")
-short_hostname=${HOSTNAME%%.*}
-
 export EDITOR=vim
 
 # Make dir completion better
@@ -257,7 +253,9 @@ fi
 ###############################################################################
 # BEGIN: PROMPT and PS1 stuff
 
-
+# local hostnames for my machines to set local PS1 colorscheme vs remote
+_localhosts=("pseudogen" "stream")
+short_hostname=${HOSTNAME%%.*}
 
 ### UGLY HACK
 # This works and the vcs prompt from git bash completion did weird things to
