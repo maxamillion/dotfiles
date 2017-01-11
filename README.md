@@ -49,6 +49,18 @@ and then symlink these files into `~/vimified/`.
     ln -s ~/dotfiles/after.vimrc ~/vimified/after.vimrc
     vim +BundleInstall +qall
 
+I also install [powerline](https://github.com/powerline/powerline)'s [patched
+fonts](https://powerline.readthedocs.io/en/master/installation/linux.html#fonts-installation)
+to supplement the [airline](https://github.com/vim-airline/vim-airline) config
+that comes with vimified.
+
+    cd /tmp/
+    wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+    wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+    mv PowerlineSymbols.otf ~/.fonts/
+    fc-cache -vf ~/.fonts/
+    mkdir -p ~/.config/fontconfig/conf.d/
+    mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/
 
 ## Notes
 This repository is more or less meant to be used along with my [workstation
