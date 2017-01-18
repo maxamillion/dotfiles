@@ -12,8 +12,9 @@ Clone this repo
 Create symlinks so apps can find the dotfiles but they will update on a `git pull`
 
     # Ensure the needed dirs exist
-    mkdir -p ~/.config/{dunst,i3,i3status}
-    mkdir ~/.gnupg
+    mkdir -p ~/.config/{dunst,i3,i3status,fontconfig}
+    mkdir -p ~/.config/fontconfig/conf.d
+    mkdir ~/.fonts
 
     # Symlink the conf files
     ln -s ~/dotfiles/dunstrc ~/.config/dunst/dunstrc
