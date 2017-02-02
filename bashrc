@@ -365,7 +365,15 @@ __prompt_command() {
 
 export PROMPT_COMMAND=__prompt_command
 
-PS1="\$ "
+# FIXME - This is kind of a hack, will fail me in the future
+#   In bash 4.4.x the $ is colorized via vi mode-string in ~/.inputrc so it's
+#   not needed here.
+if [[ $BASH_VERSION =~ 4.4.* ]]; then
+    PS1=" "
+else
+    PS1="\$ "
+fi
+
 export PS1
 
 # END: PROMPT and PS1 stuff
