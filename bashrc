@@ -50,6 +50,7 @@ unset PROMPT_COMMAND
 
 # Fedora aliases
 alias fedpkg="fedpkg --user=maxamillion"
+alias fedpkg-stage="fedpkg-stage --user=maxamillion"
 alias fek="fedora-easy-karma --fas-username=maxamillion"
 
 # ansible aliases
