@@ -35,9 +35,6 @@ bind '"\e.":yank-last-arg'
 
 export EDITOR=vim
 
-# Setup fsad
-eval "$(fasd --init auto)"
-
 # Make dir completion better
 #complete -r cd &> /dev/null
 #complete -p cd &> /dev/null
