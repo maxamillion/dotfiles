@@ -14,6 +14,7 @@ Create symlinks so apps can find the dotfiles but they will update on a `git pul
     # Ensure the needed dirs exist
     mkdir -p ~/.config/{dunst,i3,i3status,fontconfig}
     mkdir -p ~/.config/fontconfig/conf.d
+    mkdir ~/.ptpython
     mkdir ~/.fonts
 
     # Symlink the conf files
@@ -24,6 +25,7 @@ Create symlinks so apps can find the dotfiles but they will update on a `git pul
     ln -s ~/dotfiles/screenrc ~/.screenrc
     ln -s ~/dotfiles/gitconfig ~/.gitconfig
     ln -s ~/dotfiles/inputrc ~/.inputrc
+    ln -s ~/dotfiles/ptpython_config.py ~/.ptpython/config.py
     ln -s ~/dotfiles/bashrc ~/.bashrc
 
 
