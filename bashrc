@@ -62,6 +62,7 @@ alias pj="python -mjson.tool" # prettyjson
 alias sharedir='python -m SimpleHTTPServer'
 alias pu='pullupstream'
 alias pa='pullansible'
+alias ptp='ptpython'
 
 # kinit aliases
 alias kr='kinit admiller@REDHAT.COM'
