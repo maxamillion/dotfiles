@@ -99,7 +99,7 @@ def configure(repl):
     repl.enable_input_validation = True
 
     # Use this colorscheme for the code.
-    repl.use_code_colorscheme('lovelace')
+    repl.use_code_colorscheme('native')
 
     # Enable 24bit True color. (Not all terminals support this. -- maybe check
     # $TERM before changing.)
