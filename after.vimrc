@@ -2,6 +2,9 @@ set norelativenumber
 set number
 set cursorline
 
+" Change leader
+let mapleader = "\<space>"
+
 " Needed because vim 7.4 yaml syntax is really slow and cpu intensive. This is a
 " more simple and faster syntaxer.
 Bundle 'stephpy/vim-yaml'
@@ -18,6 +21,16 @@ let g:indent_guides_guide_size=1
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=238
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
+
+" Jedi because I'm lazy
+Bundle 'davidhalter/jedi-vim'
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
 
 
 colorscheme badwolf
