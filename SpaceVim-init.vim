@@ -48,3 +48,6 @@ set colorcolumn=80
 
 " Turn off the damn mouse
 set mouse=""
+
+" Set gruvbox contrast
+let g:gruvbox_contrast_dark = 'hard'
