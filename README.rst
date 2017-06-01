@@ -24,6 +24,7 @@ pull``
     mkdir -p ~/.config/fontconfig/conf.d
     mkdir ~/.ptpython
     mkdir ~/.fonts
+    mkdir ~/.SpaceVim.d/
 
     # Symlink the conf files
     ln -s ~/dotfiles/dunstrc ~/.config/dunst/dunstrc
@@ -40,30 +41,23 @@ pull``
 Vim
 ---
 
-For `vim`_ I use the `vimified`_ config distro because it's simple, it does
-everything I want, is easy to use, and I'm really lazy.
+For `vim`_ I use the `SpaceVim`_ config distro.
 
-My modifications to the default vimified setup are are contained in the
-``local.vimrc`` and ``after.vimrc`` files in this repository. The following is
-how I set it all up including installing `vimified`_, and then symlink these
-files into ``~/vimified/``.
+My modifications to the default SpaceVim setup are are contained in the
+``SpaceVim-init.vim`` file in this repository.
+
+The following is how I set it all up including installing `SpaceVim`_, and then 
+symlink my config file into ``~/.SpaceVim.d/``.
 
 ::
 
     cd
-    git clone git://github.com/zaiste/vimified.git
-    ln -sfn vimified/ ~/.vim
-    ln -sfn vimified/vimrc ~/.vimrc
-    cd ~/vimified
-    mkdir bundle
-    mkdir -p tmp/backup tmp/swap tmp/undo
-    git clone https://github.com/gmarik/vundle.git bundle/vundle
-    ln -s ~/dotfiles/local.vimrc ~/vimified/local.vimrc
-    ln -s ~/dotfiles/after.vimrc ~/vimified/after.vimrc
-    vim +BundleInstall +qall
+    curl -sLf https://spacevim.org/install.sh | bash -s -- install vim
+    ln -s ~/dotfiles/SpaceVim-init.vim ~/.SpaceVim.d/init.vim
+    
 
 I also install `powerline`_'s `patched fonts`_ to supplement the `airline`_
-config that comes with vimified.
+config that comes with SpaceVim.
 
 ::
 
@@ -89,5 +83,6 @@ that others might find useful in it's own right then I'm happy to have shared.
 .. _powerline: https://github.com/powerline/powerline
 .. _airline: https://github.com/vim-airline/vim-airline
 .. _workstation setup: https://github.com/maxamillion/maxible
+.. _SpaceVim: http://spacevim.org/
 .. _patched fonts:
     https://powerline.readthedocs.io/en/master/installation/linux.html#fonts-installation
