@@ -4,7 +4,7 @@ let g:spacevim_automatic_update = 1
 let g:spacevim_default_indent = 4
 let g:spacevim_max_column     = 80
 let g:spacevim_enable_neomake = 0
-let g:spacevim_snippet_engine = 'utlisnips'
+let g:spacevim_snippet_engine = 'ultisnips'
 let g:spacevim_lint_on_save = 0
 let g:spacevim_lint_on_the_fly = 0
 
