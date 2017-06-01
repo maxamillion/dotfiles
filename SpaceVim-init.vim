@@ -44,7 +44,7 @@ autocmd FileType ruby setlocal expandtab sw=2 sts=2 ts=4
 autocmd FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
 
 " Set column marker
-set colorcolumn = 80
+set colorcolumn=80
 
 " Turn off the damn mouse
-set mouse = ""
+set mouse=""
