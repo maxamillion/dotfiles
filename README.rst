@@ -22,6 +22,7 @@ pull``
     # Ensure the needed dirs exist
     mkdir -p ~/.config/{dunst,i3,i3status,fontconfig}
     mkdir -p ~/.config/fontconfig/conf.d
+    mkdir ~/.tmuxinator
     mkdir ~/.ptpython
     mkdir ~/.fonts
 
@@ -30,6 +31,7 @@ pull``
     ln -s ~/dotfiles/i3-config ~/.config/i3/config
     ln -s ~/dotfiles/i3status-config ~/.config/i3status/config
     ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
+    ln -s ~/dotfiles/tmuxinator-wm.yml ~/.tmuxinator/wm.yml
     ln -s ~/dotfiles/screenrc ~/.screenrc
     ln -s ~/dotfiles/gitconfig ~/.gitconfig
     ln -s ~/dotfiles/inputrc ~/.inputrc

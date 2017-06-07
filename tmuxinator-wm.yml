@@ -1,0 +1,33 @@
+# ~/.tmuxinator/wm.yml
+
+name: wm
+project_root: ~/
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+#### Have to do this because tmuxinator is stupid
+#pre_window: tmux set-option default-path ""
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+windows:
+  - irc: cd ~/
+  - bld: cd ~/
+  - dev: cd ~/src/dev
+  - pkg: cd ~/rpmbuild/
+  - misc: cd ~/
+  - ansible: cd ~/
+  - venv: cd ~/
+  - virt: cd ~/
+  - dkr: cd ~/
+  - r: cd ~/
+#  - pb: cd ~/
+#  - op: tmux move-window -s 5 -t 8; cd ~/src/li-ops
+#  - r: tmux move-window -s 6 -t 9; cd ~/
