@@ -19,13 +19,6 @@ if [ -f /etc/profile.d/bash_completion.sh ]; then
     . /etc/profile.d/bash_completion.sh
 fi
 
-# Use most if it's available, otherwise use less
-if most &> /dev/null; then
-    export PAGER=most
-else
-    export PAGER=less
-fi
-
 # various reasons
 if [[ -n "$TMUX" ]]; then
     export TERM=screen-256color
