@@ -268,7 +268,7 @@ short_hostname=${HOSTNAME%%.*}
 # This works and the vcs prompt from git bash completion did weird things to
 # my PS1 ... meh
 __my_vcs_prompt () {
-    if [ -x git ]; then
+    if which git &> /dev/null; then
         if git branch &> /dev/null; then
             printf "(%s)" "$(grep '\*' <(git branch) | sed s/\*.//)";
         fi
