@@ -66,6 +66,9 @@ alias ptp='ptpython3'
 alias ptp2='ptpython2'
 alias ipy='ipython'
 
+# Aliases needed for Termux
+alias ll='ls -l --color=auto'
+
 # kinit aliases
 alias kr='kinit admiller@REDHAT.COM'
 alias kf='kinit maxamillion@FEDORAPROJECT.ORG'
@@ -265,7 +268,7 @@ short_hostname=${HOSTNAME%%.*}
 # This works and the vcs prompt from git bash completion did weird things to
 # my PS1 ... meh
 __my_vcs_prompt () {
-    if [ -x /usr/bin/git ]; then
+    if [ -x git ]; then
         if git branch &> /dev/null; then
             printf "(%s)" "$(grep '\*' <(git branch) | sed s/\*.//)";
         fi
