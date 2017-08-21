@@ -1,0 +1,66 @@
+Host *
+  UseRoaming no
+
+Host bastion.fedoraproject.org
+  User maxamillion
+  ProxyCommand none
+  ForwardAgent no
+  VerifyHostKeyDNS yes
+
+Host *.phx2.fedoraproject.org *.qa.fedoraproject.org 10.5.125.* 10.5.126.* 10.5.127.* *.vpn.fedoraproject.org *.arm.fedoraproject.org
+  User maxamillion
+  ProxyCommand ssh -W %h:%p bastion.fedoraproject.org
+  VerifyHostKeyDNS yes
+Host *.fedorainfracloud.org
+  User maxamillion
+  ForwardAgent no
+Host *.scrye.com
+  ForwardAgent no
+Host *.amazonaws.com
+  User root
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  UserKnownHostsFile ~/.ssh/aws_known_hosts
+  #IdentityFile ~/.ssh/libra.pem
+  IdentityFile ~/.ssh/id_rsa
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+Host 192.168.122.*
+  StrictHostKeyChecking no
+  #PasswordAuthentication no
+  UserKnownHostsFile ~/.ssh/local_known_hosts
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+Host sebastian
+  HostName ovpn-phx2.redhat.com
+  Port 330
+  User admiller
+  LocalForward 2227 devserv.devel.redhat.com:991
+  LocalForward 2228 squid.redhat.com:3128
+  ControlMaster yes
+  ControlPath /tmp/rhat_ssh
+  DynamicForward 9999
+Host maxamillion
+  Hostname maxamillion.sh
+  ServerAliveInterval 120
+  ForwardAgent yes
+  TCPKeepAlive no
+  PermitLocalCommand yes
+  User admiller
+Host file.rdu
+  Hostname file.rdu.redhat.com
+  ServerAliveInterval 120
+  ForwardAgent yes
+  TCPKeepAlive yes
+  PermitLocalCommand yes
+  User admiller
+Host rpi
+  HostName 192.168.86.53
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+Host tcvirt
+  HostName 192.168.86.100
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes

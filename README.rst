@@ -25,6 +25,7 @@ pull``
     mkdir ~/.tmuxinator
     mkdir ~/.ptpython
     mkdir ~/.fonts
+    mkdir ~/.ssh/
 
     # Symlink the conf files
     ln -s ~/dotfiles/dunstrc ~/.config/dunst/dunstrc
@@ -36,8 +37,12 @@ pull``
     ln -s ~/dotfiles/gitconfig ~/.gitconfig
     ln -s ~/dotfiles/inputrc ~/.inputrc
     ln -s ~/dotfiles/ptpython_config.py ~/.ptpython/config.py
+    ln -s ~/dotfiles/ssh_config ~/.ssh/config
     ln -s ~/dotfiles/bashrc ~/.bashrc
 
+    # Set perms on ~/.ssh/config
+    chmod 0600 ~/dotfiles/ssh_config
+    restorecon -Rvv ~/.ssh
 
 Vim
 ---
