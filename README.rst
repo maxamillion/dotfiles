@@ -17,32 +17,12 @@ Clone this repo
 Create symlinks so apps can find the dotfiles but they will update on a ``git
 pull``
 
+Feel free to read the script if you're curious what it's doing. Otherwise just
+run it.
+
 ::
 
-    # Ensure the needed dirs exist
-    mkdir -p ~/.config/{dunst,i3,i3status,fontconfig}
-    mkdir -p ~/.config/fontconfig/conf.d
-    mkdir ~/.tmuxinator
-    mkdir ~/.ptpython
-    mkdir ~/.fonts
-    mkdir ~/.ssh/
-
-    # Symlink the conf files
-    ln -s ~/dotfiles/dunstrc ~/.config/dunst/dunstrc
-    ln -s ~/dotfiles/i3-config ~/.config/i3/config
-    ln -s ~/dotfiles/i3status-config ~/.config/i3status/config
-    ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
-    ln -s ~/dotfiles/tmuxinator-wm.yml ~/.tmuxinator/wm.yml
-    ln -s ~/dotfiles/screenrc ~/.screenrc
-    ln -s ~/dotfiles/gitconfig ~/.gitconfig
-    ln -s ~/dotfiles/inputrc ~/.inputrc
-    ln -s ~/dotfiles/ptpython_config.py ~/.ptpython/config.py
-    ln -s ~/dotfiles/ssh_config ~/.ssh/config
-    ln -s ~/dotfiles/bashrc ~/.bashrc
-
-    # Set perms on ~/.ssh/config
-    chmod 0600 ~/dotfiles/ssh_config
-    restorecon -Rvv ~/.ssh
+    bash ~/dotfiles/bootstrap.sh
 
 Vim
 ---
@@ -55,32 +35,15 @@ My modifications to the default vimified setup are are contained in the
 how I set it all up including installing `vimified`_, and then symlink these
 files into ``~/vimified/``.
 
-::
-
-    cd
-    git clone git://github.com/zaiste/vimified.git
-    ln -sfn vimified/ ~/.vim
-    ln -sfn vimified/vimrc ~/.vimrc
-    cd ~/vimified
-    mkdir bundle
-    mkdir -p tmp/backup tmp/swap tmp/undo
-    git clone https://github.com/gmarik/vundle.git bundle/vundle
-    ln -s ~/dotfiles/local.vimrc ~/vimified/local.vimrc
-    ln -s ~/dotfiles/after.vimrc ~/vimified/after.vimrc
-    vim +BundleInstall +qall
-
 I also install `powerline`_'s `patched fonts`_ to supplement the `airline`_
 config that comes with vimified.
 
+Again, feel free to read the script if you're curious what it's doing. Otherwise
+just run it.
+
 ::
 
-    cd /tmp/
-    wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-    wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-    mv PowerlineSymbols.otf ~/.fonts/
-    fc-cache -vf ~/.fonts/
-    mkdir -p ~/.config/fontconfig/conf.d/
-    mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/
+    bash ~/dotfiles/bootstrap-vim.sh
 
 Notes
 -----
