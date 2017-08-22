@@ -13,6 +13,11 @@ if [ -f ~/.bashrc_private ]; then
     . ~/.bashrc_private
 fi
 
+# Source termux bash bits if they exist
+if [ -f ~/.bashrc_termux ]; then
+    . ~/.bashrc_termux
+fi
+
 # Source bash-completions if available
 #   Yes, I know technically this should go in ~/.bash_profile but shhhhh
 if [ -f /etc/profile.d/bash_completion.sh ]; then
@@ -65,9 +70,6 @@ alias pa='pullansible'
 alias ptp='ptpython3'
 alias ptp2='ptpython2'
 alias ipy='ipython'
-
-# Aliases needed for Termux
-alias ll='ls -l --color=auto'
 
 # kinit aliases
 alias kr='kinit admiller@REDHAT.COM'
