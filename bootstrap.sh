@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # Ensure the needed dirs exist
 mkdir -p ~/.config/{dunst,i3,i3status,fontconfig}
