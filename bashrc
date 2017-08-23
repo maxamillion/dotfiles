@@ -263,7 +263,7 @@ fi
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("pseudogen" "stream")
+_localhosts=("pseudogen" "stream" "localhost")
 short_hostname=${HOSTNAME%%.*}
 
 ### UGLY HACK
