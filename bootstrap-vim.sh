@@ -13,8 +13,10 @@ vim +BundleInstall +qall
 
 fontdir=$(mktemp -d)
 pushd $fontdir
-wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+curl -o PowerlineSymbols.otf \
+    https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+curl -o 10-powerline-symbols.conf \
+    https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
 mv PowerlineSymbols.otf ~/.fonts/
 fc-cache -vf ~/.fonts/
 mkdir -p ~/.config/fontconfig/conf.d/
