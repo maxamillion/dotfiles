@@ -117,9 +117,6 @@ cleandocker() {
 
 ###############################################################################
 # BEGIN: Git helpers
-ansible_git_repos=( "ansible" "ansible-modules-core" "ansible-modules-extras" )
-alias ansidev='export ANSIBLE_LIBRARY=${HOME}/src/dev/ansible-modules-core:${HOME}/src/dev/ansible-modules-extras'
-
 pullupstream () {
     if [[ -z "$1" ]]; then
         printf "Error: must specify a branch name (e.g. - master, devel)\n"
@@ -133,26 +130,6 @@ pullupstream () {
         #git push origin --tags
         git checkout "${pullup_startbranch}"
     fi
-}
-
-pullansible() {
-    for i in "${ansible_git_repos[@]}"
-    do
-        pushd ~/src/dev/"${i}" &> /dev/null
-            printf "===== %s =====\n" "$i"
-            pullupstream devel
-        popd &> /dev/null
-    done
-}
-
-showansible() {
-    for i in "${ansible_git_repos[@]}"
-    do
-        pushd ~/src/dev/"${i}" &> /dev/null
-            printf "===== %s =====\n" "$i"
-            printf "= %s\n" "$(grep '\*' <(git branch) | sed s/\*.//)"
-        popd &> /dev/null
-    done
 }
 
 # 'git gc' on all src repos in my homedir
@@ -175,7 +152,6 @@ gceverything() {
     done
 }
 
-#!/bin/bash
 _hash="%C(bold blue)%h%C(reset)"
 _time="%C(bold cyan)%aD%C(reset)"
 _relative_time="%C(bold green)(%ar)%C(reset)"
