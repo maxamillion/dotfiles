@@ -121,7 +121,7 @@ pullupstream () {
     if [[ -z "$1" ]]; then
         printf "Error: must specify a branch name (e.g. - master, devel)\n"
     else
-        pullup_startbranch=$(git describe --contains --all HEAD)
+        pullup_startbranch=$(printf "%s" "$(grep '\*' <(git branch) | sed s/\*.//)")
         git checkout "$1"
         git fetch upstream
         #git fetch upstream --tags
