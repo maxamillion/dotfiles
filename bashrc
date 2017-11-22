@@ -79,6 +79,10 @@ alias ksr='kswitch -p admiller@REDHAT.COM'
 alias ksf='kswitch -p maxamillion@FEDORAPROJECT.ORG'
 alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
 
+# ansible development aliases
+alias anunit='pytest -r a --cov=. --cov-report=html --fulltrace --color yes'
+alias anunit2='ansible-test units --python 2'
+alias anunit3='ansible-test units --python 3'
 
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
