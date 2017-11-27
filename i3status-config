@@ -28,7 +28,7 @@ wireless wlp58s0 {
         format_down = "W: down"
 }
 
-ethernet enp57s0u1u2 {
+ethernet enp0s31f6 {
         # if you use %speed, i3status requires root privileges
         format_up = "E: %ip (%speed)"
         format_down = "E: down"
