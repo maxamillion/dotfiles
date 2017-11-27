@@ -13,12 +13,12 @@ general {
 
 #order += "ipv6"
 order += "disk /"
-order += "disk /home/"
+order += "disk /home"
 order += "run_watch DHCP"
-order += "run_watch VPN"
+order += "path_exists VPN"
 #order += "path_exists VPN"
 order += "wireless wlp58s0"
-order += "ethernet enp57s0u1u2"
+order += "ethernet enp0s31f6"
 order += "battery 0"
 order += "load"
 order += "tztime local"
@@ -42,13 +42,9 @@ run_watch DHCP {
         pidfile = "/var/run/dhclient*.pid"
 }
 
-run_watch VPN {
-        pidfile = "/var/run/NetworkManager/nm-vpnc*.pid"
+path_exists VPN {
+        path = "/var/run/NetworkManager/nm-openvpn-f281b867-85e1-4979-8adf-ad9fac216a7c"
 }
-
-#path_exists VPN {
-#        path = "/proc/sys/net/ipv4/conf/redhat0/"
-#}
 
 tztime local {
         format = "%Y-%m-%d %H:%M:%S"
@@ -62,6 +58,6 @@ disk "/" {
         format = "/ %avail"
 }
 
-disk "/home/" {
+disk "/home" {
         format = "/home/ %avail"
 }
