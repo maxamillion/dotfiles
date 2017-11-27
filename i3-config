@@ -42,8 +42,8 @@ floating_modifier $mod
 #
 #bindsym $mod+Return exec terminology
 #bindsym $mod+t exec terminology
-bindsym $mod+Return exec xfce4-terminal
-bindsym $mod+t exec xfce4-terminal
+bindsym $mod+Return exec st -f -*-terminus-*-*-*-*-14-*-*-*-*-*-*-*
+bindsym $mod+t exec st -f -*-terminus-*-*-*-*-14-*-*-*-*-*-*-*
 
 
 # kill focused window
