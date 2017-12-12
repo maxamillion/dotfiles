@@ -69,7 +69,8 @@ alias pu='pullupstream'
 alias pa='pullansible'
 alias ptp='ptpython3'
 alias ptp2='ptpython2'
-alias ipy='ipython'
+alias ipy='ipython3'
+alias ipy2='ipython2'
 
 # kinit aliases
 alias kr='kinit admiller@REDHAT.COM'
