@@ -122,6 +122,10 @@ cleandocker() {
 
 ###############################################################################
 # BEGIN: Git helpers
+grabpr () {
+    git fetch upstream pull/$1/head:pr/$1 && git checkout pr/$1
+}
+
 pullupstream () {
     if [[ -z "$1" ]]; then
         printf "Error: must specify a branch name (e.g. - master, devel)\n"
