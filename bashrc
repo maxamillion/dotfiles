@@ -118,6 +118,27 @@ cleandocker() {
 # END: Misc functions
 ###############################################################################
 
+###############################################################################
+# BEGIN: Ansible hacking functions
+
+# "Globals" for Ansible hacking functions
+ansible_dev_dir="~/src/dev/ansible/"
+
+# Expand the tilda
+eval ansible_dev_dir=${ansible_dev_dir}
+
+ahack() {
+    if [[ -d ${ansible_dev_dir} ]]; then
+        pushd ${ansible_dev_dir}
+            source hacking/env-setup
+        popd
+    else
+        printf "ERROR: Ansible dev dir not found: ${ansible_dev_dir}\n"
+    fi
+}
+# END: Ansible hacking functions
+###############################################################################
+
 
 
 ###############################################################################
