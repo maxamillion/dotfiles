@@ -73,6 +73,7 @@ alias ptp='ptpython3'
 alias ptp2='ptpython2'
 alias ipy='ipython3'
 alias ipy2='ipython2'
+alias ackp='ack --python'
 
 # kinit aliases
 alias kr='kinit admiller@REDHAT.COM'
@@ -132,6 +133,7 @@ eval ansible_dev_dir=${ansible_dev_dir}
 ahack() {
     if [[ -d ${ansible_dev_dir} ]]; then
         pushd ${ansible_dev_dir}
+            make clean
             source hacking/env-setup
         popd
     else
