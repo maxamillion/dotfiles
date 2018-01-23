@@ -18,15 +18,15 @@ project_root: ~/
 # tmux_options: -f ~/.tmux.mac.conf
 
 windows:
-  - irc: cd ~/
-  - bld: cd ~/
-  - dev: cd ~/src/dev
-  - pkg: cd ~/rpmbuild/
   - misc: cd ~/
+  - bld: cd ~/
+  - dev: cd ~/src/dev/ansible
+  - hack: cd ~/src/dev/ansbile
+  - abr: cd ~/src/abr
   - ansible: cd ~/
   - venv: cd ~/
   - virt: cd ~/
-  - dkr: cd ~/
+  - pkg: cd ~/
   - r: cd ~/
 #  - pb: cd ~/
 #  - op: tmux move-window -s 5 -t 8; cd ~/src/li-ops
