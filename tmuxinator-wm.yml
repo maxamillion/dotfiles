@@ -21,7 +21,7 @@ windows:
   - misc: cd ~/
   - bld: cd ~/
   - dev: cd ~/src/dev/ansible
-  - hack: cd ~/src/dev/ansbile
+  - hack: cd ~/src/dev/ansible
   - abr: cd ~/src/abr
   - ansible: cd ~/
   - venv: cd ~/
