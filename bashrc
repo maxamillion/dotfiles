@@ -87,6 +87,9 @@ alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
 alias anunit='pytest -r a --cov=. --cov-report=html --fulltrace --color yes'
 alias anunit2='ansible-test units --python 2'
 alias anunit3='ansible-test units --python 3'
+alias ast2='ansible-test sanity --python 2.7'
+alias ast3='ansible-test sanity --python 3'
+
 
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
@@ -94,6 +97,7 @@ fi
 
 ###############################################################################
 # BEGIN: Misc functions
+
 yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"
 }
@@ -118,6 +122,23 @@ cleandocker() {
         docker rmi $i
     done
 }
+
+# Sync the environment of an existing shell
+#
+#  tmux already updates the environment according to
+#  the update-environment settings in the config. However
+#  for existing shells you need to sync from from tmux's view
+#  of the world.
+#
+# Cribbed from:
+#   https://superuser.com/questions/479796/is-it-possible-to-spawn-an-ssh-agent-for-a-new-tmux-session
+function tmux_sync_env() {
+    ssh_auth_sock=`tmux showenv | grep "^SSH_AUTH_SOCK"`
+    ssh_connection=`tmux showenv | grep "^SSH_CONNECTION"`
+    export ${ssh_auth_sock}
+    export "${ssh_connection}"
+}
+
 # END: Misc functions
 ###############################################################################
 
