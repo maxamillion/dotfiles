@@ -89,6 +89,7 @@ let g:go_fmt_autosave = 1
 cnoreabbrev SC w <bar> SyntasticCheck
 cnoreabbrev SR SyntasticReset
 cnoreabbrev AR AirlineRefresh
+cnoreabbrev TT TagbarToggle
 
 " Set airline to use powerline fancy font symbols
 let g:airline_powerline_fonts = 1
