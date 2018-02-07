@@ -133,8 +133,8 @@ cleandocker() {
 # Cribbed from:
 #   https://superuser.com/questions/479796/is-it-possible-to-spawn-an-ssh-agent-for-a-new-tmux-session
 function tmux_sync_env() {
-    ssh_auth_sock=`tmux showenv | grep "^SSH_AUTH_SOCK"`
-    ssh_connection=`tmux showenv | grep "^SSH_CONNECTION"`
+    ssh_auth_sock=$(tmux showenv | grep "^SSH_AUTH_SOCK")
+    ssh_connection=$(tmux showenv | grep "^SSH_CONNECTION")
     export ${ssh_auth_sock}
     export "${ssh_connection}"
 }
