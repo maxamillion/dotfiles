@@ -10,7 +10,7 @@ let mapleader = "\<space>"
 Bundle 'stephpy/vim-yaml'
 
 " Ansible
-Bundle 'chase/vim-ansible-yaml'
+Bundle 'pearofducks/ansible-vim'
 
 " Indent-guides
 Bundle 'nathanaelkane/vim-indent-guides'
