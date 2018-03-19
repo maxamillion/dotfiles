@@ -165,7 +165,7 @@ ahack() {
 ardebug(){
     if [[ -d ~/.ansible/tmp ]]; then
         ardebug_dirs=( $(ls ~/.ansible/tmp) )
-        cd ~/.ansible/tmp/${ardebug_dirs[-1]}
+        pushd ~/.ansible/tmp/${ardebug_dirs[-1]}
             python *.py explode && cd debug_dir
     else
         printf "ERROR: Ansible KEEP_REMOTE_FILES dir not found"
