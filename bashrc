@@ -90,6 +90,9 @@ alias anunit3='ansible-test units --python 3'
 alias ast2='ansible-test sanity --python 2.7'
 alias ast3='ansible-test sanity --python 3'
 
+# ssh into cloud instances ignoring warnings and such
+alias issh='exec ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=QUIET "$@"'
+
 
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
@@ -192,6 +195,7 @@ atest(){
 
     aclean # clean the dev env
 }
+
 
 # END: Ansible hacking functions
 ###############################################################################
