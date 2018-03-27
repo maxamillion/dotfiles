@@ -162,6 +162,16 @@ ahack() {
     fi
 }
 
+aclean() {
+    if [[ -d ${ansible_dev_dir} ]]; then
+        pushd ${ansible_dev_dir}
+            make clean
+        popd
+    else
+        printf "ERROR: Ansible dev dir not found: ${ansible_dev_dir}\n"
+    fi
+}
+
 ardebug(){
     if [[ -d ~/.ansible/tmp ]]; then
         ardebug_dirs=( $(ls ~/.ansible/tmp) )
@@ -171,6 +181,18 @@ ardebug(){
         printf "ERROR: Ansible KEEP_REMOTE_FILES dir not found"
     fi
 }
+
+atest(){
+    workon ansible # Set the virtualenv via virtualenv-wrappers
+    ahack # set the dev env
+
+    ansible-test sanity \
+        --color -v --junit --changed --docker --docker-keep-git \
+        --base-branch origin/devel --skip-test pylint ${@}
+
+    aclean # clean the dev env
+}
+
 # END: Ansible hacking functions
 ###############################################################################
 
