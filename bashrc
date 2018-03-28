@@ -142,6 +142,16 @@ function tmux_sync_env() {
     export "${ssh_connection}"
 }
 
+# acs-engine stuff
+devacs() {
+#ACSENGINE_GOPATH="acs-engine"
+    export ACSENGINE_ROOT="~/go/src/github.com/Azure/acs-engine"
+    export GOPATH=~/go/
+    export PATH=$PATH:${GOPATH}/bin
+    export PATH=$PATH:${ACSENGINE_ROOT}/bin
+    alias cba="cd $ACSENGINE_ROOT"
+}
+
 # END: Misc functions
 ###############################################################################
 
