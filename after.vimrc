@@ -105,3 +105,7 @@ let g:airline_symbols.paste = 'ρ'
 let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
+
+" Some webfonts don't handle this well which screws up ssh from chromebook
+set showbreak=>
+
