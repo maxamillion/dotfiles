@@ -108,4 +108,11 @@ let g:airline_symbols.whitespace = 'Ξ'
 
 " Some webfonts don't handle this well which screws up ssh from chromebook
 set showbreak=>
-
+set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
+" Trailing whitespace override
+" Only shown when not in insert mode so I don't go insane.
+augroup trailing
+    au!
+    au InsertEnter * :set listchars-=trail:_
+    au InsertLeave * :set listchars+=trail:_
+augroup END
