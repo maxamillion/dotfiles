@@ -59,6 +59,10 @@ autocmd FileType ruby setlocal expandtab sw=2 sts=2 ts=4
 " Set golang stuff
 autocmd FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
 
+" Set ansible stuff
+au BufRead,BufNewFile */playbook*/*.yml set filetype=yaml.ansible
+au BufRead,BufNewFile */roles/*.yml set filetype=yaml.ansible
+
 " various bits of pymode are slow, turn off things we don't use
 let g:pymode = 1
 let g:pymode_indent = 1
