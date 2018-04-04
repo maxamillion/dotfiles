@@ -38,6 +38,7 @@ fi
 set -o vi
 bind '"\e.":yank-last-arg'
 
+export LANG=en_US.UTF-8
 export EDITOR=vim
 
 # Make dir completion better
