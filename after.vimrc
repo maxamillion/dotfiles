@@ -95,7 +95,7 @@ cnoreabbrev SR SyntasticReset
 cnoreabbrev AR AirlineRefresh
 cnoreabbrev TT TagbarToggle
 
-" Set airline to use powerline fancy font symbols
+" Set airline to use not use powerline fancy font symbols
 let g:airline_powerline_fonts = 0
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -110,7 +110,7 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
 
-" Some webfonts don't handle this well which screws up ssh from chromebook
+" Some webfonts don't handle this well which screws up ssh (hterm) on ChromeOS
 set showbreak=>
 set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
 " Trailing whitespace override
