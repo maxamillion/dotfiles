@@ -11,16 +11,3 @@ ln -s ~/dotfiles/local.vimrc ~/vimified/local.vimrc
 ln -s ~/dotfiles/after.vimrc ~/vimified/after.vimrc
 vim +BundleInstall +qall
 
-fontdir=$(mktemp -d)
-pushd $fontdir
-curl -o PowerlineSymbols.otf \
-    https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-curl -o 10-powerline-symbols.conf \
-    https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-mv PowerlineSymbols.otf ~/.fonts/
-fc-cache -vf ~/.fonts/
-mkdir -p ~/.config/fontconfig/conf.d/
-mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/
-popd
-
-rm -fr ${fontdir}
