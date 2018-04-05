@@ -120,3 +120,6 @@ augroup trailing
     au InsertEnter * :set listchars-=trail:_
     au InsertLeave * :set listchars+=trail:_
 augroup END
+
+" Set this because reasons
+set eol
