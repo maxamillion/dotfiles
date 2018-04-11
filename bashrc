@@ -99,6 +99,9 @@ if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
 fi
 
+# find aliases
+alias fn='find . -name'
+
 ###############################################################################
 # BEGIN: Misc functions
 
