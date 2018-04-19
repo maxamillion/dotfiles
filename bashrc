@@ -65,7 +65,7 @@ alias ap="ansible-playbook"
 
 # random/various aliases
 alias pj="python -mjson.tool" # prettyjson
-alias sharedir='python -m SimpleHTTPServer'
+alias sharedir='python3 -m http.server'
 alias pu='pullupstream'
 alias pud='pullupstream devel'
 alias pum='pullupstream master'
