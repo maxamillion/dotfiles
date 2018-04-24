@@ -94,6 +94,8 @@ alias ast3='ansible-test sanity --python 3'
 # ssh into cloud instances ignoring warnings and such
 alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=QUIET "$@"'
 
+# tmux_sync_env because I'm too lazy to keep typing that shit
+alias tse="tmux_sync_env"
 
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
@@ -144,6 +146,7 @@ function tmux_sync_env() {
     ssh_connection=$(tmux showenv | grep "^SSH_CONNECTION")
     export ${ssh_auth_sock}
     export "${ssh_connection}"
+    printf "SSH_AUTH_SOCK and SSH_CONNECTION sync'd\n"
 }
 
 # acs-engine stuff
