@@ -18,6 +18,7 @@ ln -s ~/dotfiles/gitconfig ~/.gitconfig
 ln -s ~/dotfiles/inputrc ~/.inputrc
 ln -s ~/dotfiles/ptpython_config.py ~/.ptpython/config.py
 ln -s ~/dotfiles/ssh_config ~/.ssh/config
+ln -s ~/dotfiles/sshrc ~/.ssh/rc
 ln -s ~/dotfiles/bashrc ~/.bashrc
 
 # Set perms on ~/.ssh/config
