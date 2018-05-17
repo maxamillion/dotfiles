@@ -84,12 +84,12 @@ alias ksr='kswitch -p admiller@REDHAT.COM'
 alias ksf='kswitch -p maxamillion@FEDORAPROJECT.ORG'
 alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
 
-# ansible development aliases
-alias anunit='pytest -r a --cov=. --cov-report=html --fulltrace --color yes'
-alias anunit2='ansible-test units --python 2'
-alias anunit3='ansible-test units --python 3'
-alias ast2='ansible-test sanity --python 2.7'
-alias ast3='ansible-test sanity --python 3'
+# ansible dev/test aliases
+alias atu='pytest -r a --cov=. --cov-report=html --fulltrace --color yes'
+alias atu2='ansible-test units --python 2'
+alias atu3='ansible-test units --python 3'
+alias ats2='ansible-test sanity --python 2.7'
+alias ats3='ansible-test sanity --python 3'
 
 # ssh into cloud instances ignoring warnings and such
 alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=QUIET "$@"'
