@@ -174,7 +174,7 @@ cleandocker() {
 function tmux_sync_env() {
     ssh_auth_sock=$(tmux showenv | grep "^SSH_AUTH_SOCK")
     ssh_connection=$(tmux showenv | grep "^SSH_CONNECTION")
-    export ${ssh_auth_sock}
+    export "${ssh_auth_sock}"
     export "${ssh_connection}"
     printf "SSH_AUTH_SOCK and SSH_CONNECTION sync'd\n"
 }
