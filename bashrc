@@ -322,6 +322,51 @@ show_git_head() {
         git --no-pager show -p --pretty="tformat:"
 }
 
+git_auto_bisect(){
+    bad_branch=${1}
+    good_branch=${2}
+    if [[ -z "${bad_branch}" ]] || [[ -z "${good_branch}" ]] ; then
+        printf "Test command can not be empty\n"
+        exit 1
+    fi
+
+    read -p "Test command: " test_command
+    if [[ -z "${test_command}" ]]; then
+        printf "Test command can not be empty\n"
+        exit 1
+    fi
+
+    workon ansible3 #ansble+python3 virtualenv via virtualenv-wrappers
+    if [[ "$?" -ne "0" ]]; then
+        printf "No virtualenv named ansible3.\n"
+        exit 1
+    fi
+    ahack # clean the env
+    workon ansible3 # Have to do this twice because $reasons
+
+    git bisect start ${bad_branch} ${good_branch}
+
+    while true
+    do
+        printf "${test_command}\n"
+        eval ${test_command}
+        if [[ "$?" -eq "0" ]]; then
+            git bisect good |& grep "bad commit"
+            if [[ "$?" -eq "0" ]]; then
+                break
+            fi
+        else
+            git bisect bad |& grep "bad commit"
+            if [[ "$?" -eq "0" ]]; then
+                break
+            fi
+        fi
+    done
+
+    git bisect reset
+
+}
+
 # Various aliases
 alias g="git"
 alias ga="git add"
@@ -338,6 +383,7 @@ alias gfph="git format-patch HEAD~1"
 alias gg="git grep -n"
 alias gl="pretty_git_log"
 alias gh="show_git_head"
+alias gab="git_auto_bisect"
 alias gph="git push"
 alias gpl="git pull"
 alias gpr="git pull --rebase"
