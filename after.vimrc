@@ -12,6 +12,9 @@ Bundle 'stephpy/vim-yaml'
 " Ansible
 Bundle 'pearofducks/ansible-vim'
 
+" Jinja
+Bundle 'Glench/Vim-Jinja2-Syntax'
+
 " Indent-guides
 Bundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 1
