@@ -66,6 +66,9 @@ autocmd FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
 au BufRead,BufNewFile */playbook*/*.yml set filetype=yaml.ansible
 au BufRead,BufNewFile */roles/*.yml set filetype=yaml.ansible
 
+" Set jinja highlighting for sanity
+autocmd BufNewFile,BufRead *.j2,*.jinja,*.jinja2  set ft=jinja
+
 " various bits of pymode are slow, turn off things we don't use
 let g:pymode = 1
 let g:pymode_indent = 1
