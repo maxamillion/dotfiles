@@ -325,6 +325,12 @@ show_git_head() {
 git_auto_bisect(){
     bad_branch=${1}
     good_branch=${2}
+    reverse=${3}
+
+    if [[ ${1} == "-h" ]]; then
+        printf "git_auto_bisect bad_branch good_branch [reverse]\n"
+    fi
+
     if [[ -z "${bad_branch}" ]] || [[ -z "${good_branch}" ]] ; then
         printf "Test command can not be empty\n"
         exit 1
@@ -346,23 +352,11 @@ git_auto_bisect(){
 
     git bisect start ${bad_branch} ${good_branch}
 
-    while true
-    do
-        printf "${test_command}\n"
-        eval ${test_command}
-        if [[ "$?" -eq "0" ]]; then
-            git bisect good |& grep "bad commit"
-            if [[ "$?" -eq "0" ]]; then
-                break
-            fi
-        else
-            git bisect bad |& grep "bad commit"
-            if [[ "$?" -eq "0" ]]; then
-                break
-            fi
-        fi
-    done
-
+    if [[ -z "${reverse}" ]]; then
+        eval "git bisect run ${test_command}"
+    else
+        eval "git bisect run bash -c '! ${test_command}'"
+    fi
     git bisect reset
 
 }
