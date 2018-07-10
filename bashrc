@@ -327,25 +327,25 @@ git_auto_bisect(){
     good_branch=${2}
     reverse=${3}
 
-    if [[ ${1} == "-h" ]]; then
+    if [[ ${1} == "-h" ]] || [[ -z "${1}" ]]; then
         printf "git_auto_bisect bad_branch good_branch [reverse]\n"
     fi
 
     if [[ -z "${bad_branch}" ]] || [[ -z "${good_branch}" ]] ; then
         printf "Test command can not be empty\n"
-        exit 1
+        return 1
     fi
 
     read -p "Test command: " test_command
     if [[ -z "${test_command}" ]]; then
         printf "Test command can not be empty\n"
-        exit 1
+        return 1
     fi
 
     workon ansible3 #ansble+python3 virtualenv via virtualenv-wrappers
     if [[ "$?" -ne "0" ]]; then
         printf "No virtualenv named ansible3.\n"
-        exit 1
+        return 1
     fi
     ahack # clean the env
     workon ansible3 # Have to do this twice because $reasons
