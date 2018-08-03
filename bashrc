@@ -76,6 +76,9 @@ alias ipy='ipython3'
 alias ipy2='ipython2'
 alias ackp='ack --python'
 
+# podman == container magic without root, FINALLY
+alias docker='podman'
+
 # kinit aliases
 alias kr='kinit admiller@REDHAT.COM'
 alias kf='kinit maxamillion@FEDORAPROJECT.ORG'
