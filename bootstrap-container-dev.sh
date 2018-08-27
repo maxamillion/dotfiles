@@ -5,7 +5,7 @@ set -o vi
 export TERM=screen-256color
 
 dnf -y update vim-minimal
-dnf -y install vim-enhanced
+dnf -y install vim-enhanced git
 
 pip install q
 
