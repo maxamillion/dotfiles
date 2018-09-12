@@ -83,10 +83,6 @@ export EDITOR=vim
 #bind 'TAB:menu-complete'
 #bind 'set show-all-if-ambiguous on'
 
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$HOME/node_modules/.bin
-
 #FIXME - F19+ PROMPT_COMMAND does stupid shit with escape sequences
 unset PROMPT_COMMAND
 
@@ -466,6 +462,47 @@ if [[ -f /usr/share/bash-completion/completions/git ]]; then
 fi
 
 # END Git helpers
+###############################################################################
+
+###############################################################################
+# BEGIN Modify PATH
+
+# Functions to help us manage paths.  Second argument is the name of the
+# path variable to be modified (default: PATH)
+#
+# 100% shamelessly "borrowed" from stackoverflow
+# https://stackoverflow.com/questions/11650840/linux-remove-redundant-paths-from-path-variable
+pathremove () {
+        local IFS=':'
+        local NEWPATH
+        local DIR
+        local PATHVARIABLE=${2:-PATH}
+        for DIR in ${!PATHVARIABLE} ; do
+                if [ "$DIR" != "$1" ] ; then
+                  NEWPATH=${NEWPATH:+$NEWPATH:}$DIR
+                fi
+        done
+        export $PATHVARIABLE="$NEWPATH"
+}
+pathprepend () {
+        pathremove $1 $2
+        local PATHVARIABLE=${2:-PATH}
+        export $PATHVARIABLE="$1${!PATHVARIABLE:+:${!PATHVARIABLE}}"
+}
+
+pathappend () {
+        pathremove $1 $2
+        local PATHVARIABLE=${2:-PATH}
+        export $PATHVARIABLE="${!PATHVARIABLE:+${!PATHVARIABLE}:}$1"
+}
+
+export GOPATH=$HOME/go
+pathappend $GOPATH/bin
+pathappend $HOME/node_modules/.bin
+pathappend $HOME/bin
+pathappend $HOME/.local/bin
+
+# END Modify PATH
 ###############################################################################
 
 
