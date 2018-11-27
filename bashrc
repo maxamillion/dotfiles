@@ -140,6 +140,9 @@ alias zegrep='zegrep --color=auto'
 alias zfgrep='zfgrep --color=auto'
 alias zgrep='zgrep --color=auto'
 
+# docker ....
+alias dr='docker run --rm -ti'
+
 # update everything in pip
 # 100% "borrowed" from stack overflow
 #   https://stackoverflow.com/questions/2720014/upgrading-all-packages-with-pip
