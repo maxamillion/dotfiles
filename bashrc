@@ -140,8 +140,10 @@ alias zegrep='zegrep --color=auto'
 alias zfgrep='zfgrep --color=auto'
 alias zgrep='zgrep --color=auto'
 
-# docker ....
+# containers .... docker, podman, whatever is hot next week ....
 alias dr='docker run --rm -ti'
+alias pr='podman run --rm --net=host -ti'
+
 
 # update everything in pip
 # 100% "borrowed" from stack overflow
