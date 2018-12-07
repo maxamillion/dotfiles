@@ -5,6 +5,11 @@ set cursorline
 " Change leader
 let mapleader = "\<space>"
 
+" Search and filtering (vimified messes with this stuff and it's not my
+" preference)
+nnoremap / /
+vnoremap / /
+
 " Needed because vim 7.4 yaml syntax is really slow and cpu intensive. This is a
 " more simple and faster syntaxer.
 Bundle 'stephpy/vim-yaml'
