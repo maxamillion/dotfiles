@@ -74,6 +74,10 @@ fi
 set -o vi
 bind '"\e.":yank-last-arg'
 
+# try and thwart pastejacking
+# https://lists.gnu.org/archive/html/bug-bash/2019-02/msg00057.html
+set enable-bracketed-paste On
+
 export LANG=en_US.UTF-8
 export EDITOR=vim
 
