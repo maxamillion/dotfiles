@@ -152,7 +152,8 @@ alias pr='podman run --rm --net=host -ti'
 # update everything in pip
 # 100% "borrowed" from stack overflow
 #   https://stackoverflow.com/questions/2720014/upgrading-all-packages-with-pip
-alias pipup="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+alias pip2up="pip2 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip2 install -U"
+alias pip3up="pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U"
 
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
