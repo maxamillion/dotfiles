@@ -100,11 +100,12 @@ let g:go_highlight_build_constraints = 1
 let g:go_fmt_autosave = 1
 
 
-" Syntastic shortcuts because I'm lazy
+" shortcuts because I'm lazy
 cnoreabbrev SC w <bar> SyntasticCheck
 cnoreabbrev SR SyntasticReset
 cnoreabbrev AR AirlineRefresh
 cnoreabbrev TT TagbarToggle
+cnoreabbrev SP set paste
 
 " Set airline to use not use powerline fancy font symbols
 let g:airline_powerline_fonts = 0
