@@ -622,7 +622,7 @@ export PROMPT_COMMAND=__prompt_command
 # FIXME - This is kind of a hack, will fail me in the future
 #   In bash 4.4.x the $ is colorized via vi mode-string in ~/.inputrc so it's
 #   not needed here.
-if [[ $BASH_VERSION =~ 4.4.* ]]; then
+if [[ $BASH_VERSION =~ 4.4.* ]] || [[ $BASH_VERSION =~ 5.* ]] ; then
     PS1=" "
 else
     PS1="\$ "
