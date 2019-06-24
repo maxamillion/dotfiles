@@ -1,0 +1,29 @@
+[sncli]
+cfg_sn_username = maxamillion@gmail.com
+#cfg_sn_password = supersecretpassword
+
+# as an alternate to cfg_sn_password you could use the following config item
+# any shell command can be used; its stdout is used for the password
+# trailing newlines are stripped for ease of use
+# note: if both password config are given, cfg_sn_password will be used
+cfg_sn_password_eval = keybase pgp decrypt -i ~/.sncli-pass.pgp
+
+# see http://urwid.org/manual/userinput.html for examples of more key combinations
+kb_edit_note = space
+kb_page_down = ctrl f
+
+# note that values must not be quoted
+clr_note_focus_bg = light blue
+
+# if this editor config value is not provided, the $EDITOR env var will be used instead
+# warning: if neither $EDITOR or cfg_editor is set, it will be impossible to edit notes
+#cfg_editor = vim
+
+# alternatively, {fname} and/or {line} are substituted with the filename and
+# current line number in sncli's pager.
+# If {fname} isn't supplied, the filename is simply appended.
+# examples:
+cfg_editor = vim {fname} +{line}
+
+# this is also supported for the pager:
+cfg_pager = less -c +{line} -N {fname}

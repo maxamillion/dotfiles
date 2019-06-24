@@ -8,6 +8,7 @@ mkdir ~/.fonts
 mkdir ~/.ssh/
 
 # Symlink the conf files
+ln -s ~/dotfiles/snclirc ~/.snclirc
 ln -s ~/dotfiles/dunstrc ~/.config/dunst/dunstrc
 ln -s ~/dotfiles/i3-config ~/.config/i3/config
 ln -s ~/dotfiles/i3status-config ~/.config/i3status/config
