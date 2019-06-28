@@ -9,16 +9,14 @@ case $- in
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
 
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+##### History Stuff
+shopt -s histappend # append that shit
+shopt -s cmdhist # only one cmd per line!
+HISTCONTROL=ignoreboth # stop logging duplicates and lines starting with a space
+HISTFILESIZE=1000000 # mo lines, mo betta
+HISTSIZE=1000000
+HISTTIMEFORMAT='%F %T ' # timestamp that shit
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -525,6 +523,9 @@ __my_vcs_prompt () {
 # Gaming PROMPT_COMMAND and PS1 for multi-line "prompt" with bash/readline
 # 'set show-mode-in-prompt on' (requires bash 4.3+ and readline 6.3+)
 __prompt_command() {
+
+    history -a # append to the history on the fly for ... $reasons
+
     local exit_code=$?
 
     local prompt_out=""
