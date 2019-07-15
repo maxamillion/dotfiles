@@ -69,3 +69,13 @@ Host rhel7
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
+Host devlocal
+  HostName 192.168.86.111
+  User admiller
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+Host devremote
+  HostName pseudogen.onthewifi.com
+  User admiller
+  ServerAliveInterval 120
+  TCPKeepAlive yes
