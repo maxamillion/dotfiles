@@ -75,9 +75,11 @@ Host devlocal
   ServerAliveInterval 120
   TCPKeepAlive yes
   ForwardX11 yes
+  XAuthLocation /usr/bin/xauth
 Host devremote
   HostName pseudogen.onthewifi.com
   User admiller
   ServerAliveInterval 120
   TCPKeepAlive yes
   ForwardX11 yes
+  XAuthLocation /usr/bin/xauth
