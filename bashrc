@@ -513,7 +513,7 @@ pathappend $HOME/.local/bin
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("pseudogen" "mobilegen" "penguin" "localhost")
+_localhosts=("mobilegen" "penguin" "localhost")
 short_hostname=${HOSTNAME%%.*}
 
 ### UGLY HACK
