@@ -530,10 +530,9 @@ __my_vcs_prompt () {
 # Gaming PROMPT_COMMAND and PS1 for multi-line "prompt" with bash/readline
 # 'set show-mode-in-prompt on' (requires bash 4.3+ and readline 6.3+)
 __prompt_command() {
+    local exit_code=$? # THIS IS ALWAYS FIRST
 
     history -a # append to the history on the fly for ... $reasons
-
-    local exit_code=$?
 
     local prompt_out=""
 
