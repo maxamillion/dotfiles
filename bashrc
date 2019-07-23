@@ -293,7 +293,7 @@ atest(){
 
     ansible-test sanity \
         --color -v --junit --changed --docker --docker-keep-git \
-        --base-branch origin/devel --skip-test pylint ${@}
+        --base-branch origin/devel --skip-test pylint "${@}"
 
     aclean # clean the dev env
 }
