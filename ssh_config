@@ -74,8 +74,10 @@ Host devlocal
   User admiller
   ServerAliveInterval 120
   TCPKeepAlive yes
+  ForwardX11 yes
 Host devremote
   HostName pseudogen.onthewifi.com
   User admiller
   ServerAliveInterval 120
   TCPKeepAlive yes
+  ForwardX11 yes

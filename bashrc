@@ -44,6 +44,13 @@ if [ -f ~/.bashrc_termux ]; then
     . ~/.bashrc_termux
 fi
 
+# Local user install of virtualenvwrapper
+if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
+    export WORKON_HOME=${HOME}/.virtualenvs
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+    . ~/.local/bin/virtualenvwrapper.sh
+fi
+
 # Source bash-completions if available
 #   Yes, I know technically this should go in ~/.bash_profile but shhhhh
 if ! shopt -oq posix; then
