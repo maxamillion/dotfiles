@@ -564,7 +564,7 @@ __prompt_command() {
             local date_c=$purple_c
             local user_c=$cyan_c
             local at_c=$blue_c
-            local host_c=$cyan_c
+            local host_c=$teal_c
             local exit_c=$white_c
             local vcs_c=$red_c
             local pwd_c=$cyan_c
@@ -585,7 +585,7 @@ __prompt_command() {
             local date_c=$purple_c
             local user_c=$red_c
             local at_c=$blue_c
-            local host_c=$cyan_c
+            local host_c=$teal_c
             local exit_c=$white_c
             local vcs_c=$red_c
             local pwd_c=$white_c
