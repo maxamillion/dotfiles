@@ -95,6 +95,12 @@ export EDITOR=vim
 #FIXME - F19+ PROMPT_COMMAND does stupid shit with escape sequences
 unset PROMPT_COMMAND
 
+# "Bash aliases you can't live without"
+# https://opensource.com/article/19/7/bash-aliases
+alias lt='ls --human-readable --size -1 -S --classify'
+alias mnt="mount | awk -F' ' '{ printf \"%s\t%s\n\",\$1,\$3; }' | column -t | egrep ^/dev/ | sort"
+
+
 # Fedora aliases
 alias fedpkg="fedpkg --user=maxamillion"
 alias fedpkg-stage="fedpkg-stage --user=maxamillion"
