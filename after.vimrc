@@ -21,7 +21,7 @@ Bundle 'pearofducks/ansible-vim'
 Bundle 'Glench/Vim-Jinja2-Syntax'
 
 " fugitive for git stuff
-Bundle 'tpope/vim-fugitive'
+"Bundle 'tpope/vim-fugitive'
 
 " Indent-guides
 Bundle 'nathanaelkane/vim-indent-guides'
