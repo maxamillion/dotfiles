@@ -20,6 +20,9 @@ Bundle 'pearofducks/ansible-vim'
 " Jinja
 Bundle 'Glench/Vim-Jinja2-Syntax'
 
+" fugitive for git stuff
+Bundle 'tpope/vim-fugitive'
+
 " Indent-guides
 Bundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 1
