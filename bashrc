@@ -250,6 +250,28 @@ devacs() {
     alias cba="cd $ACSENGINE_ROOT"
 }
 
+# User specific environment and startup programs
+proxy () {
+    if [[ -z "$1" ]]; then
+        export http_proxy='http://file.rdu.redhat.com:3128';
+        export https_proxy='https://file.rdu.redhat.com:3128';
+        export HTTP_PROXY='http://file.rdu.redhat.com:3128';
+        export HTTPS_PROXY='https://file.rdu.redhat.com:3128';
+    else
+        export http_proxy="$1";
+        export https_proxy="$1";
+        export HTTP_PROXY="$1";
+        export HTTPS_PROXY="$1";
+    fi
+}
+
+unproxy() {
+    unset http_proxy;
+    unset https_proxy;
+    unset HTTP_PROXY;
+    unset HTTPS_PROXY;
+}
+
 # END: Misc functions
 ###############################################################################
 
