@@ -425,13 +425,13 @@ git_auto_bisect(){
         return 1
     fi
 
-    workon ansible3 #ansble+python3 virtualenv via virtualenv-wrappers
+    workon ansible
     if [[ "$?" -ne "0" ]]; then
         printf "No virtualenv named ansible3.\n"
         return 1
     fi
     ahack # clean the env
-    workon ansible3 # Have to do this twice because $reasons
+    workon ansible
 
     git bisect start ${bad_branch} ${good_branch}
 
