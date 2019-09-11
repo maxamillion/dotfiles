@@ -26,7 +26,7 @@ windows:
   - ansible: cd ~/
   - venv: cd ~/
   - virt: cd ~/
-  - pkg: cd ~/
+  - ssh: cd ~/
   - r: cd ~/
 #  - pb: cd ~/
 #  - op: tmux move-window -s 5 -t 8; cd ~/src/li-ops
