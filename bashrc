@@ -272,6 +272,38 @@ unproxy() {
     unset HTTPS_PROXY;
 }
 
+# Get SELinux Python bindings symlink'd into the local python venv
+sevenv() {
+    local py_path=$(which python)
+    if ! [[ ${py_path} =~ 'virtualenv' ]]; then
+        printf "NOT IN A VIRTUALENV!\n"
+        return 1
+    fi
+
+    local py_version=$(python -c 'import platform; print(platform.python_version());')
+    local py_shortver="${py_version%*.*}"
+    local pylib64_path="/usr/lib64/python${py_shortver}/site-packages/"
+    if ! [[ -d "${pylib64_path}" ]]; then
+        printf "${pylib64_path} doesn't exist, check host python version!\n"
+        return 1
+    fi
+
+
+    local venv_basepath="${py_path%*/*/*}"
+    ln -s "${pylib64_path}/selinux/" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/selinux"
+    ln -s "${pylib64_path}/semanage.py" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/semanage.py"
+    local selinux_so=$(find "${pylib64_path}" -name _selinux*.so)
+    ln -s "${selinux_so}" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/${selinux_so##*/}"
+    local semanage_so=$(find "${pylib64_path}" -name _semanage*.so)
+    ln -s "${semanage_so}" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/${semanage_so##*/}"
+    printf "DONE!\n"
+}
+
+
 # END: Misc functions
 ###############################################################################
 
