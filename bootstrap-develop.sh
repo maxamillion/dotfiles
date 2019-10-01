@@ -38,6 +38,11 @@ f_git_clone_with_upstream \
     https://github.com/ansible/ansible.git
 
 f_git_clone_with_upstream \
+    ~/src/dev/ansible \
+    git@github.com:maxamillion/workshops.git \
+    https://github.com/ansible/workshops.git
+
+f_git_clone_with_upstream \
     ~/src/dev/ansible-runner \
     git@github.com:maxamillion/ansible-runner.git \
     https://github.com/ansible/ansible-runner.git
