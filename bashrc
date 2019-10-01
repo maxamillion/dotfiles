@@ -111,16 +111,14 @@ alias a="ansible"
 alias ap="ansible-playbook"
 
 # random/various aliases
-alias pj="python -mjson.tool" # prettyjson
+alias pj="python3 -mjson.tool" # prettyjson
 alias sharedir='python3 -m http.server'
 alias pu='pullupstream'
 alias pud='pullupstream devel'
 alias pum='pullupstream master'
 alias pa='pullansible'
 alias ptp='ptpython3'
-alias ptp2='ptpython2'
 alias ipy='ipython3'
-alias ipy2='ipython2'
 alias ackp='ack --python'
 
 # kinit aliases
@@ -341,7 +339,7 @@ ardebug(){
     if [[ -d ~/.ansible/tmp ]]; then
         ardebug_dirs=( $(ls ~/.ansible/tmp) )
         pushd ~/.ansible/tmp/${ardebug_dirs[-1]}
-            python *.py explode && cd debug_dir
+            python3 *.py explode && cd debug_dir
     else
         printf "ERROR: Ansible KEEP_REMOTE_FILES dir not found"
     fi
