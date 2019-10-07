@@ -38,9 +38,14 @@ f_git_clone_with_upstream \
     https://github.com/ansible/ansible.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/ansible \
+    ~/src/dev/workshops \
     git@github.com:maxamillion/workshops.git \
     https://github.com/ansible/workshops.git
+
+f_git_clone_with_upstream \
+    ~/src/dev/zuul-jobs \
+    git@github.com:maxamillion/ansible-zuul-jobs.git \
+    https://github.com/ansible/ansible-zuul-jobs.git
 
 f_git_clone_with_upstream \
     ~/src/dev/ansible-runner \
