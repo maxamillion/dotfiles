@@ -4,8 +4,9 @@
 
 # Small script to setup git repos I work in frequently
 
-mkdir -p ~/src/dev
-mkdir ~/ansible
+if ! [ -d ~/src/dev ]; then
+    mkdir -p ~/src/dev
+fi
 
 f_git_clone() {
     # $1 - Target clone dir
@@ -53,6 +54,31 @@ f_git_clone_with_upstream \
     https://github.com/ansible/ansible-runner.git
 
 f_git_clone_with_upstream \
+    ~/src/dev/ids_install \
+    git@github.com:maxamillion/ids_install.git \
+    https://github.com/ansible-security/ids_install.git
+
+f_git_clone_with_upstream \
+    ~/src/dev/ids_config \
+    git@github.com:maxamillion/ids_config.git \
+    https://github.com/ansible-security/ids_config.git
+
+f_git_clone_with_upstream \
+    ~/src/dev/ids_rule \
+    git@github.com:maxamillion/ids_rule.git \
+    https://github.com/ansible-security/ids_rule.git
+
+f_git_clone_with_upstream \
+    ~/src/dev/ibm_qradar \
+    git@github.com:maxamillion/ibm_qradar.git \
+    https://github.com/ansible-security/ibm_qradar.git
+
+f_git_clone_with_upstream \
+    ~/src/dev/splunk_enterprise_security\
+    git@github.com:maxamillion/splunk_enterprise_security.git \
+    https://github.com/ansible-security/splunk_enterprise_security.git
+
+f_git_clone_with_upstream \
     ~/src/dev/openshift-ansible \
     git@github.com:maxamillion/openshift-ansible.git \
     https://github.com/openshift/openshift-ansible.git
@@ -78,7 +104,7 @@ f_git_clone_with_upstream \
     https://pagure.io/releng-automation.git
 
 f_git_clone \
-    ~/ansible/maxible \
+    ~/src/maxible \
     git@github.com:maxamillion/maxible.git
 
 
