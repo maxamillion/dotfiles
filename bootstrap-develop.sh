@@ -39,6 +39,11 @@ f_git_clone_with_upstream \
     https://github.com/ansible/ansible.git
 
 f_git_clone_with_upstream \
+    ~/src/dev/molecule \
+    git@github.com:maxamillion/molecule.git \
+    https://github.com/ansible/molecule.git
+
+f_git_clone_with_upstream \
     ~/src/dev/workshops \
     git@github.com:maxamillion/workshops.git \
     https://github.com/ansible/workshops.git
