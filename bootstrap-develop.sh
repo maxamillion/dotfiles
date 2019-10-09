@@ -49,6 +49,11 @@ f_git_clone_with_upstream \
     https://github.com/ansible/ansible-zuul-jobs.git
 
 f_git_clone_with_upstream \
+    ~/src/dev/zuul-project-config \
+    git@github.com:maxamillion/project-config.git \
+    https://github.com/ansible/project-config.git
+
+f_git_clone_with_upstream \
     ~/src/dev/ansible-runner \
     git@github.com:maxamillion/ansible-runner.git \
     https://github.com/ansible/ansible-runner.git
