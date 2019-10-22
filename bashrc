@@ -270,34 +270,74 @@ unproxy() {
     unset HTTPS_PROXY;
 }
 
-# Get SELinux Python bindings symlink'd into the local python venv
-sevenv() {
+_conditionally_symlink() {
+    # function signature:
+    #   _conditionally_symlink src_path dest_path
+    if [[ -e "${1}" ]]; then
+        if ! [[ -e "${2}" ]]; then
+            ln -s "${1}" "${2}"
+        fi
+    fi
+
+}
+
+# Get SELinux/dnf/yum Python bindings symlink'd into the local python venv for
+# Red Hat family of distros
+rhtvenv() {
     local py_path=$(which python)
     if ! [[ ${py_path} =~ 'virtualenv' ]]; then
         printf "NOT IN A VIRTUALENV!\n"
         return 1
     fi
+    local venv_basepath="${py_path%*/*/*}"
 
     local py_version=$(python -c 'import platform; print(platform.python_version());')
     local py_shortver="${py_version%*.*}"
     local pylib64_path="/usr/lib64/python${py_shortver}/site-packages/"
+    local pylib_path="/usr/lib/python${py_shortver}/site-packages/"
     if ! [[ -d "${pylib64_path}" ]]; then
         printf "${pylib64_path} doesn't exist, check host python version!\n"
         return 1
     fi
 
 
-    local venv_basepath="${py_path%*/*/*}"
-    ln -s "${pylib64_path}/selinux/" \
+    ## SELinux
+    _conditionally_symlink "${pylib64_path}/selinux/" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/selinux"
-    ln -s "${pylib64_path}/semanage.py" \
+
+    _conditionally_symlink "${pylib64_path}/semanage.py" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/semanage.py"
+
     local selinux_so=$(find "${pylib64_path}" -name _selinux*.so)
-    ln -s "${selinux_so}" \
+    _conditionally_symlink "${selinux_so}" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/${selinux_so##*/}"
+
     local semanage_so=$(find "${pylib64_path}" -name _semanage*.so)
-    ln -s "${semanage_so}" \
+    _conditionally_symlink "${semanage_so}" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/${semanage_so##*/}"
+
+    ## DNF (YUM4)
+    _conditionally_symlink "${pylib_path}/dnf" \
+        "${venv_basepath}/lib/python${py_shortver}/site-packages/dnf"
+
+    _conditionally_symlink "${pylib_path}/dnf-plugins" \
+        "${venv_basepath}/lib/python${py_shortver}/site-packages/dnf-plugins"
+
+    _conditionally_symlink "${pylib_path}/dnfpluginscore" \
+        "${venv_basepath}/lib/python${py_shortver}/site-packages/dnfpluginscore"
+
+    _conditionally_symlink "${pylib64_path}/libdnf" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/libdnf"
+
+    _conditionally_symlink "${pylib64_path}/hawkey" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/hawkey"
+
+    ## YUM (<= 3.x)
+    _conditionally_symlink "${pylib_path}/yum" \
+        "${venv_basepath}/lib/python${py_shortver}/site-packages/yum"
+    _conditionally_symlink "${pylib_path}/yumutils" \
+                "${venv_basepath}/lib/python${py_shortver}/site-packages/yumutils"
+
     printf "DONE!\n"
 }
 
