@@ -514,7 +514,7 @@ git_auto_bisect(){
 
 }
 
-# Various aliases
+# Various git aliases
 alias g="git"
 alias ga="git add"
 alias gb="git branch -v"
@@ -539,6 +539,7 @@ alias gsh="git show --pretty='format:' --name-only"
 alias gsl="git stash list"
 alias gho="git hash-object"
 alias gcf="git cat-file"
+alias flog="vim +Flog"
 
 # setup bash completion for the alias (if available)
 if [[ -f /usr/share/bash-completion/completions/git ]]; then

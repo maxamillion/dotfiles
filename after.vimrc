@@ -20,6 +20,9 @@ Bundle 'pearofducks/ansible-vim'
 " Jinja
 Bundle 'Glench/Vim-Jinja2-Syntax'
 
+" Flog (git log magic)
+Bundle 'rbong/vim-flog'
+
 " fugitive for git stuff
 "Bundle 'tpope/vim-fugitive'
 
