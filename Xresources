@@ -1,0 +1,127 @@
+
+!!!!! xterm conf
+! Use a nice truetype font and size by default...
+xterm*faceName: DejaVu Sans Mono Book
+xterm*faceSize: 11
+
+! Every shell is a login shell by default (for inclusion of all necessary environment variables)
+xterm*loginshell: true
+
+! Save some more scrollback (tmux should basically make this moot though)
+xterm*savelines: 10000
+
+! double-click to select whole URLs :D
+!xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+
+! Tango colors with black background
+xterm*background:         #000000
+xterm*foreground:         #eeeeec
+xterm*cursorColor:        #8ae234
+! foreground color for underline
+xterm*colorUL:            #8ae234
+! line color for underline
+xterm*underlineColor:     #92659a
+! black dark/light
+xterm*color0:             #2e3436
+xterm*color8:             #555753
+! red dark/light
+xterm*color1:             #cc0000
+xterm*color9:             #ef2929
+! green dark/light
+xterm*color2:             #4e9a06
+xterm*color10:            #8ae234
+! yellow dark/light
+xterm*color3:             #c4a000
+xterm*color11:            #fce94f
+! blue dark/light
+xterm*color4:             #3465a4
+xterm*color12:            #729fcf
+! magenta dark/light
+xterm*color5:             #75507b
+xterm*color13:            #ad7fa8
+! cyan dark/light
+xterm*color6:             #06989a
+xterm*color14:            #34e2e2
+! white dark/light
+xterm*color7:             #d3d7cf
+xterm*color15:            #eeeeec
+
+
+! scroll bars are for people who don't use tmux, we don't talk to those people
+xterm*rightScrollBar: false
+xterm*ScrollBar: false
+
+! stop output to terminal from jumping down to bottom of scroll again
+xterm*scrollTtyOutput: false
+
+! 80 columns or gtfo
+xterm*vt100*geometry: 80x50
+
+! name it
+xterm*termName: xterm-color
+
+! because legacy ctrl sequences
+xterm*eightBitInput: false
+
+! I actually like bold text ... meh
+xterm*boldMode: true
+! in case I change my mind, bold == bright
+xterm*colorBDMode: true
+xterm*colorBD: rgb:fc/fc/fc
+
+xterm.termName: xterm-256color
+
+!!!!! URxvt config
+URxvt*termName:           rxvt-256color
+
+URxvt*faceName: DejaVu Sans Mono Book
+URxvt*faceSize: 11
+
+URxvt.scrollBar:          off
+URxvt.internalBorder:     0
+URxvt*selectToClipboard:  true
+URxvt*saveLines:          10000
+
+URxvt.perl-ext-common:    default,matcher,tabbedex,searchable-scrollback
+URxvt.urlLauncher:        /usr/bin/google-chrome
+URxvt.matcher.button:     1
+URxvt.tabbed.tabbar-fg:   8
+URxvt.tabbed.tabbar-bg:   0
+URxvt.tabbed.tab-fg:      2
+URxvt.tabbed.tab-bg:      0
+URxvt.tabbed.new-button:  no
+URxvt.tabbed.title:       no
+
+! Tango colors with black background
+URxvt*background:         #000000
+URxvt*foreground:         #eeeeec
+URxvt*cursorColor:        #8ae234
+! foreground color for underline
+URxvt*colorUL:            #8ae234
+! line color for underline
+URxvt*underlineColor:     #92659a
+! black dark/light
+URxvt*color0:             #2e3436
+URxvt*color8:             #555753
+! red dark/light
+URxvt*color1:             #cc0000
+URxvt*color9:             #ef2929
+! green dark/light
+URxvt*color2:             #4e9a06
+URxvt*color10:            #8ae234
+! yellow dark/light
+URxvt*color3:             #c4a000
+URxvt*color11:            #fce94f
+! blue dark/light
+URxvt*color4:             #3465a4
+URxvt*color12:            #729fcf
+! magenta dark/light
+URxvt*color5:             #75507b
+URxvt*color13:            #ad7fa8
+! cyan dark/light
+URxvt*color6:             #06989a
+URxvt*color14:            #34e2e2
+! white dark/light
+URxvt*color7:             #d3d7cf
+URxvt*color15:            #eeeeec
+
