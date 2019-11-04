@@ -55,7 +55,7 @@ xterm*ScrollBar: false
 xterm*scrollTtyOutput: false
 
 ! 80 columns or gtfo
-xterm*vt100*geometry: 80x50
+xterm*vt100*geometry: 80x24
 
 ! name it
 xterm*termName: xterm-color
