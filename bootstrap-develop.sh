@@ -8,6 +8,10 @@ if ! [ -d ~/src/dev ]; then
     mkdir -p ~/src/dev
 fi
 
+if ! [ -d ~/src/dev/ansible_collections ]; then
+    mkdir -p ~/src/dev/ansible_collections
+fi
+
 f_git_clone() {
     # $1 - Target clone dir
     # $2 - git repo
@@ -22,6 +26,9 @@ f_git_clone_with_upstream() {
     # $1 - Target clone dir
     # $2 - My git fork url
     # $3 - Upstream git url
+    if ! [ -d $(dirname $1) ]; then
+        mkdir -p $(dirname $1)
+    fi
     if ! [ -d $1 ]; then
         pushd $(dirname $1)
         git clone $2 $(basename $1)
@@ -79,12 +86,12 @@ f_git_clone_with_upstream \
     https://github.com/ansible-security/ids_rule.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/ibm_qradar \
+    ~/src/dev/ansible_collections/ibm/qradar \
     git@github.com:maxamillion/ibm_qradar.git \
     https://github.com/ansible-security/ibm_qradar.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/splunk_enterprise_security\
+    ~/src/dev/ansible_collections/splunk/enterprise_security\
     git@github.com:maxamillion/splunk_enterprise_security.git \
     https://github.com/ansible-security/splunk_enterprise_security.git
 
