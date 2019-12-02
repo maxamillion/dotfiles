@@ -106,11 +106,6 @@ f_git_clone_with_upstream \
     https://github.com/rpm-software-management/dnf.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/dnf \
-    git@github.com:maxamillion/dnf.git \
-    https://github.com/rpm-software-management/dnf.git
-
-f_git_clone_with_upstream \
     ~/src/dev/releng \
     ssh://git@pagure.io/forks/maxamillion/releng.git \
     https://pagure.io/releng.git
@@ -124,6 +119,9 @@ f_git_clone \
     ~/src/maxible \
     git@github.com:maxamillion/maxible.git
 
+f_git_clone \
+    ~/src/dev/ansible_collections/maxamillion/devel \
+    git@github.com:maxamillion/ansible_collections.maxamillion.devel.git
 
 # upstream code
 f_git_clone \
@@ -133,3 +131,4 @@ f_git_clone \
 f_git_clone \
     ~/src/yum-utils \
     https://github.com/rpm-software-management/yum-utils.git
+
