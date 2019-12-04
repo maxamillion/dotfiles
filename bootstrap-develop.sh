@@ -15,6 +15,9 @@ fi
 f_git_clone() {
     # $1 - Target clone dir
     # $2 - git repo
+    if ! [ -d $(dirname $1) ]; then
+        mkdir -p $(dirname $1)
+    fi
     if ! [ -d $1 ]; then
         pushd $(dirname $1)
         git clone $2 $(basename $1)

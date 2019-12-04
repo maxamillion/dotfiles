@@ -281,8 +281,8 @@ _conditionally_symlink() {
 
 }
 
-# Get SELinux/dnf/yum Python bindings symlink'd into the local python venv for
-# Red Hat family of distros
+# Get SELinux/dnf/yum/rpm Python bindings symlink'd into the local python venv
+# for Red Hat family of distros
 rhtvenv() {
     local py_path=$(which python)
     if ! [[ ${py_path} =~ 'virtualenv' ]]; then
@@ -316,6 +316,10 @@ rhtvenv() {
     _conditionally_symlink "${semanage_so}" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/${semanage_so##*/}"
 
+    ## RPM
+    _conditionally_symlink "${pylib64_path}/rpm" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/rpm"
+
     ## DNF (YUM4)
     _conditionally_symlink "${pylib_path}/dnf" \
         "${venv_basepath}/lib/python${py_shortver}/site-packages/dnf"
@@ -331,6 +335,12 @@ rhtvenv() {
 
     _conditionally_symlink "${pylib64_path}/hawkey" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/hawkey"
+
+    _conditionally_symlink "${pylib64_path}/libcomps" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/libcomps"
+
+    _conditionally_symlink "${pylib64_path}/gpg" \
+        "${venv_basepath}/lib64/python${py_shortver}/site-packages/gpg"
 
     ## YUM (<= 3.x)
     _conditionally_symlink "${pylib_path}/yum" \
