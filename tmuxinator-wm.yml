@@ -18,12 +18,12 @@ project_root: ~/
 # tmux_options: -f ~/.tmux.mac.conf
 
 windows:
-  - misc: cd ~/
+  - workshops: cd ~/src/dev/workshops
   - bld: cd ~/
   - dev: cd ~/src/dev/ansible
   - hack: cd ~/src/dev/ansible
   - abr: cd ~/src/abr
-  - ansible: cd ~/
+  - ansible: cd ~/src/dev/ansible
   - venv: cd ~/
   - virt: cd ~/
   - ssh: cd ~/
