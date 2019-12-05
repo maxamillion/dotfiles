@@ -174,6 +174,24 @@ alias fn='find . -name'
 ###############################################################################
 # BEGIN: Misc functions
 
+# Fedora upstream clone fork topic branch fedpkg setup
+fedpkgfork() {
+    if ! [ -d ~/src/dev/fedpkg/ ]; then
+        mkdir -p ~/src/dev/fedpkg
+    fi
+
+    if ! [ -d ${1} ]; then
+        if git clone \
+            ssh://maxamillion@pkgs.fedoraproject.org/forks/maxamillion/rpms/${1}.git \
+            ~/src/dev/fedpkg/${1}
+        then
+            pushd ~/src/dev/fedpkg/${1}
+                git remote add upstream https://src.fedoraproject.org/rpms/${1}.git
+            popd
+        fi
+    fi
+}
+
 # borrowed from https://development.robinwinslow.uk/2012/07/20/tmux-and-ssh-auto-login-with-ssh-agent-finally/
 ssh_agent() {
     # if ssh auth variable is missing
