@@ -118,6 +118,11 @@ f_git_clone_with_upstream \
     ssh://git@pagure.io/forks/maxamillion/releng-automation.git \
     https://pagure.io/releng-automation.git
 
+f_git_clone_with_upstream \
+    ~/src/dev/fedora-kickstarts \
+    ssh://git@pagure.io/forks/maxamillion/fedora-kickstarts.git \
+    https://pagure.io/fedora-kickstarts.git
+
 f_git_clone \
     ~/src/maxible \
     git@github.com:maxamillion/maxible.git
