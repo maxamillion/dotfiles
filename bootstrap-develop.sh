@@ -94,6 +94,11 @@ f_git_clone_with_upstream \
     https://github.com/ansible-security/ibm_qradar.git
 
 f_git_clone_with_upstream \
+    ~/src/dev/ansible_collections/ibm/isam \
+    git@github.com:maxamillion/isam-ansible-roles.git \
+    https://github.com/IBM-Security/isam-ansible-roles.git
+
+f_git_clone_with_upstream \
     ~/src/dev/ansible_collections/splunk/enterprise_security\
     git@github.com:maxamillion/splunk_enterprise_security.git \
     https://github.com/ansible-security/splunk_enterprise_security.git
