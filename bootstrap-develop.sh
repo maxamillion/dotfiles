@@ -104,6 +104,11 @@ f_git_clone_with_upstream \
     https://github.com/ansible-security/splunk_enterprise_security.git
 
 f_git_clone_with_upstream \
+    ~/src/dev/ansible_collections/symantec/epm \
+    git@github.com:maxamillion/ansible_collections.symantec.epm.git \
+    https://github.com/ansible-security/ansible_collections.symantec.epm.git
+
+f_git_clone_with_upstream \
     ~/src/dev/openshift-ansible \
     git@github.com:maxamillion/openshift-ansible.git \
     https://github.com/openshift/openshift-ansible.git
