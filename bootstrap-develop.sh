@@ -133,6 +133,7 @@ f_git_clone_with_upstream \
     ssh://git@pagure.io/forks/maxamillion/fedora-kickstarts.git \
     https://pagure.io/fedora-kickstarts.git
 
+# my code, not forked from elsewhere
 f_git_clone \
     ~/src/maxible \
     git@github.com:maxamillion/maxible.git
