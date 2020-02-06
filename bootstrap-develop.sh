@@ -2,15 +2,18 @@
 
 # termux shebang line /data/data/com.termux/files/usr/bin/bash
 
+src_dir="${HOME}/src"
+dev_dir="${src_dir}/dev"
+collections_dir="${dev_dir}/ansible_collections"
+
 # Small script to setup git repos I work in frequently
 
-if ! [ -d ~/src/dev ]; then
-    mkdir -p ~/src/dev
-fi
-
-if ! [ -d ~/src/dev/ansible_collections ]; then
-    mkdir -p ~/src/dev/ansible_collections
-fi
+for dir in "${dev_dir}" "${collections_dir}";
+do
+    if ! [ -d "${dir}" ]; then
+        mkdir -p "${dir}"
+    fi
+done
 
 f_git_clone() {
     # $1 - Target clone dir
@@ -42,112 +45,120 @@ f_git_clone_with_upstream() {
     fi
 }
 
+
 # Upstream Forks
 f_git_clone_with_upstream \
-    ~/src/dev/ansible \
+    "${dev_dir}/ansible" \
     git@github.com:maxamillion/ansible.git \
     https://github.com/ansible/ansible.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/molecule \
+    "${dev_dir}/molecule" \
     git@github.com:maxamillion/molecule.git \
     https://github.com/ansible/molecule.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/workshops \
+    "${dev_dir}/workshops" \
     git@github.com:maxamillion/workshops.git \
     https://github.com/ansible/workshops.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/zuul-jobs \
+    "${dev_dir}/zuul-jobs" \
     git@github.com:maxamillion/ansible-zuul-jobs.git \
     https://github.com/ansible/ansible-zuul-jobs.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/zuul-project-config \
+    "${dev_dir}/zuul-project-config" \
     git@github.com:maxamillion/project-config.git \
     https://github.com/ansible/project-config.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/ansible-runner \
+    "${dev_dir}/ansible-runner" \
     git@github.com:maxamillion/ansible-runner.git \
     https://github.com/ansible/ansible-runner.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/ids_install \
+    "${dev_dir}/ids_install" \
     git@github.com:maxamillion/ids_install.git \
     https://github.com/ansible-security/ids_install.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/ids_config \
+    "${dev_dir}/ids_config" \
     git@github.com:maxamillion/ids_config.git \
     https://github.com/ansible-security/ids_config.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/ids_rule \
+    "${dev_dir}/ids_rule" \
     git@github.com:maxamillion/ids_rule.git \
     https://github.com/ansible-security/ids_rule.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/ansible_collections/ibm/qradar \
-    git@github.com:maxamillion/ibm_qradar.git \
-    https://github.com/ansible-security/ibm_qradar.git
-
-f_git_clone_with_upstream \
-    ~/src/dev/ansible_collections/ibm/isam \
-    git@github.com:maxamillion/isam-ansible-roles.git \
-    https://github.com/IBM-Security/isam-ansible-roles.git
-
-f_git_clone_with_upstream \
-    ~/src/dev/ansible_collections/splunk/enterprise_security\
-    git@github.com:maxamillion/splunk_enterprise_security.git \
-    https://github.com/ansible-security/splunk_enterprise_security.git
-
-f_git_clone_with_upstream \
-    ~/src/dev/ansible_collections/symantec/epm \
-    git@github.com:maxamillion/ansible_collections.symantec.epm.git \
-    https://github.com/ansible-security/ansible_collections.symantec.epm.git
-
-f_git_clone_with_upstream \
-    ~/src/dev/openshift-ansible \
+    "${dev_dir}/openshift-ansible" \
     git@github.com:maxamillion/openshift-ansible.git \
     https://github.com/openshift/openshift-ansible.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/dnf \
+    "${dev_dir}/dnf" \
     git@github.com:maxamillion/dnf.git \
     https://github.com/rpm-software-management/dnf.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/releng \
+    "${dev_dir}/releng" \
     ssh://git@pagure.io/forks/maxamillion/releng.git \
     https://pagure.io/releng.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/releng-automation \
+    "${dev_dir}/releng-automation" \
     ssh://git@pagure.io/forks/maxamillion/releng-automation.git \
     https://pagure.io/releng-automation.git
 
 f_git_clone_with_upstream \
-    ~/src/dev/fedora-kickstarts \
+    "${dev_dir}/fedora-kickstarts" \
     ssh://git@pagure.io/forks/maxamillion/fedora-kickstarts.git \
     https://pagure.io/fedora-kickstarts.git
 
 # my code, not forked from elsewhere
 f_git_clone \
-    ~/src/maxible \
+    "${src_dir}/maxible" \
     git@github.com:maxamillion/maxible.git
-
-f_git_clone \
-    ~/src/dev/ansible_collections/maxamillion/devel \
-    git@github.com:maxamillion/ansible_collections.maxamillion.devel.git
 
 # upstream code
 f_git_clone \
-    ~/src/yum \
+    "${src_dir}/yum" \
     https://github.com/rpm-software-management/yum.git
 
 f_git_clone \
-    ~/src/yum-utils \
+    "${src_dir}/yum-utils" \
     https://github.com/rpm-software-management/yum-utils.git
+
+# my ansible collections
+f_git_clone \
+    "${collections_dir}/maxamillion/devel" \
+    git@github.com:maxamillion/ansible_collections.maxamillion.devel.git
+
+# forked collections I contribute to
+f_git_clone_with_upstream \
+    "${collections_dir}/ibm/qradar" \
+    git@github.com:maxamillion/ibm_qradar.git \
+    https://github.com/ansible-security/ibm_qradar.git
+
+f_git_clone_with_upstream \
+    "${collections_dir}/ibm/isam" \
+    git@github.com:maxamillion/isam-ansible-roles.git \
+    https://github.com/IBM-Security/isam-ansible-roles.git
+
+f_git_clone_with_upstream \
+    "${collections_dir}/splunk/enterprise_security" \
+    git@github.com:maxamillion/splunk_enterprise_security.git \
+    https://github.com/ansible-security/splunk_enterprise_security.git
+
+f_git_clone_with_upstream \
+    "${collections_dir}/symantec/epm" \
+    git@github.com:maxamillion/ansible_collections.symantec.epm.git \
+    https://github.com/ansible-security/ansible_collections.symantec.epm.git
+
+f_git_clone_with_upstream \
+    "${collections_dir}/trendmicro/deepsecurity" \
+    git@github.com:maxamillion/ansible_collections.trendmicro.deepsecurity.git \
+    https://github.com/ansible-security/ansible_collections.deepsecurity.deepsecurity.git
 
