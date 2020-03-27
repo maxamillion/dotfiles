@@ -64,6 +64,11 @@ Host tcvirt
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
+Host optiplex
+  HostName 192.168.86.101
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
 Host rhel7
   HostName 192.168.86.103
   User root
