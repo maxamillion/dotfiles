@@ -87,3 +87,21 @@ Host devremote
   ServerAliveInterval 120
   TCPKeepAlive yes
   ForwardX11 yes
+Host rpi2
+  HostName 192.168.86.122
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+  ForwardX11 yes
+Host rpi3
+  HostName 192.168.86.123
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+  ForwardX11 yes
+Host rpi4
+  HostName 192.168.86.124
+  User pi
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+  ForwardX11 yes
