@@ -64,7 +64,7 @@ Host tcvirt
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
-Host optiplex
+Host optiplex3050m
   HostName 192.168.86.101
   User root
   ServerAliveInterval 120
