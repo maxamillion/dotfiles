@@ -71,7 +71,7 @@ Host optiplex3050m
   TCPKeepAlive yes
 Host optiplex3040t
   HostName 192.168.86.102
-  User root
+  User admiller
   ServerAliveInterval 120
   TCPKeepAlive yes
 Host rhel7
