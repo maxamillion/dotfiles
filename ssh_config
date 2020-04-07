@@ -69,6 +69,11 @@ Host optiplex3050m
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
+Host optiplex3040t
+  HostName 192.168.86.102
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
 Host rhel7
   HostName 192.168.86.103
   User root
