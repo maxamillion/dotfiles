@@ -73,6 +73,7 @@ Host optiplex3040t
   HostName 192.168.86.102
   User admiller
   ServerAliveInterval 120
+  ForwardX11 yes
   TCPKeepAlive yes
 Host rhel7
   HostName 192.168.86.103
