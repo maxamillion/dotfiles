@@ -54,16 +54,6 @@ Host file.rdu
   TCPKeepAlive yes
   PermitLocalCommand yes
   User admiller
-Host rpi
-  HostName 192.168.86.53
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-Host tcvirt
-  HostName 192.168.86.100
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
 Host optiplex3050m
   HostName 192.168.86.101
   User root
@@ -74,11 +64,6 @@ Host optiplex3040t
   User admiller
   ServerAliveInterval 120
   ForwardX11 yes
-  TCPKeepAlive yes
-Host rhel7
-  HostName 192.168.86.103
-  User root
-  ServerAliveInterval 120
   TCPKeepAlive yes
 Host devlocal
   HostName 192.168.86.111
