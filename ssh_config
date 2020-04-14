@@ -55,12 +55,12 @@ Host file.rdu
   PermitLocalCommand yes
   User admiller
 Host optiplex3050m
-  HostName 192.168.86.101
+  HostName 192.168.218.101
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
 Host optiplex3040t
-  HostName 192.168.86.102
+  HostName 192.168.218.102
   User admiller
   ServerAliveInterval 120
   ForwardX11 yes
@@ -91,7 +91,7 @@ Host rpi3
   TCPKeepAlive yes
   ForwardX11 yes
 Host rpi4
-  HostName 192.168.86.124
+  HostName 192.168.218.124
   User pi
   ServerAliveInterval 120
   TCPKeepAlive yes
