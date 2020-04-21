@@ -92,7 +92,7 @@ Host rpi3
   ForwardX11 yes
 Host rpi4
   HostName 192.168.218.124
-  User pi
+  User root
   ServerAliveInterval 120
   TCPKeepAlive yes
   ForwardX11 yes
