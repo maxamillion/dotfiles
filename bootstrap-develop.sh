@@ -64,6 +64,7 @@ git_repos=(
     "${dev_dir}/releng ssh://git@pagure.io/forks/maxamillion/releng.git https://pagure.io/releng.git"
     "${dev_dir}/releng-automation ssh://git@pagure.io/forks/maxamillion/releng-automation.git https://pagure.io/releng-automation.git"
     "${dev_dir}/fedora-kickstarts ssh://git@pagure.io/forks/maxamillion/fedora-kickstarts.git https://pagure.io/fedora-kickstarts.git"
+    "${dev_dir}/baremetal-deploy git@github.com:maxamillion/baremetal-deploy.git https://github.com/openshift-kni/baremetal-deploy.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/yum https://github.com/rpm-software-management/yum.git"
     "${src_dir}/yum-utils https://github.com/rpm-software-management/yum-utils.git"
