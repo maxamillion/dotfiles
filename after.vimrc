@@ -14,21 +14,6 @@ vnoremap / /
 " more simple and faster syntaxer.
 Bundle 'stephpy/vim-yaml'
 
-" Ansible
-Bundle 'pearofducks/ansible-vim'
-let g:ansible_name_highlight = 'b'
-let g:ansible_extra_keywords_highlight = 1
-" Set ansible stuff
-au BufRead,BufNewFile */playbook*/*.yml set filetype=yaml.ansible
-au BufRead,BufNewFile */roles/*.yml set filetype=yaml.ansible
-au BufRead,BufNewFile */ansible_collections/*.yml set filetype=yaml.ansible
-
-augroup ansible_vim_fthosts
-      autocmd!
-        autocmd BufNewFile,BufRead hosts setfiletype yaml.ansible
-    augroup END
-augroup END
-
 " Jinja
 Bundle 'Glench/Vim-Jinja2-Syntax'
 
