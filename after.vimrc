@@ -16,6 +16,18 @@ Bundle 'stephpy/vim-yaml'
 
 " Ansible
 Bundle 'pearofducks/ansible-vim'
+let g:ansible_name_highlight = 'b'
+let g:ansible_extra_keywords_highlight = 1
+" Set ansible stuff
+au BufRead,BufNewFile */playbook*/*.yml set filetype=yaml.ansible
+au BufRead,BufNewFile */roles/*.yml set filetype=yaml.ansible
+au BufRead,BufNewFile */ansible_collections/*.yml set filetype=yaml.ansible
+
+augroup ansible_vim_fthosts
+      autocmd!
+        autocmd BufNewFile,BufRead hosts setfiletype yaml.ansible
+    augroup END
+augroup END
 
 " Jinja
 Bundle 'Glench/Vim-Jinja2-Syntax'
@@ -72,10 +84,6 @@ autocmd FileType ruby setlocal expandtab sw=2 sts=2 ts=4
 
 " Set golang stuff
 autocmd FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
-
-" Set ansible stuff
-au BufRead,BufNewFile */playbook*/*.yml set filetype=yaml.ansible
-au BufRead,BufNewFile */roles/*.yml set filetype=yaml.ansible
 
 " Set jinja highlighting for sanity
 autocmd BufNewFile,BufRead *.j2,*.jinja,*.jinja2  set ft=jinja
