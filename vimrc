@@ -13,9 +13,7 @@ call plug#end()
 """"""""""""""""""""""""""" END VIM PLUG
 
 """"""""""""""""""""""""""" BEING GENERAL SETTINGS
-" tell it to use an undo file
 set undofile
-" set a directory to store the undo history
 set undodir=$HOME/.vimundo/
 
 " fuck the arrow keys
