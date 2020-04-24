@@ -28,7 +28,6 @@ map Y y$
 command! W :w
 command! Q :q
 
-set modelines=0
 set relativenumber
 set numberwidth=3
 set winwidth=83
