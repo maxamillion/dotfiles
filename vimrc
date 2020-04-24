@@ -1,7 +1,4 @@
 """"""""""""""""""""""""""" BEGIN VIM PLUG
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
-" - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -11,12 +8,16 @@ Plug 'scrooloose/syntastic'
 Plug 'sjl/badwolf'
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-endwise'
-
-" Initialize plugin system
+Plug 'pearofducks/ansible-vim'
 call plug#end()
 """"""""""""""""""""""""""" END VIM PLUG
 
 """"""""""""""""""""""""""" BEING GENERAL SETTINGS
+" tell it to use an undo file
+set undofile
+" set a directory to store the undo history
+set undodir=$HOME/.vimundo/
+
 " fuck the arrow keys
 noremap <left> <nop>
 noremap <up> <nop>
@@ -27,6 +28,7 @@ noremap <right> <nop>
 map Y y$
 
 command! W :w
+command! Q :q
 
 set modelines=0
 set relativenumber
@@ -50,8 +52,8 @@ let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=238
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
+au VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=238
+au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
 
 """ Syntastic
 let g:syntastic_check_on_wq = 0
@@ -71,14 +73,15 @@ cnoreabbrev SR SyntasticReset
 cnoreabbrev AR AirlineRefresh
 cnoreabbrev SP set paste
 
-
 """ Random filetype settings
 au BufRead,BufNewFile *.adoc set filetype=asciidoc
-autocmd BufNewFile,BufRead *.j2,*.jinja,*.jinja2  set ft=jinja
-autocmd FileType python setlocal expandtab sw=4 sts=4 ts=8
-autocmd FileType yaml setlocal expandtab sw=2 sts=2 ts=4
-autocmd FileType ruby setlocal expandtab sw=2 sts=2 ts=4
-autocmd FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
+au BufRead,BufNewFile *.j2,*.jinja,*.jinja2  set ft=jinja
+au BufRead,BufNewFile */playbooks/*.yml,*/roles/*.yml,*/ansible_collections/*.yml set filetype=yaml.ansible
+au FileType python setlocal expandtab sw=4 sts=4 ts=8
+au FileType sh setlocal expandtab sw=4 sts=4 ts=8
+au FileType yaml setlocal expandtab sw=2 sts=2 ts=4
+au FileType ruby setlocal expandtab sw=2 sts=2 ts=4
+au FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
 
 " Some webfonts don't handle this well which screws up ssh (hterm) on ChromeOS
 set showbreak=>
