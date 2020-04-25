@@ -39,7 +39,7 @@ symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
 
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim;
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim;
     vim +PlugInstall! +qall
 fi
 
