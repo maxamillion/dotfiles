@@ -5,7 +5,7 @@ Plug 'davidhalter/jedi-vim'
 Plug 'ajh17/VimCompletesMe'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-syntastic/syntastic'
+Plug 'dense-analysis/ale'
 Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
 Plug 'pearofducks/ansible-vim'
@@ -46,14 +46,6 @@ colorscheme badwolf
 
 let python_highlight_all = 1
 let &colorcolumn="80,".join(range(400,999),",")
-
-""" Syntastic
-let g:syntastic_check_on_wq = 0
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=1
-
-" For sphinx, the default is something else and it drives me nuts
-let g:syntastic_rst_checkers = ['sphinx']
 
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
