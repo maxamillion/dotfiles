@@ -17,8 +17,12 @@ mkdir_if_needed ~/.vimundo
 
 # Symlink the conf files
 symlink_if_needed() {
-    if [[ ! -h $2 ]]; then
+    if [[ ! -f $2 ]] && [[ ! -L $2 ]]; then
+        printf "Symlinking: %s -> %s\n" "$1" "$2"
         ln -s $1 $2
+    fi
+    if [[ -f $2 ]] && [[ ! -L $2 ]]; then
+        printf "File found: %s\n" "$2"
     fi
 }
 symlink_if_needed ~/dotfiles/snclirc            ~/.snclirc
