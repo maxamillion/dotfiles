@@ -1,20 +1,34 @@
-""""""""""""""""""""""""""" BEGIN VIM PLUG
 call plug#begin('~/.vim/plugged')
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'davidhalter/jedi-vim'
-Plug 'bling/vim-airline'
-Plug 'scrooloose/syntastic'
+Plug 'ajh17/VimCompletesMe'
+Plug 'sheerun/vim-polyglot'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-syntastic/syntastic'
 Plug 'sjl/badwolf'
-Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-endwise'
 Plug 'pearofducks/ansible-vim'
 call plug#end()
-""""""""""""""""""""""""""" END VIM PLUG
 
-""""""""""""""""""""""""""" BEING GENERAL SETTINGS
 set undofile
 set undodir=$HOME/.vimundo/
+set relativenumber
+set numberwidth=3
+set winwidth=83
+set ruler
+set showcmd
+set matchtime=2
+set autoindent
+set relativenumber
+set number
+set cursorline
+set showmatch
+set eol
+
+" Some webfonts don't handle this well which screws up ssh (hterm) on ChromeOS
+set showbreak=>
+set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
 
 " fuck the arrow keys
 noremap <left> <nop>
@@ -28,29 +42,10 @@ map Y y$
 command! W :w
 command! Q :q
 
-set relativenumber
-set numberwidth=3
-set winwidth=83
-set ruler
-set showcmd
-let &colorcolumn="80,".join(range(400,999),",")
-set matchtime=2
-set autoindent
-set relativenumber
-set number
-set cursorline
-
 colorscheme badwolf
-""""""""""""""""""""""""""" END GENERAL SETTINGS
 
-""" Indent-guides Settings
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
-let g:indent_guides_auto_colors = 0
-au VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=238
-au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
+let python_highlight_all = 1
+let &colorcolumn="80,".join(range(400,999),",")
 
 """ Syntastic
 let g:syntastic_check_on_wq = 0
@@ -63,6 +58,16 @@ let g:syntastic_rst_checkers = ['sphinx']
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
 let g:airline_symbols_ascii = 1
+
+
+""" Indent-guides Settings
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+let g:indent_guides_auto_colors = 0
+au VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=238
+au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
 
 """ shortcuts because I'm lazy
 cnoreabbrev SC w <bar> SyntasticCheck
@@ -80,9 +85,6 @@ au FileType yaml setlocal expandtab sw=2 sts=2 ts=4
 au FileType ruby setlocal expandtab sw=2 sts=2 ts=4
 au FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
 
-" Some webfonts don't handle this well which screws up ssh (hterm) on ChromeOS
-set showbreak=>
-set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
 " Trailing whitespace override
 " Only shown when not in insert mode so I don't go insane.
 augroup trailing
@@ -91,5 +93,4 @@ augroup trailing
     au InsertLeave * :set listchars+=trail:_
 augroup END
 
-" Set this because reasons
-set eol
+syntax on
