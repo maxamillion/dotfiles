@@ -10,24 +10,24 @@ Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
 call plug#end()
 
-set undofile
-set undodir=$HOME/.vimundo/
-set relativenumber
+set autoindent
+set cursorline
+set eol
+set matchtime=2
+set number
 set numberwidth=3
-set winwidth=83
+set relativenumber
+set relativenumber
 set ruler
 set showcmd
-set matchtime=2
-set autoindent
-set relativenumber
-set number
-set cursorline
 set showmatch
-set eol
+set undodir=$HOME/.vimundo/
+set undofile
+set winwidth=83
 
 " Some webfonts don't handle this well which screws up ssh (hterm) on ChromeOS
-set showbreak=>
 set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
+set showbreak=>
 
 " fuck the arrow keys
 noremap <left> <nop>
@@ -48,7 +48,6 @@ let &colorcolumn="80,".join(range(400,999),",")
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
 let g:airline_symbols_ascii = 1
-
 
 """ Indent-guides Settings
 let g:indent_guides_enable_on_vim_startup = 1
