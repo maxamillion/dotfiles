@@ -8,7 +8,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'dense-analysis/ale'
 Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
-Plug 'pearofducks/ansible-vim'
 call plug#end()
 
 set undofile
