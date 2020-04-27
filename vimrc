@@ -64,9 +64,6 @@ cnoreabbrev AR AirlineRefresh
 cnoreabbrev SP set paste
 
 """ Random filetype settings
-au BufRead,BufNewFile *.adoc set filetype=asciidoc
-au BufRead,BufNewFile *.j2,*.jinja,*.jinja2  set ft=jinja
-au BufRead,BufNewFile */playbooks/*.yml,*/roles/*.yml,*/ansible_collections/*.yml set filetype=yaml.ansible
 au FileType python setlocal expandtab sw=4 sts=4 ts=8
 au FileType sh setlocal expandtab sw=4 sts=4 ts=8
 au FileType yaml setlocal expandtab sw=2 sts=2 ts=4
