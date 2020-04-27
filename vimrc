@@ -43,7 +43,6 @@ command! Q :q
 
 colorscheme badwolf
 
-let python_highlight_all = 1
 let &colorcolumn="80,".join(range(400,999),",")
 
 """ Airline settings
@@ -61,8 +60,6 @@ au VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=238
 au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
 
 """ shortcuts because I'm lazy
-cnoreabbrev SC w <bar> SyntasticCheck
-cnoreabbrev SR SyntasticReset
 cnoreabbrev AR AirlineRefresh
 cnoreabbrev SP set paste
 
