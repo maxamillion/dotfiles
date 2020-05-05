@@ -72,7 +72,7 @@ git_repos=(
     "${collections_dir}/maxamillion/devel git@github.com:maxamillion/ansible_collections.maxamillion.devel.git"
     "${collections_dir}/ibm/qradar git@github.com:maxamillion/ibm_qradar.git https://github.com/ansible-collections/ibm.qradar.git"
     "${collections_dir}/ibm/isam git@github.com:maxamillion/isam-ansible-roles.git https://github.com/IBM-Security/isam-ansible-roles.git"
-    "${collections_dir}/splunk/enterprise_security git@github.com:maxamillion/splunk_enterprise_security.git https://github.com/ansible-collections/splunk.enterprise_security.git"
+    "${collections_dir}/splunk/es git@github.com:maxamillion/splunk.es.git https://github.com/ansible-collections/splunk.es.git"
     "${collections_dir}/symantec/epm git@github.com:maxamillion/ansible_collections.symantec.epm.git https://github.com/ansible-collections/symantec.epm.git"
     "${collections_dir}/trendmicro/deepsecurity git@github.com:maxamillion/ansible_collections.trendmicro.deepsecurity.git https://github.com/ansible-security/ansible_collections.deepsecurity.deepsecurity.git"
     "${collections_dir}/crowdstrike/falcon git@github.com:maxamillion/ansible_collections.crowdstrike.falcon.git https://github.com/ansible-security/ansible_collections.crowdstrike.falcon.git"
