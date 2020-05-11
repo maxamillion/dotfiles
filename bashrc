@@ -51,6 +51,11 @@ if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     . ~/.local/bin/virtualenvwrapper.sh
 fi
 
+# Alias podman-compose because fuck docker
+if [ -f ~/.local/bin/podman-compose ]; then
+    alias docker-compose='podman-compose'
+fi
+
 # Source bash-completions if available
 #   Yes, I know technically this should go in ~/.bash_profile but shhhhh
 if ! shopt -oq posix; then
