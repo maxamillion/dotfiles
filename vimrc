@@ -64,6 +64,7 @@ cnoreabbrev SP set paste
 
 """ Random filetype settings
 au FileType python setlocal expandtab sw=4 sts=4 ts=8
+au FileType toml setlocal expandtab sw=4 sts=4 ts=8
 au FileType sh setlocal expandtab sw=4 sts=4 ts=8
 au FileType yaml setlocal expandtab sw=2 sts=2 ts=4
 au FileType ruby setlocal expandtab sw=2 sts=2 ts=4
