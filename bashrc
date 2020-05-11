@@ -62,6 +62,9 @@ if ! shopt -oq posix; then
     elif [ -f /etc/bash_completion ]; then
         . /etc/bash_completion
     fi
+    if [ -f ~/.local/poetry.bash-completion ]; then
+        . ~/.local/poetry.bash-completion
+    fi
 fi
 
 
