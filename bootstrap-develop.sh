@@ -51,6 +51,7 @@ git_repos=(
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
     "${dev_dir}/ansible-runner git@github.com:maxamillion/ansible-runner.git https://github.com/ansible/ansible-runner.git"
     "${dev_dir}/ansible-bender git@github.com:maxamillion/ansible-bender.git https://github.com/ansible-community/ansible-bender.git"
+    "${dev_dir}/receptor git@github.com:maxamillion/receptor.git https://github.com/project-receptor/receptor.git"
     "${dev_dir}/molecule git@github.com:maxamillion/molecule.git https://github.com/ansible/molecule.git"
     "${dev_dir}/workshops git@github.com:maxamillion/workshops.git https://github.com/ansible/workshops.git"
     "${dev_dir}/zuul-jobs git@github.com:maxamillion/ansible-zuul-jobs.git https://github.com/ansible/ansible-zuul-jobs.git"
