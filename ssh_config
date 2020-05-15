@@ -65,6 +65,11 @@ Host optiplex3040t
   ServerAliveInterval 120
   ForwardX11 yes
   TCPKeepAlive yes
+Host t470s
+  HostName 192.168.218.103
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
 Host devlocal
   HostName 192.168.86.111
   User admiller
