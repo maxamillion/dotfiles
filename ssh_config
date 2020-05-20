@@ -70,6 +70,11 @@ Host t470s
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
+Host starlitemk2
+  HostName 192.168.218.104
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
 Host devlocal
   HostName 192.168.86.111
   User admiller
