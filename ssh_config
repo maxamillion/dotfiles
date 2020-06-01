@@ -75,6 +75,11 @@ Host starlitemk2
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
+Host optiplex3060m
+  HostName 192.168.218.105
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
 Host devlocal
   HostName 192.168.86.111
   User admiller

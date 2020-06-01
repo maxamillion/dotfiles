@@ -56,6 +56,7 @@ git_repos=(
     "${dev_dir}/workshops git@github.com:maxamillion/workshops.git https://github.com/ansible/workshops.git"
     "${dev_dir}/zuul-jobs git@github.com:maxamillion/ansible-zuul-jobs.git https://github.com/ansible/ansible-zuul-jobs.git"
     "${dev_dir}/zuul-project-config git@github.com:maxamillion/project-config.git https://github.com/ansible/project-config.git"
+    "${dev_dir}/zuul-windmill-config git@github.com:maxamillion/windmill-config.git https://github.com/maxamillion/windmill-config.git"
     "${dev_dir}/ids_install git@github.com:maxamillion/ids_install.git https://github.com/ansible-security/ids_install.git"
     "${dev_dir}/ids_config git@github.com:maxamillion/ids_config.git https://github.com/ansible-security/ids_config.git"
     "${dev_dir}/ids_rule git@github.com:maxamillion/ids_rule.git https://github.com/ansible-security/ids_rule.git"
