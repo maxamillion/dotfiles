@@ -8,6 +8,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'dense-analysis/ale'
 Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
+Plug 'gioele/vim-autoswap'
 call plug#end()
 
 set autoindent
@@ -48,6 +49,10 @@ let &colorcolumn="80,".join(range(400,999),",")
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
 let g:airline_symbols_ascii = 1
+
+""" Autoswap
+set title titlestring=
+let g:autoswap_detect_tmux = 1
 
 """ Indent-guides Settings
 let g:indent_guides_enable_on_vim_startup = 1
