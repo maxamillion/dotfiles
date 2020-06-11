@@ -46,8 +46,12 @@ fi
 
 # Local user install of virtualenvwrapper
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
+    if [ -f /usr/bin/python3 ]; then
+        export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+    else
+        export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
+    fi
     export WORKON_HOME=${HOME}/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
     . ~/.local/bin/virtualenvwrapper.sh
 fi
 
