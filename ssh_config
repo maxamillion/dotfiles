@@ -31,6 +31,16 @@ Host 192.168.122.*
   UserKnownHostsFile ~/.ssh/local_known_hosts
   ServerAliveInterval 120
   TCPKeepAlive yes
+Host ctl1.ops.rhcloud.com
+  SendEnv DYNECT_USER_NAME DYNECT_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+  ForwardAgent yes
+Host *.pagekite.me
+  CheckHostIP no
+  ProxyCommand /usr/bin/corkscrew %h 443 %h %p
+Host *.rhcloud.com
+  StrictHostKeyChecking no
+  ServerAliveInterval 120
+  TCPKeepAlive yes
 Host sebastian
   HostName ovpn-phx2.redhat.com
   Port 330
@@ -40,12 +50,20 @@ Host sebastian
   ControlMaster yes
   ControlPath /tmp/rhat_ssh
   DynamicForward 9999
+Host jhancock
+  Hostname jhancock.ose.phx2.redhat.com
+  SendEnv DYNECT_USER_NAME DYNECT_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+  ServerAliveInterval 120
+  ForwardAgent yes
+  TCPKeepAlive yes
+  User admiller
 Host maxamillion
   Hostname maxamillion.sh
   ServerAliveInterval 120
   ForwardAgent yes
   TCPKeepAlive no
   PermitLocalCommand yes
+#  LocalCommand ~/bin/irssi-fnotify.sh --start %r@%h
   User admiller
 Host file.rdu
   Hostname file.rdu.redhat.com
@@ -53,61 +71,21 @@ Host file.rdu
   ForwardAgent yes
   TCPKeepAlive yes
   PermitLocalCommand yes
+#  LocalCommand ~/bin/irssi-fnotify.sh --start %r@%h
   User admiller
-Host optiplex3050m
-  HostName 192.168.218.101
+Host rpi
+  HostName 192.168.86.53
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
-Host optiplex3040t
-  HostName 192.168.218.102
-  User admiller
-  ServerAliveInterval 120
-  ForwardX11 yes
-  TCPKeepAlive yes
-Host t470s
-  HostName 192.168.218.103
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-Host starlitemk2
-  HostName 192.168.218.104
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-Host optiplex3060m
-  HostName 192.168.218.105
+Host tcvirt
+  HostName 192.168.86.100
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
 Host devlocal
-  HostName 192.168.86.111
-  User admiller
+  HostName 192.168.122.3
+  User root
   ServerAliveInterval 120
   TCPKeepAlive yes
-  ForwardX11 yes
   ForwardAgent yes
-Host devremote
-  HostName pseudogen.onthewifi.com
-  User admiller
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-  ForwardX11 yes
-Host rpi2
-  HostName 192.168.86.122
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-  ForwardX11 yes
-Host rpi3
-  HostName 192.168.86.123
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-  ForwardX11 yes
-Host rpi4
-  HostName 192.168.218.124
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-  ForwardX11 yes
