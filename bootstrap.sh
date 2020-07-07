@@ -19,6 +19,9 @@ mkdir_if_needed ~/.vimundo
 symlink_if_needed() {
     if [[ ! -f $2 ]] && [[ ! -L $2 ]]; then
         printf "Symlinking: %s -> %s\n" "$1" "$2"
+        if [[ ! -d $(dirname $2) ]]; then
+            mkdir -p $(dirname $2)
+        fi
         ln -s $1 $2
     fi
     if [[ -f $2 ]] && [[ ! -L $2 ]]; then
