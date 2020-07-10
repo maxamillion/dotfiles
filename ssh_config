@@ -73,13 +73,28 @@ Host file.rdu
   PermitLocalCommand yes
 #  LocalCommand ~/bin/irssi-fnotify.sh --start %r@%h
   User admiller
-Host rpi
-  HostName 192.168.86.53
+Host optiplex3060m
+  HostName 192.168.218.105
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
-Host tcvirt
-  HostName 192.168.86.100
+Host optiplex3050m
+  HostName 192.168.218.101
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+Host optiplex3040t
+  HostName 192.168.218.102
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+Host t470s
+  HostName 192.168.218.103
+  User root
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+Host starlitemk2
+  HostName 192.168.218.104
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
