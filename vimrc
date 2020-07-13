@@ -36,6 +36,9 @@ noremap <up> <nop>
 noremap <down> <nop>
 noremap <right> <nop>
 
+" the F1 help menu can kick rocks
+nmap <F1> <nop>
+
 " Yank from current cursor position to end of line
 map Y y$
 
