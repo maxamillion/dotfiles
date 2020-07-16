@@ -99,7 +99,7 @@ Host starlitemk2
   ServerAliveInterval 120
   TCPKeepAlive yes
 Host devlocal
-  HostName 192.168.122.3
+  HostName 192.168.122.100
   User admiller
   ServerAliveInterval 120
   TCPKeepAlive yes
