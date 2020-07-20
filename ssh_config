@@ -104,3 +104,4 @@ Host devlocal
   ServerAliveInterval 120
   TCPKeepAlive yes
   ForwardAgent yes
+  ForwardX11 yes
