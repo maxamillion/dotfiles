@@ -50,6 +50,7 @@ git_repos=(
     "${dev_dir}/ansible git@github.com:maxamillion/ansible.git https://github.com/ansible/ansible.git"
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
     "${dev_dir}/ansible-runner git@github.com:maxamillion/ansible-runner.git https://github.com/ansible/ansible-runner.git"
+    "${dev_dir}/ansible-builder git@github.com:maxamillion/ansible-builder.git https://github.com/ansible/ansible-builder.git"
     "${dev_dir}/ansible-bender git@github.com:maxamillion/ansible-bender.git https://github.com/ansible-community/ansible-bender.git"
     "${dev_dir}/receptor git@github.com:maxamillion/receptor.git https://github.com/project-receptor/receptor.git"
     "${dev_dir}/molecule git@github.com:maxamillion/molecule.git https://github.com/ansible/molecule.git"
@@ -71,7 +72,7 @@ git_repos=(
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/yum https://github.com/rpm-software-management/yum.git"
     "${src_dir}/yum-utils https://github.com/rpm-software-management/yum-utils.git"
-    "${src_dir}/fedora-infra-ansible https://infrastructure.fedoraproject.org/infra/ansible.git"
+#    "${src_dir}/fedora-infra-ansible https://infrastructure.fedoraproject.org/infra/ansible.git"
     "${src_dir}/firewalld https://github.com/firewalld/firewalld.git"
     "${collections_dir}/maxamillion/devel git@github.com:maxamillion/ansible_collections.maxamillion.devel.git"
     "${collections_dir}/ibm/qradar git@github.com:maxamillion/ibm_qradar.git https://github.com/ansible-collections/ibm.qradar.git"
@@ -85,7 +86,7 @@ git_repos=(
     "${collections_dir}/community/general git@github.com:maxamillion/community.general.git https://github.com/ansible-collections/community.general.git"
     "${collections_dir}/community/qradar git@github.com:maxamillion/community.qradar.git https://github.com/ansible-collections/community.qradar.git"
     "${collections_dir}/community/es git@github.com:maxamillion/community.es.git https://github.com/ansible-collections/community.es.git"
-    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
+#    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
 )
 
 for repo_string in "${git_repos[@]}"
