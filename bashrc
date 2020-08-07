@@ -67,6 +67,9 @@ fi
 if [ -f ~/bin/kubectl ]; then
     source <(kubectl completion bash)
 fi
+if [ -f ~/bin/openshift-install]; then
+    source <(openshift-install completion bash)
+fi
 
 # Source bash-completions if available
 #   Yes, I know technically this should go in ~/.bash_profile but shhhhh
