@@ -98,8 +98,15 @@ Host starlitemk2
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
-Host devlocal
+Host rhel8
   HostName 192.168.122.100
+  User admiller
+  ServerAliveInterval 120
+  TCPKeepAlive yes
+  ForwardAgent yes
+  ForwardX11 yes
+Host docker
+  HostName 192.168.122.140
   User admiller
   ServerAliveInterval 120
   TCPKeepAlive yes

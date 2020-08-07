@@ -60,6 +60,14 @@ if [ -f ~/.local/bin/podman-compose ]; then
     alias docker-compose='podman-compose'
 fi
 
+# OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
+if [ -f ~/bin/oc ]; then
+    source <(oc completion bash)
+fi
+if [ -f ~/bin/kubectl ]; then
+    source <(kubectl completion bash)
+fi
+
 # Source bash-completions if available
 #   Yes, I know technically this should go in ~/.bash_profile but shhhhh
 if ! shopt -oq posix; then
