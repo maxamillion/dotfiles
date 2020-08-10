@@ -62,13 +62,13 @@ fi
 
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/bin/oc ]; then
-    source <(oc completion bash)
+    source <(~/bin/oc completion bash)
 fi
 if [ -f ~/bin/kubectl ]; then
-    source <(kubectl completion bash)
+    source <(~/bin/kubectl completion bash)
 fi
 if [ -f ~/bin/openshift-install ]; then
-    source <(openshift-install completion bash)
+    source <(~/bin/openshift-install completion bash)
 fi
 
 # Source bash-completions if available
