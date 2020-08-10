@@ -67,7 +67,7 @@ fi
 if [ -f ~/bin/kubectl ]; then
     source <(kubectl completion bash)
 fi
-if [ -f ~/bin/openshift-install]; then
+if [ -f ~/bin/openshift-install ]; then
     source <(openshift-install completion bash)
 fi
 
