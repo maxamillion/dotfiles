@@ -86,6 +86,7 @@ git_repos=(
     "${collections_dir}/ansible/netcommon git@github.com:maxamillion/netcommon.git https://github.com/ansible-collections/netcommon.git"
     "${collections_dir}/community/general git@github.com:maxamillion/community.general.git https://github.com/ansible-collections/community.general.git"
     "${collections_dir}/community/kubernetes git@github.com:maxamillion/community.kubernetes.git https://github.com/ansible-collections/community.kubernetes.git"
+    "${collections_dir}/community/okd git@github.com:maxamillion/community.okd.git https://github.com/ansible-collections/community.okd.git"
     "${collections_dir}/community/qradar git@github.com:maxamillion/community.qradar.git https://github.com/ansible-collections/community.qradar.git"
     "${collections_dir}/community/es git@github.com:maxamillion/community.es.git https://github.com/ansible-collections/community.es.git"
 #    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
