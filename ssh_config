@@ -107,7 +107,7 @@ Host rhel8
   ForwardX11 yes
 Host docker
   HostName 192.168.122.140
-  User admiller
+  User root
   ServerAliveInterval 120
   TCPKeepAlive yes
   ForwardAgent yes
