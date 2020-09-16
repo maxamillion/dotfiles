@@ -526,13 +526,13 @@ show_git_head() {
         git --no-pager show -p --pretty="tformat:"
 }
 
-git_auto_bisect(){
+git_auto_bisect_ansible(){
     bad_branch=${1}
     good_branch=${2}
     reverse=${3}
 
     if [[ ${1} == "-h" ]] || [[ -z "${1}" ]]; then
-        printf "git_auto_bisect bad_branch good_branch [reverse]\n"
+        printf "git_auto_bisect_ansible bad_branch good_branch [reverse]\n"
     fi
 
     if [[ -z "${bad_branch}" ]] || [[ -z "${good_branch}" ]] ; then
@@ -581,7 +581,7 @@ alias gfph="git format-patch HEAD~1"
 alias gg="git grep -n"
 alias gl="pretty_git_log"
 alias gh="show_git_head"
-alias gab="git_auto_bisect"
+alias gaba="git_auto_bisect_ansible"
 alias gph="git push"
 alias gpo="git push origin"
 alias gpl="git pull"
