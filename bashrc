@@ -48,8 +48,10 @@ fi
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     if [ -f /usr/bin/python3 ]; then
         export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-    else
+    elif [ -f /usr/bin/python2 ] && ! [ -f /usr/bin/python ]; then
         export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
+    else
+        export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
     fi
     export WORKON_HOME=${HOME}/.virtualenvs
     . ~/.local/bin/virtualenvwrapper.sh
