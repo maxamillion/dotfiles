@@ -72,6 +72,8 @@ git_repos=(
     "${dev_dir}/fedora-kickstarts ssh://git@pagure.io/forks/maxamillion/fedora-kickstarts.git https://pagure.io/fedora-kickstarts.git"
     "${dev_dir}/baremetal-deploy git@github.com:maxamillion/baremetal-deploy.git https://github.com/openshift-kni/baremetal-deploy.git"
     "${dev_dir}/kubespray git@github.com:maxamillion/kubespray.git https://github.com/kubernetes-sigs/kubespray"
+    "${dev_dir}/osbuild-composer git@github.com:maxamillion/osbuild-composer.git https://github.com/osbuild/osbuild-composer.git"
+    "${dev_dir}/osbuild git@github.com:maxamillion/osbuild.git https://github.com/osbuild/osbuild.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/yum https://github.com/rpm-software-management/yum.git"
     "${src_dir}/yum-utils https://github.com/rpm-software-management/yum-utils.git"
