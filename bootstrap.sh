@@ -42,6 +42,7 @@ symlink_if_needed ~/dotfiles/ptpython_config.py ~/.ptpython/config.py
 symlink_if_needed ~/dotfiles/ssh_config         ~/.ssh/config
 symlink_if_needed ~/dotfiles/Xresources         ~/.Xresources
 symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
+symlink_if_needed ~/dotfiles/profile            ~/.profile
 symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
 
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
