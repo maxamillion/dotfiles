@@ -110,6 +110,7 @@ set enable-bracketed-paste On
 
 export LANG=en_US.UTF-8
 export EDITOR=vim
+export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
 
 # Make dir completion better
 #complete -r cd &> /dev/null
@@ -164,8 +165,8 @@ alias ats3='ansible-test sanity --python 3.6'
 # ssh into cloud instances ignoring warnings and such
 alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=QUIET "$@"'
 
-# tmux_sync_env because I'm too lazy to keep typing that shit
-alias tse="tmux_sync_env"
+# start ssh agent (if necessary)
+alias ssa='ssh_agent'
 
 # traditional util aliases
 alias l.='ls -d .* --color=auto'
@@ -217,24 +218,10 @@ fedpkgfork() {
     fi
 }
 
-# borrowed from https://development.robinwinslow.uk/2012/07/20/tmux-and-ssh-auto-login-with-ssh-agent-finally/
 ssh_agent() {
-    # if ssh auth variable is missing
-    if [ -z "$SSH_AUTH_SOCK" ]; then
-        export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
-    fi
-
+    rm -f ${SSH_AUTH_SOCK}
     # if socket is available create the new auth session
-    if [ ! -S "$SSH_AUTH_SOCK" ]; then
-        ssh-agent -a $SSH_AUTH_SOCK > /dev/null 2>&1
-        echo $SSH_AGENT_PID > $HOME/.ssh/.auth_pid
-    fi
-
-    # if agent isn't defined, recreate it from pid file
-    if [ -z $SSH_AGENT_PID ]; then
-        export SSH_AGENT_PID=$(cat $HOME/.ssh/.auth_pid)
-    fi
-
+    SSH_AGENT_PID=$(ssh-agent -a ${SSH_AUTH_SOCK} > /dev/null 2>&1)
     # Add all default keys to ssh auth
     ssh-add 2>/dev/null
 }
@@ -262,23 +249,6 @@ cleandocker() {
     do
         docker rmi $i
     done
-}
-
-# Sync the environment of an existing shell
-#
-#  tmux already updates the environment according to
-#  the update-environment settings in the config. However
-#  for existing shells you need to sync from from tmux's view
-#  of the world.
-#
-# Cribbed from:
-#   https://superuser.com/questions/479796/is-it-possible-to-spawn-an-ssh-agent-for-a-new-tmux-session
-function tmux_sync_env() {
-    ssh_auth_sock=$(tmux showenv | grep "^SSH_AUTH_SOCK")
-    ssh_connection=$(tmux showenv | grep "^SSH_CONNECTION")
-    export "${ssh_auth_sock}"
-    export "${ssh_connection}"
-    printf "SSH_AUTH_SOCK and SSH_CONNECTION sync'd\n"
 }
 
 # acs-engine stuff

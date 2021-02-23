@@ -5,6 +5,7 @@
 src_dir="${HOME}/src"
 dev_dir="${src_dir}/dev"
 collections_dir="${dev_dir}/ansible_collections"
+execenvs_dir="${dev_dir}/ansible_execenvs"
 
 # Small script to setup git repos I work in frequently
 
@@ -79,6 +80,7 @@ git_repos=(
     "${src_dir}/yum-utils https://github.com/rpm-software-management/yum-utils.git"
 #    "${src_dir}/fedora-infra-ansible https://infrastructure.fedoraproject.org/infra/ansible.git"
     "${src_dir}/firewalld https://github.com/firewalld/firewalld.git"
+    "${src_dir}/meta-rpm https://gitlab.com/fedora-iot/meta-rpm.git"
     "${collections_dir}/maxamillion/devel git@github.com:maxamillion/ansible_collections.maxamillion.devel.git"
     "${collections_dir}/ibm/qradar git@github.com:maxamillion/ibm_qradar.git https://github.com/ansible-collections/ibm.qradar.git"
     "${collections_dir}/ibm/isam git@github.com:maxamillion/isam-ansible-roles.git https://github.com/IBM-Security/isam-ansible-roles.git"
@@ -94,6 +96,8 @@ git_repos=(
     "${collections_dir}/community/qradar git@github.com:maxamillion/community.qradar.git https://github.com/ansible-collections/community.qradar.git"
     "${collections_dir}/community/es git@github.com:maxamillion/community.es.git https://github.com/ansible-collections/community.es.git"
     "${collections_dir}/containers/podman git@github.com:maxamillion/ansible-podman-collections.git https://github.com/containers/ansible-podman-collections.git"
+    "${collections_dir}/fedora/iot git@github.com:maxamillion/fedora.iot.git"
+    "${execenvs_dir}/fedora.iot git@github.com:maxamillion/execenv.fedora.iot.git"
 #    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
 )
 
