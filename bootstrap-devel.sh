@@ -78,6 +78,7 @@ git_repos=(
     "${dev_dir}/yggdrasil git@github.com:maxamillion/yggdrasil.git https://github.com/RedHatInsights/yggdrasil.git"
     "${dev_dir}/playbook-dispatcher git@github.com:maxamillion/playbook-dispatcher.git https://github.com/RedHatInsights/playbook-dispatcher.git"
     "${dev_dir}/rhc-worker-playbook git@github.com:maxamillion/rhc-worker-playbook.git https://github.com/RedHatInsights/rhc-worker-playbook.git"
+    "${dev_dir}/insights-core git@github.com:maxamillion/insights-core.git https://github.com/RedHatInsights/insights-core.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/yum https://github.com/rpm-software-management/yum.git"
     "${src_dir}/yum-utils https://github.com/rpm-software-management/yum-utils.git"
