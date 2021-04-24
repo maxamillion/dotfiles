@@ -640,6 +640,12 @@ pathappend $HOME/.local/bin
 _localhosts=("mobilegen" "penguin" "localhost" "starlite" "latitude7390" "optiplex5055")
 short_hostname=${HOSTNAME%%.*}
 
+if [[ -z "${short_hostname}" ]]; then
+    if [[ -n "${container}" ]] && [[ ${NAME} == *"toolbox"* ]]; then
+        short_hostname="${NAME}:${VERSION}"
+    fi
+fi
+
 ### UGLY HACK
 # This works and the vcs prompt from git bash completion did weird things to
 # my PS1 ... meh
@@ -674,7 +680,7 @@ __prompt_command() {
     if [[ $EUID -ne 0 ]]; then
 
         # Set local colorscheme conditionally
-        if [[ -n ${short_hostname} ]] && [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
+        if [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
             # non-root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$yellow_c
