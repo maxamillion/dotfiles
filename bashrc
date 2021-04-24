@@ -110,7 +110,6 @@ set enable-bracketed-paste On
 
 export LANG=en_US.UTF-8
 export EDITOR=vim
-export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
 
 # Make dir completion better
 #complete -r cd &> /dev/null
@@ -218,13 +217,15 @@ fedpkgfork() {
     fi
 }
 
-ssh_agent() {
-    rm -f ${SSH_AUTH_SOCK}
-    # if socket is available create the new auth session
-    SSH_AGENT_PID=$(ssh-agent -a ${SSH_AUTH_SOCK} > /dev/null 2>&1)
-    # Add all default keys to ssh auth
-    ssh-add 2>/dev/null
-}
+# Go back to allowing keyring daemon to manage this ... for now
+#export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
+#ssh_agent() {
+#    rm -f ${SSH_AUTH_SOCK}
+#    # if socket is available create the new auth session
+#    SSH_AGENT_PID=$(ssh-agent -a ${SSH_AUTH_SOCK} > /dev/null 2>&1)
+#    # Add all default keys to ssh auth
+#    ssh-add 2>/dev/null
+#}
 
 yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"

@@ -34,6 +34,7 @@ symlink_if_needed ~/dotfiles/i3-config          ~/.config/i3/config
 symlink_if_needed ~/dotfiles/i3status-config    ~/.config/i3status/config
 symlink_if_needed ~/dotfiles/redshift.conf      ~/.config/redshift.conf
 symlink_if_needed ~/dotfiles/tmux.conf          ~/.tmux.conf
+symlink_if_needed ~/dotfiles/tmuxp.yml          ~/.tmuxp.conf
 symlink_if_needed ~/dotfiles/tmuxinator-wm.yml  ~/.tmuxinator/wm.yml
 symlink_if_needed ~/dotfiles/screenrc           ~/.screenrc
 symlink_if_needed ~/dotfiles/gitconfig          ~/.gitconfig
