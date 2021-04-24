@@ -674,7 +674,7 @@ __prompt_command() {
     if [[ $EUID -ne 0 ]]; then
 
         # Set local colorscheme conditionally
-        if [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
+        if [[ -n ${short_hostname} ]] && [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
             # non-root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$yellow_c
