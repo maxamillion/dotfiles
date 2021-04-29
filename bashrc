@@ -164,8 +164,9 @@ alias ats3='ansible-test sanity --python 3.6'
 # ssh into cloud instances ignoring warnings and such
 alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=QUIET "$@"'
 
-# start ssh agent (if necessary)
-alias ssa='ssh_agent'
+# Go back to allowing keyring daemon to manage this ... for now
+## start ssh agent (if necessary)
+#alias ssa='ssh_agent'
 
 # traditional util aliases
 alias l.='ls -d .* --color=auto'
@@ -289,6 +290,7 @@ _conditionally_symlink() {
     #   _conditionally_symlink src_path dest_path
     if [[ -e "${1}" ]]; then
         if ! [[ -e "${2}" ]]; then
+            printf "%s -> %s\n:" "${1}" "${2}"
             ln -s "${1}" "${2}"
         fi
     fi
@@ -299,7 +301,7 @@ _conditionally_symlink() {
 # for Red Hat family of distros
 rhtvenv() {
     local py_path=$(which python)
-    if ! [[ ${py_path} =~ 'virtualenv' ]]; then
+    if ! [[ ${py_path} =~ 'virtualenv' ]] && [[ -z "${VIRTUAL_ENV}" ]]; then
         printf "NOT IN A VIRTUALENV!\n"
         return 1
     fi
@@ -364,7 +366,7 @@ rhtvenv() {
 
     ## Insights Client
     _conditionally_symlink "${pylib_path}/insights_client" \
-                "${venv_basepath}/lib/python${py_shortver}/site-packages/insights_client/"
+                "${venv_basepath}/lib/python${py_shortver}/site-packages/insights_client"
 
     printf "DONE!\n"
 }
