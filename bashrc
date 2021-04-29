@@ -362,6 +362,10 @@ rhtvenv() {
     _conditionally_symlink "${pylib_path}/yumutils" \
                 "${venv_basepath}/lib/python${py_shortver}/site-packages/yumutils"
 
+    ## Insights Client
+    _conditionally_symlink "${pylib_path}/insights_client" \
+                "${venv_basepath}/lib/python${py_shortver}/site-packages/insights_client/"
+
     printf "DONE!\n"
 }
 
