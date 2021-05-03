@@ -3,35 +3,27 @@ windows:
 - window_name: workshops
   shell_command_before:
     - cd ~/src/dev/workshops/
-  window_index: 1
 - window_name: bld
   shell_command_before:
     - cd ~/
-  window_index: 2
 - window_name: dev
   shell_command_before:
     - cd ~/src/dev/ansible    
-  window_index: 3
 - window_name: hack
   shell_command_before:
     - cd ~/
-  window_index: 4
 - window_name: ansible
   shell_command_before:
     - cd ~/
-  window_index: 5
 - window_name: venv
   shell_command_before:
     - cd ~/
-  window_index: 6
 - window_name: virt
   shell_command_before:
     - cd ~/
-  window_index: 7
 - window_name: ssh
   shell_command_before:
     - cd ~/
-  window_index: 8
 - window_name: r
   shell_command_before:
     - cd ~/                    # run as a first command in all panes
