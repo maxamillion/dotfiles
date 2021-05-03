@@ -647,8 +647,13 @@ _localhosts=("mobilegen" "penguin" "localhost" "starlite" "latitude7390" "optipl
 short_hostname=${HOSTNAME%%.*}
 
 if [[ -z "${short_hostname}" ]]; then
-    if [[ -n "${container}" ]] && [[ ${NAME} == *"toolbox"* ]]; then
-        short_hostname="${NAME}:${VERSION}"
+    if [[ -n "${container}" ]]; then
+        if [[ ${NAME} == *"toolbox"* ]]; then
+            short_hostname="${NAME}:${VERSION}"
+        elif [[ ${NAME} != *"toolbox"* ]]; then
+            source /etc/os-release
+            short_hostname="${ID}:${VERSION_ID}"
+        fi
     fi
 fi
 
@@ -686,7 +691,7 @@ __prompt_command() {
     if [[ $EUID -ne 0 ]]; then
 
         # Set local colorscheme conditionally
-        if [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
+        if [[ ${_localhosts[@]} =~ ${short_hostname} ]] && [[ -n "${short_hostname}" ]]; then
             # non-root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$yellow_c
@@ -707,7 +712,7 @@ __prompt_command() {
         fi
     else
         # Set local colorscheme conditionally
-        if [[ ${_localhosts[@]} =~ ${short_hostname} ]]; then
+        if [[ ${_localhosts[@]} =~ ${short_hostname} ]] && [[ -n "${short_hostname}" ]]; then
             # root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$red_c
