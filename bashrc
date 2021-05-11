@@ -189,6 +189,7 @@ alias pr='podman run --rm --net=host -ti'
 #   https://stackoverflow.com/questions/2720014/upgrading-all-packages-with-pip
 alias pip2up="pip2 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip2 install -U"
 alias pip3up="pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U"
+alias pipuup="pip list --user --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 2  | xargs -n1 pip install --user -U"
 
 if rpm -q vim-common &> /dev/null; then
     alias vless="$(rpm -ql vim-common | grep less.sh)"
