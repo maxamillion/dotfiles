@@ -81,6 +81,7 @@ git_repos=(
     "${dev_dir}/insights-core git@github.com:maxamillion/insights-core.git https://github.com/RedHatInsights/insights-core.git"
     "${dev_dir}/greenboot git@github.com:maxamillion/greenboot.git https://github.com/fedora-iot/greenboot.git"
     "${dev_dir}/edge-api git@github.com:maxamillion/edge-api.git https://github.com/RedHatInsights/edge-api.git"
+    "${dev_dir}/minikube git@github.com:maxamillion/minikube.git https://github.com/kubernetes/minikube.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/maxamillion.github.io git@github.com:maxamillion/maxamillion.github.io.git"
     "${src_dir}/yum https://github.com/rpm-software-management/yum.git"
