@@ -183,6 +183,8 @@ alias zgrep='zgrep --color=auto'
 alias dr='docker run --rm -ti'
 alias pr='podman run --rm --net=host -ti'
 
+# toolbox enter
+alias te='toolbox enter'
 
 # update everything in pip
 # 100% "borrowed" from stack overflow
