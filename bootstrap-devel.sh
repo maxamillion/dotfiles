@@ -75,6 +75,7 @@ git_repos=(
     "${dev_dir}/kubespray git@github.com:maxamillion/kubespray.git https://github.com/kubernetes-sigs/kubespray"
     "${dev_dir}/osbuild-composer git@github.com:maxamillion/osbuild-composer.git https://github.com/osbuild/osbuild-composer.git"
     "${dev_dir}/osbuild git@github.com:maxamillion/osbuild.git https://github.com/osbuild/osbuild.git"
+    "${dev_dir}/cloud-connector git@github.com:maxamillion/cloud-connector.git https://github.com/RedHatInsights/cloud-connector.git"
     "${dev_dir}/yggdrasil git@github.com:maxamillion/yggdrasil.git https://github.com/RedHatInsights/yggdrasil.git"
     "${dev_dir}/playbook-dispatcher git@github.com:maxamillion/playbook-dispatcher.git https://github.com/RedHatInsights/playbook-dispatcher.git"
     "${dev_dir}/rhc-worker-playbook git@github.com:maxamillion/rhc-worker-playbook.git https://github.com/RedHatInsights/rhc-worker-playbook.git"
