@@ -95,6 +95,7 @@ git_repos=(
     "${src_dir}/firewalld https://github.com/firewalld/firewalld.git"
     "${src_dir}/meta-rpm https://gitlab.com/fedora-iot/meta-rpm.git"
     "${src_dir}/portfolio-architecture-examples https://gitlab.com/redhatdemocentral/portfolio-architecture-examples.git"
+    "${src_dir}/k4e-operator https://github.com/jakub-dzon/k4e-operator"
     "${collections_dir}/maxamillion/devel git@github.com:maxamillion/ansible_collections.maxamillion.devel.git"
     "${collections_dir}/ibm/qradar git@github.com:maxamillion/ibm_qradar.git https://github.com/ansible-collections/ibm.qradar.git"
     "${collections_dir}/ibm/isam git@github.com:maxamillion/isam-ansible-roles.git https://github.com/IBM-Security/isam-ansible-roles.git"
