@@ -182,6 +182,7 @@ alias zgrep='zgrep --color=auto'
 # containers .... docker, podman, whatever is hot next week ....
 alias dr='docker run --rm -ti'
 alias pr='podman run --rm --net=host -ti'
+alias mk='minikube kubectl --'
 
 # toolbox enter
 alias te='toolbox enter'
