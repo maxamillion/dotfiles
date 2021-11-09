@@ -1,8 +1,8 @@
 session_name: wm
 windows:
-- window_name: workshops
+- window_name: edge-api
   shell_command_before:
-    - cd ~/src/dev/workshops/
+    - cd ~/src/dev/edge-api/
 - window_name: bld
   shell_command_before:
     - cd ~/
