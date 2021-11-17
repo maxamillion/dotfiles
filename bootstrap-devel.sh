@@ -93,7 +93,7 @@ git_repos=(
     "${src_dir}/yum-utils https://github.com/rpm-software-management/yum-utils.git"
 #    "${src_dir}/fedora-infra-ansible https://infrastructure.fedoraproject.org/infra/ansible.git"
     "${src_dir}/firewalld https://github.com/firewalld/firewalld.git"
-    "${src_dir}/meta-rpm https://gitlab.com/fedora-iot/meta-rpm.git"
+#    "${src_dir}/meta-rpm https://gitlab.com/fedora-iot/meta-rpm.git"
     "${src_dir}/portfolio-architecture-examples https://gitlab.com/redhatdemocentral/portfolio-architecture-examples.git"
     "${src_dir}/k4e-operator https://github.com/jakub-dzon/k4e-operator.git"
     "${src_dir}/k4e-device-worker https://github.com/jakub-dzon/k4e-device-worker.git"
