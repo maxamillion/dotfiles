@@ -85,6 +85,7 @@ git_repos=(
     "${dev_dir}/edge-api git@github.com:maxamillion/edge-api.git https://github.com/RedHatInsights/edge-api.git"
     "${dev_dir}/edge-frontend git@github.com:maxamillion/edge-frontend.git https://github.com/RedHatInsights/edge-frontend.git"
     "${dev_dir}/minikube git@github.com:maxamillion/minikube.git https://github.com/kubernetes/minikube.git"
+    "${dev_dir}/kcp git@github.com:maxamillion/kcp.git https://github.com/kcp-dev/kcp.git"
     "${dev_dir}/centpkg ssh://git@git.centos.org/forks/maxamillion/centos/centpkg.git https://git.centos.org/centos/centpkg.git"
     "${dev_dir}/sig-core-t_functional git@github.com:maxamillion/sig-core-t_functional.git https://github.com/CentOS/sig-core-t_functional.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
