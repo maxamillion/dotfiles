@@ -179,8 +179,7 @@ alias zegrep='zegrep --color=auto'
 alias zfgrep='zfgrep --color=auto'
 alias zgrep='zgrep --color=auto'
 
-# containers .... docker, podman, whatever is hot next week ....
-alias dr='docker run --rm -ti'
+# containers .... podman, whatever is hot next week ....
 alias pr='podman run --rm --net=host -ti'
 alias mk='minikube kubectl --'
 
@@ -243,17 +242,17 @@ gen_passwd () {
         tr -cd '[:graph:]' < /dev/urandom | fold -w"$1" | head -n1
     fi
 }
-cleandocker() {
+cleanpodman() {
     # Clean exited containers
-    for container in $(docker ps -a | awk '/Exited/{ print $1}')
+    for container in $(podman ps -a | awk '/Exited/{ print $1}')
     do
-        docker rm $container
+        podman rm $container
     done
 
     # Clean dangling images
-    for i in $(docker images -f 'dangling=true' -q)
+    for i in $(podman images -f 'dangling=true' -q)
     do
-        docker rmi $i
+        podman rmi $i
     done
 }
 
