@@ -147,9 +147,9 @@ alias ipy='ipython3'
 alias ackp='ack --python'
 
 # kinit aliases
-alias kr='kinit admiller@REDHAT.COM'
-alias kf='kinit maxamillion@FEDORAPROJECT.ORG'
-alias kfs='kinit maxamillion@STG.FEDORAPROJECT.ORG'
+alias kr='fkinit admiller@REDHAT.COM'
+alias kf='fkinit maxamillion@FEDORAPROJECT.ORG'
+alias kfs='fkinit maxamillion@STG.FEDORAPROJECT.ORG'
 alias ksr='kswitch -p admiller@REDHAT.COM'
 alias ksf='kswitch -p maxamillion@FEDORAPROJECT.ORG'
 alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
