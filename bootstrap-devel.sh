@@ -68,6 +68,7 @@ git_repos=(
     "${dev_dir}/ids_rule git@github.com:maxamillion/ids_rule.git https://github.com/ansible-security/ids_rule.git"
     "${dev_dir}/openshift-ansible git@github.com:maxamillion/openshift-ansible.git https://github.com/openshift/openshift-ansible.git"
     "${dev_dir}/dnf git@github.com:maxamillion/dnf.git https://github.com/rpm-software-management/dnf.git"
+    "${dev_dir}/mock git@github.com:maxamillion/mock.git https://github.com/rpm-software-management/mock.git"
     "${dev_dir}/toolbox git@github.com:maxamillion/toolbox.git https://github.com/containers/toolbox.git"
     "${dev_dir}/releng ssh://git@pagure.io/forks/maxamillion/releng.git https://pagure.io/releng.git"
     "${dev_dir}/releng-automation ssh://git@pagure.io/forks/maxamillion/releng-automation.git https://pagure.io/releng-automation.git"
