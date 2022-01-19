@@ -646,7 +646,7 @@ pathappend $HOME/.local/bin
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("mobilegen" "penguin" "localhost" "starlite" "latitude7390" "optiplex5055" "framework")
+_localhosts=("mobilegen" "penguin" "localhost" "starlite" "latitude7390" "optiplex5055" "framework" "toolbox")
 short_hostname=${HOSTNAME%%.*}
 
 if [[ -z "${short_hostname}" ]]; then
@@ -699,7 +699,11 @@ __prompt_command() {
             local date_c=$red_c
             local user_c=$yellow_c
             local at_c=$blue_c
-            local host_c=$yellow_c
+            if [[ ${short_hostname} == "toolbox" ]]; then
+                local host_c=$teal_c
+            else
+                local host_c=$yellow_c
+            fi
             local exit_c=$white_c
             local vcs_c=$red_c
             local pwd_c=$teal_c
