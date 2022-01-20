@@ -19,7 +19,6 @@ set matchtime=2
 set number
 set numberwidth=3
 set relativenumber
-set relativenumber
 set ruler
 set showcmd
 set showmatch
