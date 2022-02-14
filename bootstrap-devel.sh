@@ -56,7 +56,7 @@ git_repos=(
     "${dev_dir}/awx git@github.com:maxamillion/awx.git https://github.com/ansible/awx.git"
     "${dev_dir}/awx-resource-operator git@github.com:maxamillion/awx-resource-operator.git https://github.com/ansible/awx-resource-operator.git"
     "${dev_dir}/ansible-bender git@github.com:maxamillion/ansible-bender.git https://github.com/ansible-community/ansible-bender.git"
-    "${dev_dir}/receptor git@github.com:maxamillion/receptor.git https://github.com/project-receptor/receptor.git"
+    "${dev_dir}/receptor git@github.com:maxamillion/receptor.git https://github.com/ansible/receptor.git"
     "${dev_dir}/molecule git@github.com:maxamillion/molecule.git https://github.com/ansible/molecule.git"
     "${dev_dir}/workshops git@github.com:maxamillion/workshops.git https://github.com/ansible/workshops.git"
     "${dev_dir}/workshop-examples git@github.com:maxamillion/workshop-examples.git https://github.com/ansible-security/workshop-examples.git"
