@@ -90,6 +90,7 @@ git_repos=(
     "${dev_dir}/centpkg ssh://git@git.centos.org/forks/maxamillion/centos/centpkg.git https://git.centos.org/centos/centpkg.git"
     "${dev_dir}/sig-core-t_functional git@github.com:maxamillion/sig-core-t_functional.git https://github.com/CentOS/sig-core-t_functional.git"
     "${dev_dir}/awx-operator git@github.com:maxamillion/awx-operator.git https://github.com/ansible/awx-operator.git"
+    "${dev_dir}/podman-system-role git@github.com:maxamillion/podman.git https://github.com/linux-system-roles/podman.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/maxamillion.github.io git@github.com:maxamillion/maxamillion.github.io.git"
     "${src_dir}/surface-uefi-firmware https://github.com/linux-surface/surface-uefi-firmware"
