@@ -143,7 +143,7 @@ alias pud='pullupstream devel'
 alias pum='pullupstream master'
 alias pa='pullansible'
 alias ptp='ptpython3'
-alias ipy='ipython3'
+alias ipy='ipython --TerminalInteractiveShell.editing_mode=vi'
 alias ackp='ack --python'
 
 # kinit aliases
