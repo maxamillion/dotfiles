@@ -281,6 +281,13 @@ proxy () {
     fi
 }
 
+stageproxy () {
+    export http_proxy='http://squid.corp.redhat.com:3128';
+    export https_proxy='http://squid.corp.redhat.com:3128';
+    export HTTP_PROXY='http://squid.corp.redhat.com:3128';
+    export HTTPS_PROXY='https://squid.corp.redhat.com:3128';
+}
+
 unproxy() {
     unset http_proxy;
     unset https_proxy;
