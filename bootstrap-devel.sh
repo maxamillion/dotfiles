@@ -120,7 +120,7 @@ git_repos=(
     "${collections_dir}/containers/podman git@github.com:maxamillion/ansible-podman-collections.git https://github.com/containers/ansible-podman-collections.git"
     "${collections_dir}/community/osbuild git@github.com:maxamillion/community.osbuild.git https://github.com/ansible-collections/community.osbuild.git"
     "${collections_dir}/fedora/iot git@github.com:maxamillion/fedora.iot.git"
-    "${collections_dir}/osbuild/composer git@github.com:maxamillion/osbuild.composer.git"
+    "${collections_dir}/osbuild/composer git@github.com:maxamillion/osbuild.composer.git https://github.com/ansible-collections/osbuild.composer.git"
     "${execenvs_dir}/fedora.iot git@github.com:maxamillion/execenv.fedora.iot.git"
 #    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
 )
