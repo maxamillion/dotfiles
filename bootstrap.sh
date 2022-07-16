@@ -9,6 +9,7 @@ mkdir_if_needed() {
 
 mkdir_if_needed ~/.config/{dunst,i3,i3status,fontconfig}
 mkdir_if_needed ~/.config/fontconfig/conf.d
+mkdir_if_needed ~/.config/nvim/lua/
 mkdir_if_needed ~/.tmuxinator
 mkdir_if_needed ~/.ptpython
 mkdir_if_needed ~/.fonts
@@ -45,12 +46,20 @@ symlink_if_needed ~/dotfiles/Xresources         ~/.Xresources
 symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
 symlink_if_needed ~/dotfiles/profile            ~/.profile
 symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
+symlink_if_needed ~/dotfiles/init.lua           ~/.config//nvim/init.lua
+symlink_if_needed ~/dotfiles/plugins.lua        ~/.config//nvim/lua/plugins.lua
 
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim;
     vim +PlugInstall! +qall
 fi
+
+## FIXME - need to sort out some neovim stuff before switching
+#if [[ ! -f ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
+#    git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+#         ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+#fi
 
 # This doesn't appear to be necessary, but keep it around just in case
 #link_if_needed ~/dotfiles/sshrc ~/.ssh/rc
