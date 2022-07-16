@@ -55,11 +55,11 @@ if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     vim +PlugInstall! +qall
 fi
 
-## FIXME - need to sort out some neovim stuff before switching
-#if [[ ! -f ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
-#    git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-#         ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-#fi
+if [[ ! -f ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
+    git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+         ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+    nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+fi
 
 # This doesn't appear to be necessary, but keep it around just in case
 #link_if_needed ~/dotfiles/sshrc ~/.ssh/rc

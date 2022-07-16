@@ -118,7 +118,12 @@ require('hardline').setup {
     theme = "gruvbox"
 }
 
---require('indent-guides')
+-- indent-blanklines
+require("indent_blankline").setup {
+        -- for example, context is off by default, use this to turn it on
+    show_current_context = true,
+    show_current_context_start = true,
+}
 
 local group = vim.api.nvim_create_augroup('fmt', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePre', { command = 'undojoin | Neoformat', group = group })

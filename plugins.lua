@@ -22,6 +22,8 @@ return require('packer').startup(function()
     use 'saadparwaiz1/cmp_luasnip'
     use 'L3MON4D3/LuaSnip'
 
+    use "lukas-reineke/indent-blankline.nvim"
+
     use 'nvim-treesitter/nvim-treesitter'
     use 'nvim-lua/lsp-status.nvim'
     use 'sbdchd/neoformat'
