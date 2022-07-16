@@ -46,6 +46,7 @@ map Y y$
 command! W :w
 command! Q :q
 
+set t_Co=256
 colorscheme badwolf
 
 let &colorcolumn="80,".join(range(400,999),",")

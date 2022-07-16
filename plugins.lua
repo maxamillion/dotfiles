@@ -35,7 +35,6 @@ return require('packer').startup(function()
     use 'ojroques/nvim-hardline'
     use {'fenetikm/falcon'}
     use { "ellisonleao/gruvbox.nvim" }
-    use { "savq/melange" }
 
     use {'terrortylor/nvim-comment'}
     use {'kylechui/nvim-surround'}

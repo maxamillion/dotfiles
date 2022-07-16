@@ -99,6 +99,8 @@ cmp.setup {
 }
 
 
+local opts = { noremap=true, silent=true }
+
 -- telescope
 require('telescope')
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, opts)
@@ -112,9 +114,11 @@ require('nvim_comment').setup {
     comment_empty = false,
 }
 require('nvim-surround').setup()
-require('hardline').setup {}
+require('hardline').setup {
+    theme = "gruvbox"
+}
 
 local group = vim.api.nvim_create_augroup('fmt', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePre', { command = 'undojoin | Neoformat', group = group })
 
-vim.cmd[[colorscheme melange]]
+vim.cmd[[colorscheme gruvbox]]
