@@ -109,7 +109,7 @@ bind '"\e.":yank-last-arg'
 set enable-bracketed-paste On
 
 export LANG=en_US.UTF-8
-export EDITOR=vim
+export EDITOR=nvim
 
 # Make dir completion better
 #complete -r cd &> /dev/null

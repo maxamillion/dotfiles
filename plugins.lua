@@ -13,6 +13,8 @@ return require('packer').startup(function()
     use 'lukas-reineke/lsp-format.nvim'
     use 'onsails/lspkind.nvim'
 
+    use "lukas-reineke/virt-column.nvim"
+
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-buffer'
