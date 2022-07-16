@@ -118,7 +118,12 @@ require('hardline').setup {
     theme = "gruvbox"
 }
 
+--require('indent-guides')
+
 local group = vim.api.nvim_create_augroup('fmt', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePre', { command = 'undojoin | Neoformat', group = group })
 
-vim.cmd[[colorscheme gruvbox]]
+-- vim command(s)
+vim.cmd[[
+colorscheme gruvbox
+]]

@@ -38,5 +38,7 @@ return require('packer').startup(function()
 
     use {'terrortylor/nvim-comment'}
     use {'kylechui/nvim-surround'}
+
+    use {'yuntan/neovim-indent-guides'}
 end)
 
