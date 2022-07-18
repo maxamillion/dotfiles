@@ -20,6 +20,21 @@ vim.wo.colorcolumn = "80"
 
 vim.g.mapleader = " "
 
+-- tab stuff
+vim.keymap.set('', '<leader>tn', '<Cmd>tabnew<CR>', { noremap = true })
+vim.keymap.set('', '<leader>tc', '<Cmd>tabclose<CR>', { noremap = true })
+vim.keymap.set('', '<leader>tp', '<Cmd>tabprevious<CR>', { noremap = true })
+vim.keymap.set('', '<leader>tm', '<Cmd>tabmove<CR>', { noremap = true })
+vim.keymap.set('', '<leader>1', '1gt', { noremap = true })
+vim.keymap.set('', '<leader>2', '2gt', { noremap = true })
+vim.keymap.set('', '<leader>3', '3gt', { noremap = true })
+vim.keymap.set('', '<leader>4', '4gt', { noremap = true })
+vim.keymap.set('', '<leader>5', '5gt', { noremap = true })
+vim.keymap.set('', '<leader>6', '6gt', { noremap = true })
+vim.keymap.set('', '<leader>7', '7gt', { noremap = true })
+vim.keymap.set('', '<leader>8', '8gt', { noremap = true })
+vim.keymap.set('', '<leader>9', '9gt', { noremap = true })
+
 -- treesitter
 require('nvim-treesitter.configs').setup {
     ensure_installed = { 'lua', 'python', 'go', 'bash'},
