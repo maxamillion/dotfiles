@@ -42,11 +42,6 @@ require('nvim-lsp-setup').setup({
     default_mappings = true,
     on_attach = function(client, bufnr)
         vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-          local bufopts = { noremap=true, silent=true, buffer=bufnr }
-          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-          vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-          vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
         client.server_capabilities.documentFormattingProvider = false
         client.server_capabilities.documentRangeFormattingProvider = false
     end,
@@ -138,10 +133,5 @@ require("indent_blankline").setup {
 -- colorcolumn
 require("virt-column").setup()
 
-local group = vim.api.nvim_create_augroup('fmt', { clear = true })
-vim.api.nvim_create_autocmd('BufWritePre', { command = 'undojoin | Neoformat', group = group })
-
 -- vim command(s)
-vim.cmd[[
-colorscheme gruvbox
-]]
+vim.cmd('colorscheme gruvbox')

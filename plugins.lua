@@ -10,7 +10,6 @@ return require('packer').startup(function()
             'williamboman/nvim-lsp-installer',
         }
     }
-    use 'lukas-reineke/lsp-format.nvim'
     use 'onsails/lspkind.nvim'
 
     use "lukas-reineke/virt-column.nvim"
@@ -28,7 +27,6 @@ return require('packer').startup(function()
 
     use 'nvim-treesitter/nvim-treesitter'
     use 'nvim-lua/lsp-status.nvim'
-    use 'sbdchd/neoformat'
 
     use {
         'nvim-telescope/telescope.nvim',
