@@ -12,6 +12,8 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+vim.opt.undofile = true
+
 vim.g.termguicolors = true
 
 vim.wo.colorcolumn = "80"
