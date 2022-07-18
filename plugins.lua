@@ -42,5 +42,6 @@ return require('packer').startup(function()
     use {'kylechui/nvim-surround'}
 
     use {'yuntan/neovim-indent-guides'}
+    use {'Glench/Vim-Jinja2-Syntax' }
 end)
 
