@@ -146,6 +146,11 @@ require("indent_blankline").setup {
     show_current_context_start = true,
 }
 
+-- nvim-tree
+require("nvim-tree").setup()
+vim.keymap.set('n', '<leader>ft', '<Cmd>NvimTreeOpen<CR>', { noremap = true })
+vim.keymap.set('n', '<leader>fc', '<Cmd>NvimTreeClose<CR>', { noremap = true })
+
 -- colorcolumn
 require("virt-column").setup()
 
