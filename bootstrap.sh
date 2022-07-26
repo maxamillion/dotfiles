@@ -15,6 +15,7 @@ mkdir_if_needed ~/.ptpython
 mkdir_if_needed ~/.fonts
 mkdir_if_needed ~/.ssh
 mkdir_if_needed ~/.vimundo
+mkdir_if_needed ~/.ipython/profile_default/
 
 # Symlink the conf files
 symlink_if_needed() {
@@ -47,7 +48,7 @@ symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
 symlink_if_needed ~/dotfiles/profile            ~/.profile
 symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
 symlink_if_needed ~/dotfiles/init.lua           ~/.config//nvim/init.lua
-symlink_if_needed ~/dotfiles/plugins.lua        ~/.config//nvim/lua/plugins.lua
+symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
