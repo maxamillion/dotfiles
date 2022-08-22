@@ -3,6 +3,8 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
 
+    use { "williamboman/mason.nvim" }
+
     use {
         'junnplus/nvim-lsp-setup',
         requires = {
