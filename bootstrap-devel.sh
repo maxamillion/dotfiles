@@ -121,6 +121,7 @@ git_repos=(
     "${collections_dir}/community/osbuild git@github.com:maxamillion/community.osbuild.git https://github.com/ansible-collections/community.osbuild.git"
     "${collections_dir}/fedora/iot git@github.com:maxamillion/fedora.iot.git"
     "${collections_dir}/osbuild/composer git@github.com:maxamillion/osbuild.composer.git https://github.com/ansible-collections/osbuild.composer.git"
+    "${collections_dir}/edge/workload git@github.com:maxamillion/edge.workload.git https://github.com/ansible-collections/edge.workload.git"
     "${execenvs_dir}/fedora.iot git@github.com:maxamillion/execenv.fedora.iot.git"
 #    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
 )
