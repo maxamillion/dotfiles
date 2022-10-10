@@ -530,7 +530,7 @@ git_auto_bisect_ansible(){
     fi
 
     if [[ -z "${bad_branch}" ]] || [[ -z "${good_branch}" ]] ; then
-        printf "Test command can not be empty\n"
+        printf "Must provide both refs\n"
         return 1
     fi
 
@@ -556,6 +556,41 @@ git_auto_bisect_ansible(){
         eval "git bisect run bash -c '! ${test_command}'"
     fi
     git bisect reset
+
+}
+
+git_revlist_test_ansible(){
+    branch=${1}
+
+    if [[ ${1} == "-h" ]] || [[ -z "${1}" ]]; then
+        printf "git_revlist_test \n"
+    fi
+
+    read -p "Test command: " test_command
+    if [[ -z "${test_command}" ]]; then
+        printf "Test command can not be empty\n"
+        return 1
+    fi
+
+    workon ansible
+    if [[ "$?" -ne "0" ]]; then
+        printf "No virtualenv named ansible.\n"
+        return 1
+    fi
+    ahack # clean the env
+    workon ansible
+
+    for ref in $(git rev-list "${branch}")
+    do
+        printf "CHECKING OUT: ${ref}\n"
+        git checkout "${ref}"
+        ahack
+        eval "${test_command}"
+        if [[ "$?" -eq "0" ]]; then
+            printf "First good commit found: ${ref}\n"
+            return 0
+        fi
+    done
 
 }
 
