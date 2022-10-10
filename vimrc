@@ -11,6 +11,7 @@ Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
+Plug 'ctrlpvim/ctrlp.vim'
 call plug#end()
 
 set autoindent
