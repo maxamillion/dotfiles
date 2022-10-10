@@ -31,6 +31,26 @@ set winwidth=83
 set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
 set showbreak=>
 
+" map leader to space
+let mapleader = " "
+
+" Switch between tabs
+nnoremap <Leader>1 1gt
+nnoremap <Leader>2 2gt
+nnoremap <Leader>3 3gt
+nnoremap <Leader>4 4gt
+nnoremap <Leader>5 5gt
+nnoremap <Leader>6 6gt
+nnoremap <Leader>7 7gt
+nnoremap <Leader>8 8gt
+nnoremap <Leader>9 9gt
+
+" Easy tab shortcuts
+noremap <Leader>tn :tabnew<CR>
+noremap <Leader>tc :tabclose<CR>
+noremap <Leader>tm :tabmove<CR>
+noremap <Leader>tp :tabprevious<CR>
+
 " fuck the arrow keys
 noremap <left> <nop>
 noremap <up> <nop>
@@ -43,9 +63,11 @@ nmap <F1> <nop>
 " Yank from current cursor position to end of line
 map Y y$
 
+" fat fingers be damned
 command! W :w
 command! Q :q
 
+" colors
 set t_Co=256
 colorscheme badwolf
 

@@ -57,11 +57,6 @@ if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     . ~/.local/bin/virtualenvwrapper.sh
 fi
 
-# Alias vim to neovim because it's the future
-if [ -f /usr/bin/nvim ]; then
-    alias vim='nvim'
-fi
-
 # Alias podman-compose because fuck docker
 if [ -f ~/.local/bin/podman-compose ]; then
     alias docker-compose='podman-compose'

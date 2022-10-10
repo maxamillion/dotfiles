@@ -4,16 +4,11 @@ return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
 
     use {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
-    }
-
-    use {
-        'junnplus/nvim-lsp-setup',
+        'junnplus/lsp-setup.nvim',
         requires = {
             'neovim/nvim-lspconfig',
-            'williamboman/nvim-lsp-installer',
+            'williamboman/mason.nvim',
+            'williamboman/mason-lspconfig.nvim',
         }
     }
     use 'onsails/lspkind.nvim'
