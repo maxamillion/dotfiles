@@ -77,9 +77,8 @@ let &colorcolumn="80,".join(range(400,999),",")
 noremap <Leader>ff :CtrlP<CR>
 
 " ALE
-"let g:ale_linters = {'python': ['pylsp']}
-" let g:ale_fixers = {'python': ['black']}
-" set omnifunc=ale#completion#OmniFunc
+nnoremap <Leader>an :ALENext<cr>
+nnoremap <Leader>ap :ALEPrevious<cr>
 
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
