@@ -76,6 +76,11 @@ let &colorcolumn="80,".join(range(400,999),",")
 " CtrlP
 noremap <Leader>ff :CtrlP<CR>
 
+" ALE
+"let g:ale_linters = {'python': ['pylsp']}
+" let g:ale_fixers = {'python': ['black']}
+" set omnifunc=ale#completion#OmniFunc
+
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
 let g:airline_symbols_ascii = 1
