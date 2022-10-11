@@ -71,8 +71,10 @@ command! Q :q
 " colors
 set t_Co=256
 colorscheme badwolf
-
 let &colorcolumn="80,".join(range(400,999),",")
+
+" CtrlP
+noremap <Leader>ff :CtrlP<CR>
 
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
