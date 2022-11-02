@@ -87,6 +87,9 @@ if ! shopt -oq posix; then
     if [ -f ~/.local/poetry.bash-completion ]; then
         . ~/.local/poetry.bash-completion
     fi
+    if [ -f ~/.local/bin/pipx ]; then
+        eval "$(register-python-argcomplete pipx)"
+    fi
 fi
 
 
