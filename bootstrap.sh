@@ -53,7 +53,6 @@ symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipytho
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim;
-    vim +PlugInstall! +qall
 vim << EOF
 :PlugInstall!
 :CocInstall coc-json coc-tsserver @yaegassy/coc-ansible
