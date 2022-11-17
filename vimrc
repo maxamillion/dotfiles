@@ -5,13 +5,13 @@ Plug 'davidhalter/jedi-vim'
 Plug 'ajh17/VimCompletesMe'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
-Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go'
 Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 set autoindent
@@ -90,10 +90,6 @@ let &colorcolumn="80,".join(range(400,999),",")
 
 " CtrlP
 noremap <Leader>ff :CtrlP<CR>
-
-" ALE
-nnoremap <Leader>an :ALENext<cr>
-nnoremap <Leader>ap :ALEPrevious<cr>
 
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
