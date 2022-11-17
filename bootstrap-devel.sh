@@ -123,7 +123,7 @@ git_repos=(
     "${collections_dir}/community/es git@github.com:maxamillion/community.es.git https://github.com/ansible-collections/community.es.git"
     "${collections_dir}/community/cip git@github.com:maxamillion/community.cip.git https://github.com/ansible-collections/community.cip.git"
     "${collections_dir}/containers/podman git@github.com:maxamillion/ansible-podman-collections.git https://github.com/containers/ansible-podman-collections.git"
-    "${collections_dir}/infra/osbuild git@github.com:maxamillion/infra.osbuild.git https://github.com/ansible-collections/infra.osbuild.git"
+    "${collections_dir}/infra/osbuild git@github.com:maxamillion/infra.osbuild.git https://github.com/redhat-cop/infra.osbuild.git"
     "${collections_dir}/fedora/iot git@github.com:maxamillion/fedora.iot.git"
     "${collections_dir}/osbuild/composer git@github.com:maxamillion/osbuild.composer.git https://github.com/ansible-collections/osbuild.composer.git"
     "${collections_dir}/edge/workload git@github.com:maxamillion/edge.workload.git https://github.com/ansible-collections/edge.workload.git"
