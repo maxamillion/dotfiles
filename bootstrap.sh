@@ -15,6 +15,7 @@ mkdir_if_needed ~/.ptpython
 mkdir_if_needed ~/.fonts
 mkdir_if_needed ~/.ssh
 mkdir_if_needed ~/.vimundo
+mkdir_if_needed ~/.vim
 mkdir_if_needed ~/.ipython/profile_default/
 
 # Symlink the conf files
@@ -47,6 +48,7 @@ symlink_if_needed ~/dotfiles/Xresources         ~/.Xresources
 symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
 symlink_if_needed ~/dotfiles/profile            ~/.profile
 symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
+symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
 symlink_if_needed ~/dotfiles/init.lua           ~/.config//nvim/init.lua
 symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 
@@ -54,7 +56,7 @@ if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim;
     vim +'PlugInstall!' +qall
-    vim +'CocInstall coc-json coc-tsserver coc-pyright @yaegassy/coc-ansible' +qall
+    vim +'CocInstall coc-json coc-sh coc-tsserver coc-pyright @yaegassy/coc-ansible' +qall
 fi
 
 # the neovim experiment is over
