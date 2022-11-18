@@ -129,4 +129,9 @@ augroup trailing
     au InsertLeave * :set listchars+=trail:_
 augroup END
 
+" coc.nvim settings
+let g:coc_filetype_map = {
+	\ 'yaml.ansible': 'ansible',
+\ }
+
 syntax on
