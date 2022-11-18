@@ -59,6 +59,7 @@ git_repos=(
     "${dev_dir}/awx git@github.com:maxamillion/awx.git https://github.com/ansible/awx.git"
     "${dev_dir}/awx-resource-operator git@github.com:maxamillion/awx-resource-operator.git https://github.com/ansible/awx-resource-operator.git"
     "${dev_dir}/aap-containerized-installer git@github.com:maxamillion/aap-containerized-installer.git git@github.com:ansible/aap-containerized-installer.git"
+    "${dev_dir}/el_grandiose_module_promoter git@github.com:maxamillion/el_grandiose_module_promoter.git https://github.com/ansible-collections/el_grandiose_module_promoter.git"
     "${dev_dir}/ansible-bender git@github.com:maxamillion/ansible-bender.git https://github.com/ansible-community/ansible-bender.git"
     "${dev_dir}/receptor git@github.com:maxamillion/receptor.git https://github.com/ansible/receptor.git"
     "${dev_dir}/molecule git@github.com:maxamillion/molecule.git https://github.com/ansible/molecule.git"
