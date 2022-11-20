@@ -10,8 +10,9 @@ Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 call plug#end()
 
 set autoindent
@@ -50,7 +51,6 @@ let mapleader = " "
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
-
 " Switch between tabs
 nnoremap <Leader>1 1gt
 nnoremap <Leader>2 2gt
@@ -74,6 +74,9 @@ noremap <up> <nop>
 noremap <down> <nop>
 noremap <right> <nop>
 
+" fzf
+noremap <Leader>ff :Files<CR>
+
 " the F1 help menu can kick rocks
 nmap <F1> <nop>
 
@@ -88,9 +91,6 @@ command! Q :q
 set t_Co=256
 colorscheme badwolf
 let &colorcolumn="80,".join(range(400,999),",")
-
-" CtrlP
-noremap <Leader>ff :CtrlP<CR>
 
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
@@ -132,6 +132,6 @@ augroup END
 " coc.nvim settings
 let g:coc_filetype_map = {
 	\ 'yaml.ansible': 'ansible',
-\ }
+	\}
 
 syntax on
