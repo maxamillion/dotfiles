@@ -1,20 +1,20 @@
 session_name: wm
 windows:
-- window_name: edge-api
+- window_name: ansible.posix
   shell_command_before:
-    - cd ~/src/dev/edge-api/
-- window_name: bld
+    - cd ~/src/dev/ansible_collections/ansible/posix/
+- window_name: infra.osbuild
   shell_command_before:
-    - cd ~/
+    - cd ~/src/dev/ansible_collections/infra/osbuild/
 - window_name: dev
   shell_command_before:
-    - cd ~/src/dev/ansible    
+    - cd ~/src/dev/ansible
 - window_name: hack
   shell_command_before:
     - cd ~/
 - window_name: ansible
   shell_command_before:
-    - cd ~/
+    - cd ~/src/dev/ansible    
 - window_name: venv
   shell_command_before:
     - cd ~/
