@@ -1,6 +1,3 @@
-Host *
-  UseRoaming no
-
 Host bastion.fedoraproject.org
   User maxamillion
   ProxyCommand none
@@ -34,13 +31,6 @@ Host 192.168.122.*
 Host ctl1.ops.rhcloud.com
   SendEnv DYNECT_USER_NAME DYNECT_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
   ForwardAgent yes
-Host *.pagekite.me
-  CheckHostIP no
-  ProxyCommand /usr/bin/corkscrew %h 443 %h %p
-Host *.rhcloud.com
-  StrictHostKeyChecking no
-  ServerAliveInterval 120
-  TCPKeepAlive yes
 Host sebastian
   HostName ovpn-phx2.redhat.com
   Port 330
@@ -88,27 +78,9 @@ Host optiplex3040t
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
-Host t470s
-  HostName 192.168.218.103
+Host xps8940
+  HostName 100.90.199.6
   User root
   ServerAliveInterval 120
   TCPKeepAlive yes
-Host starlitemk2
-  HostName 192.168.218.104
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-Host rhel8
-  HostName 192.168.122.100
-  User admiller
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-  ForwardAgent yes
-  ForwardX11 yes
-Host docker
-  HostName 192.168.122.140
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-  ForwardAgent yes
-  ForwardX11 yes
+
