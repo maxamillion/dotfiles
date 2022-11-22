@@ -1,11 +1,6 @@
 #!/bin/bash
 
-# Ensure the needed dirs exist
-mkdir_if_needed() {
-    if [[ ! -d $1 ]]; then
-        mkdir -p $1
-    fi
-}
+source ./bootstrap-lib.sh
 
 mkdir_if_needed ~/.config/{dunst,i3,i3status,fontconfig}
 mkdir_if_needed ~/.config/fontconfig/conf.d
@@ -18,19 +13,6 @@ mkdir_if_needed ~/.vimundo
 mkdir_if_needed ~/.vim
 mkdir_if_needed ~/.ipython/profile_default/
 
-# Symlink the conf files
-symlink_if_needed() {
-    if [[ ! -f $2 ]] && [[ ! -L $2 ]]; then
-        printf "Symlinking: %s -> %s\n" "$1" "$2"
-        if [[ ! -d $(dirname $2) ]]; then
-            mkdir -p $(dirname $2)
-        fi
-        ln -s $1 $2
-    fi
-    if [[ -f $2 ]] && [[ ! -L $2 ]]; then
-        printf "File found: %s\n" "$2"
-    fi
-}
 symlink_if_needed ~/dotfiles/snclirc            ~/.snclirc
 symlink_if_needed ~/dotfiles/dunstrc            ~/.config/dunst/dunstrc
 symlink_if_needed ~/dotfiles/i3-config          ~/.config/i3/config
