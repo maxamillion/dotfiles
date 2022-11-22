@@ -56,7 +56,7 @@ if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim;
     vim +'PlugInstall!' +qall
-    vim +'CocInstall coc-json coc-sh coc-tsserver coc-pyright @yaegassy/coc-ansible' +qall
+    vim +'CocInstall coc-json coc-sh coc-tsserver coc-pyright @yaegassy/coc-ansible coc-go' +qall
 fi
 
 # the neovim experiment is over
