@@ -50,6 +50,7 @@ git_repos=(
     "${dev_dir}/ansible-lint git@github.com:maxamillion/ansible-lint.git https://github.com/ansible/ansible-lint.git"
     "${dev_dir}/ansible-builder git@github.com:maxamillion/ansible-builder.git https://github.com/ansible/ansible-builder.git"
     "${dev_dir}/ansible-community git@github.com:maxamillion/community.git https://github.com/ansible/community.git"
+    "${dev_dir}/ansible-zuul-jobs git@github.com:maxamillion/ansible-zuul-jobs.git https://github.com/ansible/ansible-zuul-jobs.git"
     "${dev_dir}/awx git@github.com:maxamillion/awx.git https://github.com/ansible/awx.git"
     "${dev_dir}/awx-resource-operator git@github.com:maxamillion/awx-resource-operator.git https://github.com/ansible/awx-resource-operator.git"
     "${dev_dir}/aap-containerized-installer git@github.com:maxamillion/aap-containerized-installer.git git@github.com:ansible/aap-containerized-installer.git"
