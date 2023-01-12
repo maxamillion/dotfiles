@@ -32,6 +32,9 @@
     diffst = diff --stat
     dg = difftool -y -g
 
+[checkout]
+    defaultRemote = origin
+
 [branch]
     autosetuprebase = always
 [diff]
