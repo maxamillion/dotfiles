@@ -127,6 +127,10 @@ git_repos=(
     "${collections_dir}/osbuild/composer git@github.com:maxamillion/osbuild.composer.git https://github.com/ansible-collections/osbuild.composer.git"
     "${collections_dir}/edge/workload git@github.com:maxamillion/edge.workload.git https://github.com/ansible-collections/edge.workload.git"
     "${collections_dir}/edge/microshift git@github.com:maxamillion/edge.microshift.git https://github.com/ansible-collections/edge.microshift.git"
+    "${collections_dir}/redhat_cop/controller_configuration git@github.com:maxamillion/controller_configuration.git https://github.com/redhat-cop/controller_configuration.git"
+    "${collections_dir}/redhat_cop/ah_configuration git@github.com:maxamillion/ah_configuration.git https://github.com/redhat-cop/ah_configuration.git"
+    "${collections_dir}/redhat_cop/ee_utilities git@github.com:maxamillion/ee_utilities.git https://github.com/redhat-cop/ee_utilities.git"
+    "${collections_dir}/redhat_cop/aap_utilities git@github.com:maxamillion/aap_utilities.git https://github.com/redhat-cop/aap_utilities.git"
     "${execenvs_dir}/fedora.iot git@github.com:maxamillion/execenv.fedora.iot.git"
 #    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
 )
