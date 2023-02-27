@@ -381,6 +381,10 @@ rhtvenv() {
     _conditionally_symlink "${pylib_path}/insights_client" \
                 "${venv_basepath}/lib/python${py_shortver}/site-packages/insights_client"
 
+    ## firewalld 
+    _conditionally_symlink "${pylib_path}/firewall" \
+                "${venv_basepath}/lib/python${py_shortver}/site-packages/firewall"
+
     printf "DONE!\n"
 }
 
