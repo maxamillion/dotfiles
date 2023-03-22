@@ -150,7 +150,7 @@ alias ipy='ipython --TerminalInteractiveShell.editing_mode=vi'
 alias ackp='ack --python'
 
 # kinit aliases
-alias kr='fkinit admiller@REDHAT.COM'
+alias kr='kinit admiller@REDHAT.COM'
 alias kf='fkinit maxamillion@FEDORAPROJECT.ORG'
 alias kfs='fkinit maxamillion@STG.FEDORAPROJECT.ORG'
 alias ksr='kswitch -p admiller@REDHAT.COM'
