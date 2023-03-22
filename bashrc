@@ -310,6 +310,29 @@ _conditionally_symlink() {
 
 }
 
+function beaker_console()
+{
+    local OPT=$(shopt -p -o nounset)
+    set -o nounset
+        # Treat unset variables as an error
+    local HOST=$1
+    local CONSERVER
+    case ${HOST} in
+        *bne*) CONSERVER="conserver-01.app.eng.bne.redhat.com";;
+        *rdu*) CONSERVER="conserver-02.eng.rdu2.redhat.com";;
+        *bos*) CONSERVER="conserver-02.eng.bos.redhat.com";;
+        *brq*) CONSERVER="conserver-01.app.eng.brq.redhat.com";;
+        *blr*) CONSERVER="conserver.lab.eng.blr.redhat.com";;
+        *nay*) CONSERVER="console.lab.eng.nay.redhat.com";;
+        *pek2*) CONSERVER="conserver-01.eng.pek2.redhat.com";;
+        *pnq*) CONSERVER="conserver.lab.eng.pnq.redhat.com";;
+        *tlv*) CONSERVER="conserver-01.eng.tlv.redhat.com";;
+        *) CONSERVER="conserver-02.eng.bos.redhat.com";;
+    esac
+    /usr/bin/console -M ${CONSERVER} ${HOST}
+    eval ${OPT}
+}
+
 # Get SELinux/dnf/yum/rpm Python bindings symlink'd into the local python venv
 # for Red Hat family of distros
 rhtvenv() {
