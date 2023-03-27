@@ -46,6 +46,7 @@ git_repos=(
     "${dev_dir}/ara git@github.com:maxamillion/ara.git https://github.com/ansible-community/ara.git"
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
     "${dev_dir}/ansible-runner git@github.com:maxamillion/ansible-runner.git https://github.com/ansible/ansible-runner.git"
+    "${dev_dir}/ansible-rulebook git@github.com:maxamillion/ansible-rulebook.git https://github.com/ansible/ansible-rulebook.git"
     "${dev_dir}/ansible-sdk git@github.com:maxamillion/ansible-sdk.git https://github.com/ansible/ansible-sdk.git"
     "${dev_dir}/ansible-lint git@github.com:maxamillion/ansible-lint.git https://github.com/ansible/ansible-lint.git"
     "${dev_dir}/ansible-builder git@github.com:maxamillion/ansible-builder.git https://github.com/ansible/ansible-builder.git"
