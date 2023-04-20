@@ -124,6 +124,7 @@ git_repos=(
     "${collections_dir}/community/qradar git@github.com:maxamillion/community.qradar.git https://github.com/ansible-collections/community.qradar.git"
     "${collections_dir}/community/es git@github.com:maxamillion/community.es.git https://github.com/ansible-collections/community.es.git"
     "${collections_dir}/community/cip git@github.com:maxamillion/community.cip.git https://github.com/ansible-collections/community.cip.git"
+    "${collections_dir}/community/content_builder git@github.com:maxamillion/ansible.content_builder.git https://github.com/ansible-community/ansible.content_builder.git"
     "${collections_dir}/containers/podman git@github.com:maxamillion/ansible-podman-collections.git https://github.com/containers/ansible-podman-collections.git"
     "${collections_dir}/infra/osbuild git@github.com:maxamillion/infra.osbuild.git https://github.com/redhat-cop/infra.osbuild.git"
     "${collections_dir}/fedora/iot git@github.com:maxamillion/fedora.iot.git"
