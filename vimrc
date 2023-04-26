@@ -13,6 +13,7 @@ Plug 'tpope/vim-commentary'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'Exafunction/codeium.vim'
 call plug#end()
 
 set autoindent
@@ -133,5 +134,10 @@ augroup END
 let g:coc_filetype_map = {
 	\ 'yaml.ansible': 'ansible',
 	\}
+
+""" codeium default bindings conflict with tmux so add these for sanity
+imap <C-,>   <Cmd>call codeium#CycleCompletions(1)<CR>
+imap <C-.>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+imap <C-x>   <Cmd>call codeium#Clear()<CR>
 
 syntax on
