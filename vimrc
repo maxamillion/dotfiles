@@ -135,9 +135,4 @@ let g:coc_filetype_map = {
 	\ 'yaml.ansible': 'ansible',
 	\}
 
-""" codeium default bindings conflict with tmux so add these for sanity
-imap <C-,>   <Cmd>call codeium#CycleCompletions(1)<CR>
-imap <C-.>   <Cmd>call codeium#CycleCompletions(-1)<CR>
-imap <C-x>   <Cmd>call codeium#Clear()<CR>
-
 syntax on
