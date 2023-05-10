@@ -55,6 +55,7 @@ git_repos=(
     "${dev_dir}/awx git@github.com:maxamillion/awx.git https://github.com/ansible/awx.git"
     "${dev_dir}/awx-resource-operator git@github.com:maxamillion/awx-resource-operator.git https://github.com/ansible/awx-resource-operator.git"
     "${dev_dir}/galaxy_ng git@github.com:maxamillion/galaxy_ng.git https://github.com/ansible/galaxy_ng.git"
+    "${dev_dir}/ansible-hub-ui git@github.com:maxamillion/ansible-hub-ui.git https://github.com/ansible/ansible-hub-ui.git"
     "${dev_dir}/community-website git@github.com:maxamillion/community-website.git https://github.com/ansible-community/community-website.git"
     "${dev_dir}/aap-containerized-installer git@github.com:maxamillion/aap-containerized-installer.git git@github.com:ansible/aap-containerized-installer.git"
     "${dev_dir}/el_grandiose_module_promoter git@github.com:maxamillion/el_grandiose_module_promoter.git https://github.com/ansible-collections/el_grandiose_module_promoter.git"
