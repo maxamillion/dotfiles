@@ -718,7 +718,7 @@ pathappend $HOME/.local/bin
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("latitude7390" "optiplex3000tc" "latitude3120")
+_localhosts=("latitude7390" "optiplex3000tc" "latitude3120" "framework13" "framework13dt" )
 short_hostname=${HOSTNAME%%.*}
 
 if [[ -z "${short_hostname}" ]]; then
