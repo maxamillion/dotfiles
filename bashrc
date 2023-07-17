@@ -690,18 +690,18 @@ pathremove () {
                   NEWPATH=${NEWPATH:+$NEWPATH:}$DIR
                 fi
         done
-        export $PATHVARIABLE="$NEWPATH"
+        export "$PATHVARIABLE"="$NEWPATH"
 }
 pathprepend () {
         pathremove $1 $2
         local PATHVARIABLE=${2:-PATH}
-        export $PATHVARIABLE="$1${!PATHVARIABLE:+:${!PATHVARIABLE}}"
+        export "$PATHVARIABLE"="$1${!PATHVARIABLE:+:${!PATHVARIABLE}}"
 }
 
 pathappend () {
         pathremove $1 $2
         local PATHVARIABLE=${2:-PATH}
-        export $PATHVARIABLE="${!PATHVARIABLE:+${!PATHVARIABLE}:}$1"
+        export "$PATHVARIABLE"="${!PATHVARIABLE:+${!PATHVARIABLE}:}$1"
 }
 
 export GOPATH=$HOME/go
@@ -791,7 +791,7 @@ __prompt_command() {
         fi
     else
         # Set local colorscheme conditionally
-        if [[ ${_localhosts[.]} =~ ${short_hostname} ]] && [[ -n "${short_hostname}" ]]; then
+        if [[ ${_localhosts[*]} =~ ${short_hostname} ]] && [[ -n "${short_hostname}" ]]; then
             # root prompt - local colorscheme
             local date_c=$red_c
             local user_c=$red_c
