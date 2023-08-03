@@ -718,7 +718,7 @@ pathappend $HOME/.local/bin
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("latitude7390" "optiplex3000tc" "latitude3120" "framework13" "framework13dt" )
+_localhosts=("latitude7390" "optiplex3000tc" "latitude3120" "framework13" "framework13dt" "pengiun")
 short_hostname=${HOSTNAME%%.*}
 
 if [[ -z "${short_hostname}" ]]; then
@@ -729,6 +729,9 @@ if [[ -z "${short_hostname}" ]]; then
             source /etc/os-release
             short_hostname="${ID}:${VERSION_ID}"
         fi
+    fi
+    if [[ "pengiun" -eq "${short_hostname}" ]]; then
+        export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
     fi
 fi
 
