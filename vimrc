@@ -2,7 +2,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'davidhalter/jedi-vim'
-Plug 'ajh17/VimCompletesMe'
+" Plug 'ajh17/VimCompletesMe' " This stopped working for some reason
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
 Plug 'fatih/vim-go'
@@ -96,7 +96,6 @@ let &colorcolumn="80,".join(range(400,999),",")
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
 let g:airline_symbols_ascii = 1
-let g:airline_section_y = '{…}%3{codeium#GetStatusString()}'
 
 """ Autoswap
 set title titlestring=
