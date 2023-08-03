@@ -3,7 +3,7 @@ sudo apt install -y nodejs
 
 mkdir_if_needed ~/.config/systemd/user
 
-cat > ~/.config/systemd/user/ssh-agent.service << EOF
+cat > ~/.config/systemd/user/ssh-agent.service << "EOF"
 [Unit]
 Description=SSH key agent
 

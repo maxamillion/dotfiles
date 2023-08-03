@@ -35,7 +35,7 @@ symlink_if_needed ~/dotfiles/init.lua           ~/.config//nvim/init.lua
 symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 
 short_hostname=${HOSTNAME%%.*}
-if [[ "pengiun" -eq ${short_hostname} ]] && [[ -n "${short_hostname}" ]]; then
+if [[ "penguin" == ${short_hostname} ]]; then
     . ./bootstrap-crostini.sh
 fi
 
