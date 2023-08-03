@@ -10,6 +10,7 @@ Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
+Plug 'Exafunction/codeium.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -95,6 +96,7 @@ let &colorcolumn="80,".join(range(400,999),",")
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
 let g:airline_symbols_ascii = 1
+let g:airline_section_y = '{…}%3{codeium#GetStatusString()}'
 
 """ Autoswap
 set title titlestring=
