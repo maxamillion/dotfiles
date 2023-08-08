@@ -4,8 +4,8 @@ source ./bootstrap-lib.sh
 # tailscale
 curl -fsSL https://pkgs.tailscale.com/stable/debian/bullseye.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
 curl -fsSL https://pkgs.tailscale.com/stable/debian/bullseye.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
-sudo apt-get update
-sudo apt-get install tailscale
+sudo apt update
+sudo apt install -y tailscale
 
 # nodejs LTS
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
@@ -30,7 +30,7 @@ EOF
 systemctl --user enable ssh-agent
 
 # random dev stuff
-sudo apt install -y vim python3 python3-pip python3-venv git tmux
+sudo apt install -y vim python3 python3-pip python3-venv git tmux htop
 
 python3 -mpip install --user pipx virtualenvwrapper q
 
