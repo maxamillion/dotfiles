@@ -30,7 +30,7 @@ EOF
 systemctl --user enable ssh-agent
 
 # random dev stuff
-sudo apt install -y vim python3 python3-pip python3-venv git tmux htop
+sudo apt install -y vim python3 python3-pip python3-venv git tmux htop podman skopeo buildah
 
 python3 -mpip install --user pipx virtualenvwrapper q
 
