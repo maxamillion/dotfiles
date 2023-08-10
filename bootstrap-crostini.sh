@@ -7,7 +7,7 @@ curl -fsSL https://pkgs.tailscale.com/stable/debian/bullseye.tailscale-keyring.l
 sudo apt update
 sudo apt install -y tailscale
 
-# docker
+# docker - because podman doesn't work in crostini/termina
 sudo apt install -y ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -18,6 +18,8 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo groupadd docker
+sudo usermod -aG docker $USER
 
 # nodejs LTS
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
