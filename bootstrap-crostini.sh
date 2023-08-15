@@ -58,17 +58,7 @@ sudo rm /usr/local/go-${golang_version}.tar.gz
 
 python3 -mpip install --user pipx virtualenvwrapper q
 
-pipx install ptpython
-pipx install tox
-pipx install httpie
-pipx install flake8
-pipx install pep8
-pipx install pyflakes
-pipx install pylint
-pipx install black
-pipx install pipenv
-pipx install poetry
-pipx install tmuxp
-pipx install bpytop
-pipx install python-lsp-server
-pipx install tldr
+for pypkg in ptpython tox httpie flake8 pep8 pyflakes pylint black pipenv poetry tmuxp bpytop python-lsp-server tldr
+do
+    pipx install ${pypkg}
+done
