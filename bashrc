@@ -709,6 +709,7 @@ pathappend $GOPATH/bin
 pathappend $HOME/node_modules/.bin
 pathappend $HOME/bin
 pathappend $HOME/.local/bin
+pathappend /usr/local/go/bin
 
 # END Modify PATH
 ###############################################################################
