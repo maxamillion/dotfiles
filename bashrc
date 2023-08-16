@@ -55,6 +55,8 @@ if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     fi
     export WORKON_HOME=${HOME}/.virtualenvs
     . ~/.local/bin/virtualenvwrapper.sh
+elif [ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
+    . /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 fi
 
 # Alias podman-compose because fuck docker
