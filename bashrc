@@ -259,6 +259,20 @@ cleanpodman() {
     done
 }
 
+cleandocker() {
+    # Clean exited containers
+    for container in $(docker ps -a | awk '/Exited/{ print $1}')
+    do
+        docker rm $container
+    done
+
+    # Clean dangling images
+    for i in $(docker images -f 'dangling=true' -q)
+    do
+        docker rmi $i
+    done
+}
+
 # acs-engine stuff
 devacs() {
 #ACSENGINE_GOPATH="acs-engine"
