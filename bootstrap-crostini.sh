@@ -47,7 +47,8 @@ EOF
 systemctl --user enable ssh-agent
 
 # random dev stuff
-sudo apt install -y vim python3 python3-pip python3-venv git tmux htop strace
+sudo apt install -y vim python3 python3-pip python3-venv python3-q \
+    git tmux htop strace pipx virtualenvwrapper
 
 # download golang
 golang_version="1.20.7"
@@ -58,8 +59,6 @@ fi
 sudo curl -o "/usr/local/go-${golang_version}.tar.gz" "https://dl.google.com/go/go${golang_version}.linux-$(dpkg --print-architecture).tar.gz"
 sudo tar -zxvf /usr/local/go-${golang_version}.tar.gz --directory=/usr/local/
 sudo rm /usr/local/go-${golang_version}.tar.gz
-
-python3 -mpip install --user pipx virtualenvwrapper q
 
 for pypkg in ptpython tox httpie flake8 pep8 pyflakes pylint black pipenv poetry tmuxp bpytop python-lsp-server tldr
 do
