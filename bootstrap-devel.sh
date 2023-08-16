@@ -102,6 +102,7 @@ git_repos=(
     "${dev_dir}/podman-system-role git@github.com:maxamillion/podman.git https://github.com/linux-system-roles/podman.git"
     "${dev_dir}/ale git@github.com:maxamillion/ale.git https://github.com/dense-analysis/ale.git"
     "${dev_dir}/ansible.pages.redhat.com git@gitlab.cee.redhat.com:admiller/ansible.pages.redhat.com.git https://gitlab.cee.redhat.com/ansible/ansible.pages.redhat.com.git"
+    "${dev_dir}/distrobox git@github.com:maxamillion/distrobox.git https://github.com/89luca89/distrobox.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/maxamillion.github.io git@github.com:maxamillion/maxamillion.github.io.git"
     "${src_dir}/surface-uefi-firmware https://github.com/linux-surface/surface-uefi-firmware"
