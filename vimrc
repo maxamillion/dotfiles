@@ -31,6 +31,7 @@ set undofile
 set winwidth=83
 set modeline
 set hidden
+set hlsearch
 
 " Some webfonts don't handle this well which screws up ssh (hterm) on ChromeOS
 set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
