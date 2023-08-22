@@ -10,6 +10,7 @@ Plug 'sjl/badwolf'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
 Plug 'Exafunction/codeium.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }

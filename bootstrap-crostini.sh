@@ -43,6 +43,7 @@ fi
 # ssh-agent systemd user unit
 mkdir_if_needed ~/.config/systemd/user
 
+if [[ ! -f ~/.config/systemd/user/ssh-agent.service ]]; then
 cat > ~/.config/systemd/user/ssh-agent.service << "EOF"
 [Unit]
 Description=SSH key agent
@@ -55,12 +56,29 @@ ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
 [Install]
 WantedBy=default.target
 EOF
-
 systemctl --user enable ssh-agent
+fi
 
 # random dev stuff
-sudo apt install -y vim python3 python3-pip python3-venv python3-q \
-    git tmux htop strace pipx virtualenvwrapper
+pkglist=(
+    "vim"
+    "python3"
+    "python3-pip"
+    "python3-venv"
+    "python3-q"
+    "git"
+    "tmux"
+    "htop"
+    "strace"
+    "pipx"
+    "virtualenvwrapper"
+)
+for pkg in ${pkglist[@]}; do
+    dpkg -l $pkg > /dev/null 2>&1
+    if [[ $? -ne 0 ]]; then
+        sudo apt install -y $pkg
+    fi
+done
 
 # golang
 golang_version="1.20.7"
@@ -78,7 +96,28 @@ if [[ ! -d /usr/local/go ]]; then
     sudo rm /usr/local/go-${golang_version}.tar.gz
 fi
 
-for pypkg in ptpython tox httpie flake8 pep8 pyflakes pylint black pipenv poetry tmuxp bpytop python-lsp-server tldr
+# pipx install pypkglist 
+pypkglist=(
+    "ptpython"
+    "tox"
+    "httpie"
+    "flake8"
+    "pep8"
+    "pyflakes"
+    "pylint"
+    "black"
+    "pipenv"
+    "poetry"
+    "tmuxp"
+    "bpytop"
+    "python-lsp-server"
+    "tldr"
+)
+for pypkg in ${pypkglist[@]};
 do
-    pipx install ${pypkg}
+    if [[ ! -d ${HOME}/.local/pipx/venvs/${pypkg} ]]; then
+        pipx install ${pypkg}
+    fi
 done
+
+printf "Done!\n"
