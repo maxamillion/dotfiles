@@ -61,7 +61,7 @@ fi
 
 # random dev stuff
 pkglist=(
-    "vim"
+    "vim-nox"
     "python3"
     "python3-pip"
     "python3-venv"
