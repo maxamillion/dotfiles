@@ -24,6 +24,7 @@ if [[ $? -ne 0 ]]; then
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt update
     sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    printf "Adding user to docker group...\n"
     sudo groupadd docker
     sudo usermod -aG docker $USER
 fi
@@ -72,11 +73,24 @@ pkglist=(
     "strace"
     "pipx"
     "virtualenvwrapper"
+    "qemu-system"
+    "libvirt-clients"
+    "libvirt-daemon-system"
 )
 for pkg in ${pkglist[@]}; do
-    dpkg -l $pkg > /dev/null 2>&1
+    dpkg -l ${pkg} > /dev/null 2>&1
     if [[ $? -ne 0 ]]; then
-        sudo apt install -y $pkg
+        printf "Installing %s...\n" ${pkg}
+        sudo apt install -y ${pkg}
+        if [[ "${pkg}" == "libvirt-daemon-system" ]]; then
+            printf "Adding user to libvirt group...\n"
+            sudo usermod -aG libvirt $USER
+            # Configure qemu to allow dynamic ownership for minikube
+            sudo sed -i 's/\#dynamic_ownership\ \=\ 1/dynamic_ownership\ \=\ 0/' /etc/libvirt/qemu.conf
+            sudo sed -i 's/\#remember_owner\ \=\ 1/remember_owner\ \=\ 0/' /etc/libvirt/qemu.conf
+            sudo sed -i 's/\#user\ \=\ "libvirt-qemu"/user\ \=\ "root"/' /etc/libvirt/qemu.conf
+            sudo sed -i 's/\#group\ \=\ "libvirt-qemu"/group\ \=\ "root"/' /etc/libvirt/qemu.conf
+        fi
     fi
 done
 
@@ -91,9 +105,36 @@ if [[ $? -ne 0 ]]; then
     sudo rm -fr /usr/local/go
 fi
 if [[ ! -d /usr/local/go ]]; then
+    printf "Installing golang...\n"
     sudo curl -o "/usr/local/go-${golang_version}.tar.gz" "https://dl.google.com/go/go${golang_version}.linux-$(dpkg --print-architecture).tar.gz"
     sudo tar -zxvf /usr/local/go-${golang_version}.tar.gz --directory=/usr/local/
     sudo rm /usr/local/go-${golang_version}.tar.gz
+fi
+
+# k8s stuff
+# For AMD64 / x86_64
+if [[ $(uname -m) = x86_64 ]]; then
+    k8s_arch=amd64
+fi
+# For ARM64
+if [[ $(uname -m) = aarch64 ]]; then
+    k8s_arch=arm64
+fi
+
+# minikube install
+if [[ ! -f ${HOME}/.local/bin/minikube ]]; then
+    printf "Installing minikube...\n"
+    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${k8s_arch}
+    chmod +x ./minikube-linux-${k8s_arch}
+    sudo mv ./minikube-linux-${k8s_arch} ${HOME}/.local/bin/minikube
+fi
+
+# kubectl install
+if [[ ! -f ${HOME}/.local/bin/kubectl ]]; then
+    printf "Installing kubectl...\n"
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${k8s_arch}/kubectl"
+    chmod +x ./kubectl
+    sudo mv ./kubectl ${HOME}/.local/bin/kubectl
 fi
 
 # pipx install pypkglist 
