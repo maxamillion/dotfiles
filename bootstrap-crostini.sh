@@ -73,24 +73,12 @@ pkglist=(
     "strace"
     "pipx"
     "virtualenvwrapper"
-    "qemu-system"
-    "libvirt-clients"
-    "libvirt-daemon-system"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -l ${pkg} > /dev/null 2>&1
     if [[ $? -ne 0 ]]; then
         printf "Installing %s...\n" ${pkg}
         sudo apt install -y ${pkg}
-        if [[ "${pkg}" == "libvirt-daemon-system" ]]; then
-            printf "Adding user to libvirt group...\n"
-            sudo usermod -aG libvirt $USER
-            # Configure qemu to allow dynamic ownership for minikube
-            sudo sed -i 's/\#dynamic_ownership\ \=\ 1/dynamic_ownership\ \=\ 0/' /etc/libvirt/qemu.conf
-            sudo sed -i 's/\#remember_owner\ \=\ 1/remember_owner\ \=\ 0/' /etc/libvirt/qemu.conf
-            sudo sed -i 's/\#user\ \=\ "libvirt-qemu"/user\ \=\ "root"/' /etc/libvirt/qemu.conf
-            sudo sed -i 's/\#group\ \=\ "libvirt-qemu"/group\ \=\ "root"/' /etc/libvirt/qemu.conf
-        fi
     fi
 done
 
@@ -112,21 +100,10 @@ if [[ ! -d /usr/local/go ]]; then
 fi
 
 # k8s stuff
-# For AMD64 / x86_64
 if [[ $(uname -m) = x86_64 ]]; then
     k8s_arch=amd64
-fi
-# For ARM64
-if [[ $(uname -m) = aarch64 ]]; then
+elif [[ $(uname -m) = aarch64 ]]; then
     k8s_arch=arm64
-fi
-
-# minikube install
-if [[ ! -f ${HOME}/.local/bin/minikube ]]; then
-    printf "Installing minikube...\n"
-    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${k8s_arch}
-    chmod +x ./minikube-linux-${k8s_arch}
-    sudo mv ./minikube-linux-${k8s_arch} ${HOME}/.local/bin/minikube
 fi
 
 # kubectl install
