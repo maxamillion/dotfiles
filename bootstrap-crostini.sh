@@ -73,6 +73,7 @@ pkglist=(
     "strace"
     "pipx"
     "virtualenvwrapper"
+    "libonig-dev"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -l ${pkg} > /dev/null 2>&1
