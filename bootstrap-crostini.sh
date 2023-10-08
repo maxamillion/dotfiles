@@ -137,6 +137,7 @@ pypkglist=(
     "bpytop"
     "python-lsp-server"
     "tldr"
+    "firefox-esr"
 )
 for pypkg in ${pypkglist[@]};
 do
