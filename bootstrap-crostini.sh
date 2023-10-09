@@ -73,6 +73,7 @@ pkglist=(
     "python3-pip"
     "python3-venv"
     "python3-q"
+    "python3-ipython"
     "git"
     "tmux"
     "htop"
