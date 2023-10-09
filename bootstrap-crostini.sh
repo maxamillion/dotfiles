@@ -80,6 +80,8 @@ pkglist=(
     "pipx"
     "virtualenvwrapper"
     "libonig-dev"
+    "firefox-esr"
+    "debian-goodies"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -l ${pkg} > /dev/null 2>&1
@@ -137,7 +139,6 @@ pypkglist=(
     "bpytop"
     "python-lsp-server"
     "tldr"
-    "firefox-esr"
 )
 for pypkg in ${pypkglist[@]};
 do
