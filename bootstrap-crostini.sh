@@ -83,6 +83,7 @@ pkglist=(
     "libonig-dev"
     "firefox-esr"
     "debian-goodies"
+    "flatpak"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -l ${pkg} > /dev/null 2>&1
