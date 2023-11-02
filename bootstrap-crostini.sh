@@ -77,6 +77,7 @@ pkglist=(
     "git"
     "tmux"
     "htop"
+    "iotop"
     "strace"
     "pipx"
     "virtualenvwrapper"
