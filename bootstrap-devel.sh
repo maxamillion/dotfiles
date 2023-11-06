@@ -53,6 +53,7 @@ git_repos=(
     "${dev_dir}/ansible-builder git@github.com:maxamillion/ansible-builder.git https://github.com/ansible/ansible-builder.git"
     "${dev_dir}/ansible-community git@github.com:maxamillion/community.git https://github.com/ansible/community.git"
     "${dev_dir}/ansible-zuul-jobs git@github.com:maxamillion/ansible-zuul-jobs.git https://github.com/ansible/ansible-zuul-jobs.git"
+    "${dev_dir}/ecosystem-documentation git@github.com:maxamillion/ecosystem-documentation.git https://github.com/ansible/ecosystem-documentation.git"
     "${dev_dir}/awx git@github.com:maxamillion/awx.git https://github.com/ansible/awx.git"
     "${dev_dir}/awx-resource-operator git@github.com:maxamillion/awx-resource-operator.git https://github.com/ansible/awx-resource-operator.git"
     "${dev_dir}/aap-upstream-ci git@github.com:maxamillion/aap-upstream-ci.git git@github.com:ansible/aap-upstream-ci.git"
