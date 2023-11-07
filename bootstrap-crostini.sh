@@ -112,10 +112,13 @@ if [[ ! -d /usr/local/go ]]; then
 fi
 
 # k8s stuff
-if [[ $(uname -m) = x86_64 ]]; then
-    k8s_arch=amd64
-elif [[ $(uname -m) = aarch64 ]]; then
-    k8s_arch=arm64
+k8s_arch=$(dpkg --print-architecture)
+# minikube install
+if [[ ! -f ${HOME}/.local/bin/minikube ]]; then
+    printf "Installing minikube...\n"
+    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${k8s_arch}
+    chmod +x ./minikube-linux-${k8s_arch}
+    sudo mv ./minikube-linux-${k8s_arch} ${HOME}/.local/bin/minikube
 fi
 
 # kubectl install
@@ -124,6 +127,13 @@ if [[ ! -f ${HOME}/.local/bin/kubectl ]]; then
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${k8s_arch}/kubectl"
     chmod +x ./kubectl
     sudo mv ./kubectl ${HOME}/.local/bin/kubectl
+fi
+
+# terraform
+if [[ ! -f /usr/bin/terraform ]]; then
+    wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update && sudo apt install terraform
 fi
 
 # pipx install pypkglist 
