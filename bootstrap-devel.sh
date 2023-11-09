@@ -51,6 +51,7 @@ git_repos=(
     "${dev_dir}/ansible-cdk git@github.com:maxamillion/ansible-cdk.git https://github.com/ansible-community/ansible-cdk.git"
     "${dev_dir}/ansible-lint git@github.com:maxamillion/ansible-lint.git https://github.com/ansible/ansible-lint.git"
     "${dev_dir}/ansible-builder git@github.com:maxamillion/ansible-builder.git https://github.com/ansible/ansible-builder.git"
+    "${dev_dir}/ansible-creator git@github.com:maxamillion/ansible-creator.git https://github.com/ansible/ansible-creator.git"
     "${dev_dir}/ansible-community git@github.com:maxamillion/community.git https://github.com/ansible/community.git"
     "${dev_dir}/ansible-zuul-jobs git@github.com:maxamillion/ansible-zuul-jobs.git https://github.com/ansible/ansible-zuul-jobs.git"
     "${dev_dir}/ecosystem-documentation git@github.com:maxamillion/ecosystem-documentation.git https://github.com/ansible/ecosystem-documentation.git"
