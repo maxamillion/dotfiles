@@ -75,6 +75,7 @@ pkglist=(
     "python3-q"
     "python3-ipython"
     "git"
+    "tig"
     "tmux"
     "htop"
     "iotop"
