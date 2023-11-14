@@ -69,7 +69,7 @@ if [ -f ~/.local/bin/oc ]; then
     source <(~/bin/oc completion bash)
 fi
 if [ -f ~/.local/bin/kubectl ]; then
-    source <(~/bin/kubectl completion bash)
+    source <(~/.local/bin/kubectl completion bash)
 fi
 if [ -f ~/.local/bin/openshift-install ]; then
     source <(~/.local/bin/openshift-install completion bash)
