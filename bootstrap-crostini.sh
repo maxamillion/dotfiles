@@ -123,6 +123,15 @@ if [[ ! -f ${HOME}/.local/bin/minikube ]]; then
     sudo mv ./minikube-linux-${k8s_arch} ${HOME}/.local/bin/minikube
 fi
 
+# kind install
+if [[ ! -f ${HOME}/.local/bin/kind ]]; then
+    printf "Installing kind...\n"
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-${k8s_arch}
+    chmod +x ./kind
+    mv ./kind ${HOME}/.local/bin/kind
+fi
+
+
 # kubectl install
 if [[ ! -f ${HOME}/.local/bin/kubectl ]]; then
     printf "Installing kubectl...\n"
