@@ -65,14 +65,17 @@ if [ -f ~/.local/bin/podman-compose ]; then
 fi
 
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
-if [ -f ~/bin/oc ]; then
+if [ -f ~/.local/bin/oc ]; then
     source <(~/bin/oc completion bash)
 fi
-if [ -f ~/bin/kubectl ]; then
+if [ -f ~/.local/bin/kubectl ]; then
     source <(~/bin/kubectl completion bash)
 fi
-if [ -f ~/bin/openshift-install ]; then
-    source <(~/bin/openshift-install completion bash)
+if [ -f ~/.local/bin/openshift-install ]; then
+    source <(~/.local/bin/openshift-install completion bash)
+fi
+if [ -f ~/.local/bin/kind ]; then
+    source <(~/.local/bin/kind completion bash)
 fi
 
 # Source bash-completions if available
