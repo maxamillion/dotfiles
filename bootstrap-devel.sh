@@ -122,10 +122,6 @@ git_repos=(
     "${collections_dir}/consoledot/edgemanagement git@github.com:maxamillion/consoledot.edgemanagement.git https://github.com/ansible-collections/consoledot.edgemanagement.git"
     "${collections_dir}/ibm/qradar git@github.com:maxamillion/ibm_qradar.git https://github.com/ansible-collections/ibm.qradar.git"
     "${collections_dir}/ibm/isam git@github.com:maxamillion/isam-ansible-roles.git https://github.com/IBM-Security/isam-ansible-roles.git"
-    "${collections_dir}/splunk/es git@github.com:maxamillion/splunk.es.git https://github.com/ansible-collections/splunk.es.git"
-    "${collections_dir}/symantec/epm git@github.com:maxamillion/ansible_collections.symantec.epm.git https://github.com/ansible-collections/symantec.epm.git"
-    "${collections_dir}/trendmicro/deepsecurity git@github.com:maxamillion/ansible_collections.trendmicro.deepsecurity.git https://github.com/ansible-security/ansible_collections.deepsecurity.deepsecurity.git"
-    "${collections_dir}/crowdstrike/falcon git@github.com:maxamillion/ansible_collections.crowdstrike.falcon.git https://github.com/ansible-security/ansible_collections.crowdstrike.falcon.git"
     "${collections_dir}/ansible/eda git@github.com:maxamillion/ansible.eda.git https://github.com/ansible/event-driven-ansible"
     "${collections_dir}/ansible/posix git@github.com:maxamillion/ansible.posix.git https://github.com/ansible-collections/ansible.posix.git"
     "${collections_dir}/ansible/utils git@github.com:maxamillion/ansible.utils.git https://github.com/ansible-collections/ansible.utils.git"
@@ -149,7 +145,6 @@ git_repos=(
     "${collections_dir}/redhat_cop/ee_utilities git@github.com:maxamillion/ee_utilities.git https://github.com/redhat-cop/ee_utilities.git"
     "${collections_dir}/redhat_cop/aap_utilities git@github.com:maxamillion/aap_utilities.git https://github.com/redhat-cop/aap_utilities.git"
     "${execenvs_dir}/fedora.iot git@github.com:maxamillion/execenv.fedora.iot.git"
-#    "${collections_dir}/community/epm git@github.com:maxamillion/community.epm.git https://github.com/ansible-collections/community.epm.git"
 )
 
 for repo_string in "${git_repos[@]}"
