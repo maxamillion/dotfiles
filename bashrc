@@ -77,6 +77,9 @@ fi
 if [ -f ~/.local/bin/kind ]; then
     source <(~/.local/bin/kind completion bash)
 fi
+if [ -f ~/.local/bin/minikube ]; then
+    source <(~/.local/bin/minikube completion bash)
+fi
 
 # Source bash-completions if available
 #   Yes, I know technically this should go in ~/.bash_profile but shhhhh
