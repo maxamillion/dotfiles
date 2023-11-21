@@ -9,6 +9,9 @@ case $- in
       *) return;;
 esac
 
+# Set PAGER
+PAGER=less
+export PAGER
 
 ##### History Stuff
 shopt -s histappend # append that shit
