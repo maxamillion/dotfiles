@@ -34,6 +34,12 @@ if [[ ! -f ${HOME}/.local/bin/distrobox ]]; then
     curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
 fi
 
+# OPA
+if [[ ! -f ${HOME}/.local/bin/opa ]]; then
+    curl -L -o ${HOME}/.local/bin/opa https://openpolicyagent.org/downloads/v0.58.0/opa_linux_amd64_static
+    chmod +x ${HOME}/.local/bin/opa
+fi
+
 # nodejs LTS
 NODE_MAJOR=18
 dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1
