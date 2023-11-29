@@ -98,7 +98,7 @@ pkglist=(
     "flatpak"
 )
 for pkg in ${pkglist[@]}; do
-    dpkg -l ${pkg} > /dev/null 2>&1
+    dpkg -s ${pkg} > /dev/null 2>&1
     if [[ $? -ne 0 ]]; then
         printf "Installing %s...\n" ${pkg}
         sudo apt install -y ${pkg}
