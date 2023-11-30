@@ -96,6 +96,7 @@ pkglist=(
     "firefox-esr"
     "debian-goodies"
     "flatpak"
+    "bubblewrap"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1
