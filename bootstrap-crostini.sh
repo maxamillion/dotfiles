@@ -122,6 +122,11 @@ if [[ ! -d /usr/local/go ]]; then
     sudo rm /usr/local/go-${golang_version}.tar.gz
 fi
 
+# rust
+if [[ ! -f ${HOME}/.cargo/bin/rustup ]]; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+fi
+
 # k8s stuff
 k8s_arch=$(dpkg --print-architecture)
 # minikube install

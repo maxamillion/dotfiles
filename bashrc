@@ -84,6 +84,14 @@ if [ -f ~/.local/bin/minikube ]; then
     source <(~/.local/bin/minikube completion bash)
 fi
 
+# rustup
+if [ -f ~/.cargo/env ]; then
+    source "${HOME}/.cargo/env"
+fi
+if [ -f ~/.cargo/bin/rustup ]; then
+    source <(~/.cargo/bin/rustup completions bash cargo)
+fi
+
 # Source bash-completions if available
 #   Yes, I know technically this should go in ~/.bash_profile but shhhhh
 if ! shopt -oq posix; then
