@@ -72,6 +72,9 @@ noremap <Leader>tc :tabclose<CR>
 noremap <Leader>tm :tabmove<CR>
 noremap <Leader>tp :tabprevious<CR>
 
+" Set ft=yaml.ansible
+noremap <Leader>sa :set ft=yaml.ansible<CR>
+
 " fuck the arrow keys
 noremap <left> <nop>
 noremap <up> <nop>
