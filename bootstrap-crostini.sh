@@ -97,6 +97,8 @@ pkglist=(
     "debian-goodies"
     "flatpak"
     "bubblewrap"
+    "tshark"
+    "termshark"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1
