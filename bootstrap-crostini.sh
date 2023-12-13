@@ -99,6 +99,7 @@ pkglist=(
     "bubblewrap"
     "tshark"
     "termshark"
+    "nmap"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1
