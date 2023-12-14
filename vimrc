@@ -35,6 +35,19 @@ set modeline
 set hidden
 set hlsearch
 
+set encoding=utf-8
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
+" delays and poor user experience for coc.nvim
+set updatetime=300
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved
+set signcolumn=yes
+
 " Some webfonts don't handle this well which screws up ssh (hterm) on ChromeOS
 set listchars=tab:+\ ,eol:¬,extends:>,precedes:<,trail:_
 set showbreak=>
@@ -136,9 +149,29 @@ augroup trailing
     au InsertLeave * :set listchars+=trail:_
 augroup END
 
-" coc.nvim settings
+""" coc.nvim settings
 let g:coc_filetype_map = {
 	\ 'yaml.ansible': 'ansible',
 	\}
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
 
 syntax on
