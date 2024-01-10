@@ -67,6 +67,13 @@ if [ -f ~/.local/bin/podman-compose ]; then
     alias docker-compose='podman-compose'
 fi
 
+# Only use docker in crostini
+if [ -f /usr/bin/dpkg ] && dpkg -l cros-logging > /dev/null 2>&1; then
+    export container_runtime='docker'
+else
+    export container_runtime='podman' # default
+fi
+
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/.local/bin/oc ]; then
     source <(~/bin/oc completion bash)
@@ -182,6 +189,8 @@ alias atu2='ansible-test units --python 2.7'
 alias atu3='ansible-test units --python 3.6'
 alias ats2='ansible-test sanity --python 2.7'
 alias ats3='ansible-test sanity --python 3.6'
+alias cruntime="${container_runtime}"
+alias alintc='cruntime run --rm -t --workdir $(pwd) -v $(pwd):$(pwd) quay.io/ansible/creator-ee ansible-lint --exclude changelogs/ --profile=production'
 
 # ssh into cloud instances ignoring warnings and such
 alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=QUIET "$@"'
@@ -264,31 +273,18 @@ gen_passwd () {
         tr -cd '[:graph:]' < /dev/urandom | fold -w"$1" | head -n1
     fi
 }
-cleanpodman() {
+
+cleancontainers() {
     # Clean exited containers
-    for container in $(podman ps -a | awk '/Exited/{ print $1}')
+    for container in $(${container_runtime} ps -a | awk '/Exited/{ print $1}')
     do
-        podman rm $container
+        ${container_runtime} rm $container
     done
 
     # Clean dangling images
-    for i in $(podman images -f 'dangling=true' -q)
+    for i in $(${container_runtime} images -f 'dangling=true' -q)
     do
-        podman rmi $i
-    done
-}
-
-cleandocker() {
-    # Clean exited containers
-    for container in $(docker ps -a | awk '/Exited/{ print $1}')
-    do
-        docker rm $container
-    done
-
-    # Clean dangling images
-    for i in $(docker images -f 'dangling=true' -q)
-    do
-        docker rmi $i
+        ${container_runtime} rmi $i
     done
 }
 
