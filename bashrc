@@ -231,6 +231,9 @@ fi
 # find aliases
 alias fn='find . -name'
 
+# hexdump with od
+alias hexd='od -A x -t x1z -v'
+
 ###############################################################################
 # BEGIN: Misc functions
 
