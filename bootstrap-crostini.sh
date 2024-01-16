@@ -82,6 +82,7 @@ pkglist=(
     "python3-q"
     "python3-ipython"
     "python-is-python3"
+    "ipython3"
     "git"
     "tig"
     "tmux"
