@@ -88,6 +88,12 @@ noremap <Leader>tp :tabprevious<CR>
 " Set ft=yaml.ansible
 noremap <Leader>sa :set ft=yaml.ansible<CR>
 
+" Easy window navigation
+noremap <Leader>h <C-w>h
+noremap <Leader>j <C-w>j
+noremap <Leader>k <C-w>k
+noremap <Leader>l <C-w>l
+
 " fuck the arrow keys
 noremap <left> <nop>
 noremap <up> <nop>
