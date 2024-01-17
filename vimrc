@@ -103,6 +103,10 @@ noremap <right> <nop>
 " fzf
 noremap <Leader>ff :Files<CR>
 
+" codeium suggestion cycling
+imap <C-j>   <Cmd>call codeium#CycleCompletions(1)<CR>
+imap <C-k>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+
 " the F1 help menu can kick rocks
 nmap <F1> <nop>
 
