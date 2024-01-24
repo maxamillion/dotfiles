@@ -29,17 +29,6 @@ if [[ $? -ne 0 ]]; then
     sudo usermod -aG docker $USER
 fi
 
-# rootless distrobox
-if [[ ! -f ${HOME}/.local/bin/distrobox ]]; then
-    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-fi
-
-# OPA
-if [[ ! -f ${HOME}/.local/bin/opa ]]; then
-    curl -L -o ${HOME}/.local/bin/opa https://openpolicyagent.org/downloads/v0.58.0/opa_linux_amd64_static
-    chmod +x ${HOME}/.local/bin/opa
-fi
-
 # nodejs LTS
 NODE_MAJOR=18
 dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1
@@ -51,37 +40,6 @@ if [[ $? -ne 0 ]]; then
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
     sudo apt update
     sudo apt install -y nodejs
-fi
-
-# github cli
-#
-dpkg -l gh > /dev/null 2>&1
-if [[ $? -ne 0 ]]; then
-    type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-    && sudo apt update \
-    && sudo apt install gh -y
-fi
-
-# ssh-agent systemd user unit
-mkdir_if_needed ~/.config/systemd/user
-
-if [[ ! -f ~/.config/systemd/user/ssh-agent.service ]]; then
-cat > ~/.config/systemd/user/ssh-agent.service << "EOF"
-[Unit]
-Description=SSH key agent
-
-[Service]
-Type=simple
-Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
-
-[Install]
-WantedBy=default.target
-EOF
-systemctl --user enable ssh-agent
 fi
 
 # random dev stuff
@@ -113,6 +71,7 @@ pkglist=(
     "tshark"
     "termshark"
     "nmap"
+    "jq"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1
@@ -139,67 +98,30 @@ if [[ ! -d /usr/local/go ]]; then
     sudo rm /usr/local/go-${golang_version}.tar.gz
 fi
 
-# rust
-if [[ ! -f ${HOME}/.cargo/bin/rustup ]]; then
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-fi
+# local user ssh agent
+local_user_ssh_agent
+
+# rustup
+local_install_rustup
 
 # k8s stuff
-k8s_arch=$(dpkg --print-architecture)
-# minikube install
-if [[ ! -f ${HOME}/.local/bin/minikube ]]; then
-    printf "Installing minikube...\n"
-    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${k8s_arch}
-    chmod +x ./minikube-linux-${k8s_arch}
-    sudo mv ./minikube-linux-${k8s_arch} ${HOME}/.local/bin/minikube
-fi
-
-# kind install
-if [[ ! -f ${HOME}/.local/bin/kind ]]; then
-    printf "Installing kind...\n"
-    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-${k8s_arch}
-    chmod +x ./kind
-    mv ./kind ${HOME}/.local/bin/kind
-fi
-
-
-# kubectl install
-if [[ ! -f ${HOME}/.local/bin/kubectl ]]; then
-    printf "Installing kubectl...\n"
-    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${k8s_arch}/kubectl"
-    chmod +x ./kubectl
-    sudo mv ./kubectl ${HOME}/.local/bin/kubectl
-fi
+local_install_minikube
+local_install_kind
+local_install_kubectl
 
 # terraform
-if [[ ! -f /usr/bin/terraform ]]; then
-    wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-    sudo apt update && sudo apt install terraform
-fi
+local_install_terraform
 
-# pipx install pypkglist 
-pypkglist=(
-    "ptpython"
-    "tox"
-    "httpie"
-    "flake8"
-    "pep8"
-    "pyflakes"
-    "pylint"
-    "black"
-    "pipenv"
-    "poetry"
-    "tmuxp"
-    "bpytop"
-    "python-lsp-server"
-    "tldr"
-)
-for pypkg in ${pypkglist[@]};
-do
-    if [[ ! -d ${HOME}/.local/pipx/venvs/${pypkg} ]]; then
-        pipx install ${pypkg}
-    fi
-done
+# pipx
+local_pipx_packages_install
+
+# rootless distrobox
+local_install_distrobox
+
+# OPA
+local_install_opa
+
+# GH cli
+local_install_gh
 
 printf "Done!\n"
