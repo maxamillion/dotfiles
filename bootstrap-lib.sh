@@ -159,11 +159,19 @@ local_install_terraform() {
         rm -f ${install_path}
     fi
 
-    local terraform_version="$(curl -s 'https://api.github.com/repos/hashicorp/terraform/tags' | jq -r '.[0].name')"
-    local terraform_numerical_version="${terraform_version#v*}"
+    local terraform_vprefix_version="$(curl -s 'https://api.github.com/repos/hashicorp/terraform/tags' | jq -r '.[0].name')"
+    local terraform_version="${terraform_vprefix_version#v*}"
     if [[ ! -f ${install_path} ]]; then
         printf "Installing terraform...\n"
-        curl -Lo ${install_path} https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_${_GOLANG_ARCH}.zip
+        printf "curl -Lo ${install_path} https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_${_GOLANG_ARCH}.zip\n"
+        pushd /tmp/
+            rm -f terraform terraform.zip # just to make sure the zip command doesn't complain
+            curl -Lo terraform.zip \
+                https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_${_GOLANG_ARCH}.zip
+            unzip terraform.zip
+            cp terraform ${install_path}
+        popd
+        chmod +x ${install_path}
     fi
 }
 
@@ -189,7 +197,7 @@ local_install_gh() {
     if [[ ! -f ${install_path} ]]; then
         printf "Installing gh...\n"
         curl -Lo /tmp/gh.tar.gz https://github.com/cli/cli/releases/download/${gh_version}/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}.tar.gz
-        tar -zxvf /tmp/gh.tar.gz
+        tar -zxvf /tmp/gh.tar.gz -C /tmp/
         cp /tmp/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}/bin/gh ${install_path}
         cp /tmp/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}/share/man/man1/* ${HOME}/.local/share/man/man1/
     fi
