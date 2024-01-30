@@ -2,4 +2,7 @@
 	"python.formatting.provider": "black",
 	"python.linting.enabled": true,
 	"python.linting.pylintEnabled": true,
+	"pyright.inlayHints.variableTypes": false,
+	"pyright.inlayHints.parameterNames": false,
+	"pyright.inlayHints.functionReturnTypes": false
 }
