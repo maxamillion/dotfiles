@@ -47,6 +47,11 @@ if [ -f ~/.bashrc_termux ]; then
     . ~/.bashrc_termux
 fi
 
+# GitHub CLI bash completion local install
+if [ -f ~/.local/bin/gh ]; then
+    source <(~/.local/bin/gh completion -s bash)
+fi
+
 # Local user install of virtualenvwrapper
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     if [ -f /usr/bin/python3 ]; then
