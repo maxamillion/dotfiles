@@ -57,6 +57,7 @@ pkglist=(
     "podman"
     "skopeo"
     "buildah"
+    "npm"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1
