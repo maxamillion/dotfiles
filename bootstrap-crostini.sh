@@ -11,24 +11,6 @@ if [[ $? -ne 0 ]]; then
     sudo apt install -y tailscale
 fi
 
-
-# docker - because podman doesn't work in crostini/termina
-dpkg -l docker-ce > /dev/null 2>&1
-if [[ $? -ne 0 ]]; then
-    sudo apt install -y ca-certificates curl gnupg
-    sudo install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg --yes
-    sudo chmod a+r /etc/apt/keyrings/docker.gpg
-    echo \
-      "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian ${VERSION_CODENAME} stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt update
-    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    printf "Adding user to docker group...\n"
-    sudo groupadd docker
-    sudo usermod -aG docker $USER
-fi
-
 # nodejs LTS
 NODE_MAJOR=18
 dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1
@@ -72,6 +54,9 @@ pkglist=(
     "termshark"
     "nmap"
     "jq"
+    "podman"
+    "skopeo"
+    "buildah"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1
@@ -96,6 +81,21 @@ if [[ ! -d /usr/local/go ]]; then
     sudo curl -o "/usr/local/go-${golang_version}.tar.gz" "https://dl.google.com/go/go${golang_version}.linux-$(dpkg --print-architecture).tar.gz"
     sudo tar -zxvf /usr/local/go-${golang_version}.tar.gz --directory=/usr/local/
     sudo rm /usr/local/go-${golang_version}.tar.gz
+fi
+
+# podman subuid/subgid
+podman_system_migrate=""
+if ! grep -q "${USER}:10000:65536" /etc/subuid; then
+    sudo sh -c "echo ${USER}:10000:65536 >> /etc/subuid"
+    podman_system_migrate="true"
+fi
+if ! grep -q "${USER}:10000:65536" /etc/subgid; then
+    sudo sh -c "echo ${USER}:10000:65536 >> /etc/subgid"
+    podman_system_migrate="true"
+fi
+if [[ ${podman_system_migrate} == "true" ]]; then
+    printf "Migrating podman system...\n"
+    podman system migrate
 fi
 
 # local user ssh agent
