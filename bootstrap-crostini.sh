@@ -12,7 +12,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # nodejs LTS
-NODE_MAJOR=18
+NODE_MAJOR=20
 dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1
 if [[ $? -ne 0 ]]; then
     sudo apt-get update
