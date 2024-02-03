@@ -72,12 +72,15 @@ if [ -f ~/.local/bin/podman-compose ]; then
     alias docker-compose='podman-compose'
 fi
 
-# Only use docker in crostini
-if [ -f /usr/bin/dpkg ] && dpkg -l cros-logging > /dev/null 2>&1; then
-    export container_runtime='docker'
-else
-    export container_runtime='podman' # default
-fi
+# # Only use docker in crostini
+# if [ -f /usr/bin/dpkg ] && dpkg -l cros-logging > /dev/null 2>&1; then
+#     export container_runtime='docker'
+# else
+#     export container_runtime='podman' # default
+# fi
+
+# FIXED podman in crostini, podman is the only container engine
+export container_runtime='podman'
 
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/.local/bin/oc ]; then
