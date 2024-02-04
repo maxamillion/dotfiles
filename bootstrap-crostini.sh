@@ -41,7 +41,6 @@ pkglist=(
     "htop"
     "iotop"
     "strace"
-    "ltrace"
     "tree"
     "pipx"
     "virtualenvwrapper"
