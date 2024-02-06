@@ -101,6 +101,9 @@ fi
 if [[ ! -f /usr/local/bin/ollama ]]; then
     printf "Installing ollama...\n"
     curl https://ollama.ai/install.sh | sh
+
+    # don't actually start it until I want to use it
+    sudo systemctl disable ollama.service
 fi
 
 # local user ssh agent
