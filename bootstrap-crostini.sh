@@ -97,6 +97,12 @@ if [[ ${podman_system_migrate} == "true" ]]; then
     podman system migrate
 fi
 
+# install ollama.ai
+if [[ ! -f /usr/local/bin/ollama ]]; then
+    printf "Installing ollama...\n"
+    curl https://ollama.ai/install.sh | sh
+fi
+
 # local user ssh agent
 local_user_ssh_agent
 
