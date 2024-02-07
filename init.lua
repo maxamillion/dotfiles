@@ -172,12 +172,11 @@ require("virt-column").setup()
 -- gruvbox
 require('gruvbox').setup {
     transparent_mode=true,
-    contrast="hard",
     italic = {
         strings=false,
-        emphasis=true,
         comments=false,
         operators=false,
+        emphasis=true,
         folds=true
     }
 }
