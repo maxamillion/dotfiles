@@ -172,6 +172,13 @@ require("virt-column").setup()
 -- gruvbox
 require('gruvbox').setup {
     transparent_mode=true,
+    italic = {
+        strings=false,
+        comments=false,
+        operators=false,
+        emphasis=true,
+        folds=true
+    }
 }
 
 -- death to the mouse
