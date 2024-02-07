@@ -203,6 +203,21 @@ local_install_gh() {
     fi
 }
 
+local_install_neovim_appimage() {
+    local install_path="${HOME}/.local/bin/nvim"
+    if [[ ${1} == "update" ]]; then
+        rm -f ${install_path}
+    fi
+
+    local neovim_version="$(curl -s 'https://api.github.com/repos/neovim/neovim/tags' | jq -r '.[0].name')"
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing neovim appimage... \n"
+        wget -c -O ${install_path} https://github.com/neovim/neovim/releases/download/${neovim_version}/nvim.appimage
+        chmod +x ${install_path}
+    fi
+}
+
+
 local_pipx_packages_install() {
     if which pipx > /dev/null 2>&1; then
         for pypkg in ${_PIPX_PACKAGE_LIST[@]};
@@ -223,5 +238,6 @@ update_local_installs() {
     local_install_terraform update
     local_install_rustup update
     local_install_gh update
+    local_install_neovim_appimage update
     pipx upgrade-all
 }

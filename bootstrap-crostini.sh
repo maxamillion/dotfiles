@@ -27,7 +27,6 @@ fi
 # random dev stuff
 pkglist=(
     "apt-file"
-    "vim-nox"
     "python3"
     "python3-pip"
     "python3-venv"
@@ -56,6 +55,7 @@ pkglist=(
     "podman"
     "skopeo"
     "buildah"
+    "fuse"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1
@@ -131,5 +131,8 @@ local_install_opa
 
 # GH cli
 local_install_gh
+
+# neovim
+local_install_neovim_appimage
 
 printf "Done!\n"
