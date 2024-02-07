@@ -133,4 +133,7 @@ local_install_opa
 # GH cli
 local_install_gh
 
+# Neovim
+local_install_neovim_appimage
+
 printf "Done!\n"
