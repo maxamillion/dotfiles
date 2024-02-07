@@ -48,6 +48,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(
     {
+        'ellisonleao/gruvbox.nvim',
         'lukas-reineke/virt-column.nvim',
         'hrsh7th/nvim-cmp',
         'hrsh7th/cmp-nvim-lsp',
@@ -58,7 +59,6 @@ require("lazy").setup(
         "lukas-reineke/indent-blankline.nvim",
         'nvim-lua/lsp-status.nvim',
         'ojroques/nvim-hardline',
-        'ellisonleao/gruvbox.nvim',
         'numToStr/Comment.nvim',
         'kylechui/nvim-surround',
         'Glench/Vim-Jinja2-Syntax',
@@ -73,7 +73,7 @@ require("lazy").setup(
         },
         {
             'nvim-telescope/telescope.nvim',
-            dependencies = { {'nvim-lua/plenary.nvim'} }
+            dependencies = {'nvim-lua/plenary.nvim'}
         },
         {
             'kyazdani42/nvim-tree.lua',
@@ -105,7 +105,7 @@ require('lsp-setup').setup({
     end,
     servers = {
         gopls = {},
-        -- pylsp = {},
+        pylsp = {},
         ansiblels = {},
         lua_ls = {}
     }
