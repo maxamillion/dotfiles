@@ -87,7 +87,6 @@ require("lazy").setup(
             },
         },
         {
-          { 'kepano/flexoki-neovim', name = 'flexoki' }
         }
     }
 )
@@ -121,16 +120,7 @@ require('lsp-setup').setup({
         gopls = {},
         -- pylsp = {},
         ansiblels = {},
-        sumneko_lua = {
-            single_file_support = true,
-            settings = {
-                Lua = {
-                    diagnostics = {
-                        globals = { 'vim', 'use' }
-                    }
-                }
-            },
-        },
+        lua_ls = {}
     }
 })
 
@@ -149,16 +139,6 @@ cmp.setup {
         expand = function(args)
             require('luasnip').lsp_expand(args.body)
         end,
-    },
-    formatting = {
-        format = lspkind.cmp_format {
-            with_text = true,
-            menu = {
-                buffer = "[buf]",
-                nvim_lsp = "[LSP]",
-                luasnip = "[snip]",
-            }
-        }
     },
     sources = {
         { name = 'nvim_lsp' },
@@ -189,7 +169,9 @@ require('nvim_comment').setup {
     comment_empty = false,
 }
 require('nvim-surround').setup()
-require('hardline').setup()
+require('hardline').setup {
+    theme="gruvbox"
+}
 
 -- indent-blanklines
 require("ibl").setup {}
@@ -203,9 +185,7 @@ vim.keymap.set('n', '<leader>fc', '<Cmd>NvimTreeClose<CR>', { noremap = true })
 require("virt-column").setup()
 
 -- gruvboxr
--- require('gruvbox').setup({transparent_mode=true})
+require('gruvbox').setup({transparent_mode=true})
 
 -- vim command(s)
--- vim.cmd('colorscheme gruvbox')
-
-vim.cmd('colorscheme flexoki-dark')
+vim.cmd('colorscheme gruvbox')
