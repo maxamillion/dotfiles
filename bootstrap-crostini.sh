@@ -26,6 +26,7 @@ fi
 
 # random dev stuff
 pkglist=(
+    "vim-nox"
     "apt-file"
     "python3"
     "python3-pip"
@@ -131,8 +132,5 @@ local_install_opa
 
 # GH cli
 local_install_gh
-
-# neovim
-local_install_neovim_appimage
 
 printf "Done!\n"

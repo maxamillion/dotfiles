@@ -31,7 +31,7 @@ symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
 symlink_if_needed ~/dotfiles/profile            ~/.profile
 symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
 symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
-symlink_if_needed ~/dotfiles/init.lua           ~/.config//nvim/init.lua
+symlink_if_needed ~/dotfiles/init.lua           ~/.config/nvim/init.lua
 symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 
 short_hostname=${HOSTNAME%%.*}
@@ -45,13 +45,6 @@ if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     vim +'PlugInstall!' +qall
     vim +'CocInstall coc-json coc-sh coc-tsserver coc-pyright @yaegassy/coc-ansible coc-go coc-rust-analyzer coc-yaml' +qall
 fi
-
-# the neovim experiment is over
-# if ! [[ -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
-#     git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-#          ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-#     nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-# fi
 
 # This doesn't appear to be necessary, but keep it around just in case
 #link_if_needed ~/dotfiles/sshrc ~/.ssh/rc

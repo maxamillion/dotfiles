@@ -238,6 +238,5 @@ update_local_installs() {
     local_install_terraform update
     local_install_rustup update
     local_install_gh update
-    local_install_neovim_appimage update
     pipx upgrade-all
 }
