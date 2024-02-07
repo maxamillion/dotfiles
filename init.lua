@@ -55,17 +55,12 @@ require("lazy").setup(
         'hrsh7th/cmp-path',
         'hrsh7th/cmp-nvim-lua',
         'hrsh7th/cmp-nvim-lsp-document-symbol',
-        'saadparwaiz1/cmp_luasnip',
-        'L3MON4D3/LuaSnip',
         "lukas-reineke/indent-blankline.nvim",
-        'nvim-treesitter/nvim-treesitter',
         'nvim-lua/lsp-status.nvim',
         'ojroques/nvim-hardline',
-        'fenetikm/falcon',
         'ellisonleao/gruvbox.nvim',
-        'terrortylor/nvim-comment',
+        'numToStr/Comment.nvim',
         'kylechui/nvim-surround',
-        'yuntan/neovim-indent-guides',
         'Glench/Vim-Jinja2-Syntax',
         'nvim-treesitter/nvim-treesitter',
         {
@@ -98,14 +93,6 @@ require('nvim-treesitter.configs').setup {
     highlight = {
         enable = true,
     },
-}
-
--- luasnip
-local luasnip = require('luasnip')
-luasnip.config.set_config {
-    history = true,
-    updateevents = 'TextChanged,TextChangedI',
-    enable_autosnippets = true,
 }
 
 -- LSP
@@ -165,9 +152,7 @@ vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, opts)
 vim.keymap.set('n', '<leader>dj', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>dk', vim.diagnostic.goto_prev, opts)
 
-require('nvim_comment').setup {
-    comment_empty = false,
-}
+require('Comment').setup()
 require('nvim-surround').setup()
 require('hardline').setup {
     theme="gruvbox"
@@ -184,8 +169,21 @@ vim.keymap.set('n', '<leader>fc', '<Cmd>NvimTreeClose<CR>', { noremap = true })
 -- colorcolumn
 require("virt-column").setup()
 
--- gruvboxr
-require('gruvbox').setup({transparent_mode=true})
+-- gruvbox
+require('gruvbox').setup {
+    transparent_mode=true,
+    contrast="hard",
+    italic = {
+        strings=false,
+        emphasis=true,
+        comments=false,
+        operators=false,
+        folds=true
+    }
+}
+
+-- death to the mouse
+vim.opt.mouse = ""
 
 -- vim command(s)
 vim.cmd('colorscheme gruvbox')
