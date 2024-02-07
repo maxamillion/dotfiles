@@ -12,7 +12,7 @@ Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-Plug 'Exafunction/codeium.vim'
+" Plug 'Exafunction/codeium.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -104,8 +104,8 @@ noremap <right> <nop>
 noremap <Leader>ff :Files<CR>
 
 " codeium suggestion cycling
-imap <C-j>   <Cmd>call codeium#CycleCompletions(1)<CR>
-imap <C-k>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+" imap <C-j>   <Cmd>call codeium#CycleCompletions(1)<CR>
+" imap <C-k>   <Cmd>call codeium#CycleCompletions(-1)<CR>
 
 " the F1 help menu can kick rocks
 nmap <F1> <nop>
@@ -163,10 +163,6 @@ augroup END
 let g:coc_filetype_map = {
 	\ 'yaml.ansible': 'ansible',
 	\}
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation
 nmap <silent> gd <Plug>(coc-definition)
