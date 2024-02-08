@@ -571,6 +571,7 @@ local servers = {
   pyright = {},
   ansiblels ={},
   rust_analyzer = {},
+  bashls = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
