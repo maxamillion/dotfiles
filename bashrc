@@ -157,7 +157,7 @@ export EDITOR=vim
 #FIXME - F19+ PROMPT_COMMAND does stupid shit with escape sequences
 unset PROMPT_COMMAND
 
-# Neovim
+# neovim 
 if [ -f ~/.local/bin/nvim ]; then
     alias nv=nvim
     alias vim=nvim
