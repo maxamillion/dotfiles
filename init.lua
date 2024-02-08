@@ -47,44 +47,63 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(
+  {
+    'ellisonleao/gruvbox.nvim',
+    'lukas-reineke/virt-column.nvim',
+    'hrsh7th/nvim-cmp',
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-path',
+    'hrsh7th/cmp-nvim-lua',
+    'hrsh7th/cmp-nvim-lsp-document-symbol',
+    "lukas-reineke/indent-blankline.nvim",
+    'nvim-lua/lsp-status.nvim',
+    'ojroques/nvim-hardline',
+    'numToStr/Comment.nvim',
+    'kylechui/nvim-surround',
+    'Glench/Vim-Jinja2-Syntax',
+    'nvim-treesitter/nvim-treesitter',
     {
-        'ellisonleao/gruvbox.nvim',
-        'lukas-reineke/virt-column.nvim',
-        'hrsh7th/nvim-cmp',
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-path',
-        'hrsh7th/cmp-nvim-lua',
-        'hrsh7th/cmp-nvim-lsp-document-symbol',
-        "lukas-reineke/indent-blankline.nvim",
-        'nvim-lua/lsp-status.nvim',
-        'ojroques/nvim-hardline',
-        'numToStr/Comment.nvim',
-        'kylechui/nvim-surround',
-        'Glench/Vim-Jinja2-Syntax',
-        'nvim-treesitter/nvim-treesitter',
-        {
-            'junnplus/lsp-setup.nvim',
-            dependencies = {
-                'neovim/nvim-lspconfig',
-                'williamboman/mason.nvim',
-                'williamboman/mason-lspconfig.nvim',
-            }
-        },
-        {
-            'nvim-telescope/telescope.nvim',
-            dependencies = {'nvim-lua/plenary.nvim'}
-        },
-        {
-            'kyazdani42/nvim-tree.lua',
-              dependencies = {
-                'kyazdani42/nvim-web-devicons', -- optional, for file icons
-            },
-        },
-        {
-        }
-    }
-)
+      'junnplus/lsp-setup.nvim',
+      dependencies = {
+          'neovim/nvim-lspconfig',
+          'williamboman/mason.nvim',
+          'williamboman/mason-lspconfig.nvim',
+      }
+    },
+    {
+      'nvim-telescope/telescope.nvim',
+      dependencies = {'nvim-lua/plenary.nvim'}
+    },
+    {
+      'kyazdani42/nvim-tree.lua',
+        dependencies = {
+          'kyazdani42/nvim-web-devicons', -- optional, for file icons
+      },
+    },
+  {
+    -- Autocompletion
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      -- Snippet Engine & its associated nvim-cmp source
+      {
+        'L3MON4D3/LuaSnip',
+        build = (function()
+          -- Build Step is needed for regex support in snippets
+          return 'make install_jsregexp'
+        end)(),
+      },
+      'saadparwaiz1/cmp_luasnip',
+
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-path',
+
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
+    },
+  },
+})
 
 -- treesitter
 -- [[ Configure Treesitter ]]
@@ -199,33 +218,106 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
--- Completion
-local cmp = require('cmp')
+-- mason-lspconfig requires that these setup functions are called in this order
+-- before setting up the servers.
+require('mason').setup()
+require('mason-lspconfig').setup()
+
+-- Enable the following language servers
+--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+--
+--  Add any additional override configuration in the following tables. They will be passed to
+--  the `settings` field of the server config. You must look up that documentation yourself.
+--
+--  If you want to override the default filetypes that your language server will attach to you can
+--  define the property 'filetypes' to the map in question.
+local servers = {
+  gopls = {},
+  pyright = {},
+  lua_ls = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+      -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+      -- diagnostics = { disable = { 'missing-fields' } },
+    },
+  },
+}
+
+-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+-- Ensure the servers above are installed
+local mason_lspconfig = require 'mason-lspconfig'
+
+mason_lspconfig.setup {
+  ensure_installed = vim.tbl_keys(servers),
+}
+
+mason_lspconfig.setup_handlers {
+  function(server_name)
+    require('lspconfig')[server_name].setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = servers[server_name],
+      filetypes = (servers[server_name] or {}).filetypes,
+    }
+  end,
+}
+
+-- [[ Configure nvim-cmp ]]
+-- See `:help cmp`
+local cmp = require 'cmp'
+local luasnip = require 'luasnip'
+require('luasnip.loaders.from_vscode').lazy_load()
+luasnip.config.setup {}
+
 cmp.setup {
-    mapping = {
-        ['<C-n>'] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
-        ['<C-p>'] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-e>'] = cmp.mapping.abort(),
-        ['<C-y>'] = cmp.mapping.confirm { select = true },
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  completion = {
+    completeopt = 'menu,menuone,noinsert',
+  },
+  mapping = cmp.mapping.preset.insert {
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
     },
-    snippet = {
-        expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-        end,
-    },
-    sources = {
-        { name = 'nvim_lsp' },
-        { name = 'nvim_lua' },
-        { name = 'path' },
-        { name = 'luasnip' },
-        { name = 'buffer' },
-    },
-    experimental = {
-        native_menu = false,
-        ghost_text = true,
-    },
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_locally_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.locally_jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'luasnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
 }
 
 
@@ -336,3 +428,5 @@ vim.opt.mouse = ""
 
 -- vim command(s)
 vim.cmd('colorscheme gruvbox')
+
+-- vim: ts=2 sts=2 sw=2 et
