@@ -118,8 +118,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
-  "nyoom-engineering/oxocarbon.nvim",
-
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -249,6 +247,18 @@ require('lazy').setup({
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
       end,
     },
+  },
+
+  {
+    -- colorscheme theme
+    'tanvirtin/monokai.nvim',
+    priority = 1000,
+    lazy = false,
+    config = function()
+      require('monokai').setup {
+        palette = require('monokai').ristretto
+      }
+    end,
   },
 
   {
@@ -651,11 +661,6 @@ cmp.setup {
     { name = 'path' },
   },
 }
-
-
-vim.cmd("colorscheme oxocarbon")
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
