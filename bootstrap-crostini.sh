@@ -40,7 +40,6 @@ pkglist=(
     "tig"
     "tmux"
     "htop"
-    "fd-find"
     "iotop"
     "strace"
     "tree"
