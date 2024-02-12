@@ -125,6 +125,9 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
+  -- Treesitter code context
+  'nvim-treesitter/nvim-treesitter-context',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -143,7 +146,6 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -171,9 +173,10 @@ require('lazy').setup({
       'rafamadriz/friendly-snippets',
     },
   },
-
-  -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  {
+    -- Useful plugin to show you pending keybinds.
+    'folke/which-key.nvim', opts = {}
+  },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -248,19 +251,17 @@ require('lazy').setup({
       end,
     },
   },
-
   {
-    -- colorscheme theme
-    'tanvirtin/monokai.nvim',
-    priority = 1000,
-    lazy = false,
-    config = function()
-      require('monokai').setup {
-        palette = require('monokai').ristretto
-      }
-    end,
+    -- colorscheme
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000
   },
-
+  {
+    -- colorscheme
+    "olimorris/onedarkpro.nvim",
+    priority = 1000, -- Ensure it loads first
+  },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -274,7 +275,6 @@ require('lazy').setup({
       },
     },
   },
-
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
@@ -283,12 +283,13 @@ require('lazy').setup({
     main = 'ibl',
     opts = {},
   },
-
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
-
-  -- Fuzzy Finder (files, lsp, etc)
   {
+    'numToStr/Comment.nvim',
+    -- "gc" to comment visual regions/lines
+    opts = {}
+  },
+  {
+    -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
     dependencies = {
@@ -307,7 +308,6 @@ require('lazy').setup({
       },
     },
   },
-
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -487,6 +487,12 @@ vim.defer_fn(function()
   }
 end, 0)
 
+
+-- treesitter code contxt
+require('treesitter-context').setup {
+  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+}
+
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -663,8 +669,10 @@ cmp.setup {
 }
 
 -- force transparent background
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
+vim.cmd [[colorscheme onedark_dark]]
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
