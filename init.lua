@@ -126,6 +126,9 @@ require('lazy').setup({
   -- Treesitter code context
   'nvim-treesitter/nvim-treesitter-context',
 
+  -- Auto enable/disable hlsearch when using
+  'nvimdev/hlsearch.nvim',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -636,10 +639,25 @@ cmp.setup {
   },
 }
 
+-- dynamic hlsearch enable/disable
+require('hlsearch').setup()
+
 -- force transparent background
 -- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
+-- set colorscheme options
+require('onedarkpro').setup {
+  highlights = {
+    Search = {
+      bg = '${yellow}',
+      fg = '${black}',
+    }
+  },
+  options={
+    terminal_colors=false,
+  }
+}
 vim.cmd [[colorscheme onedark_dark]]
 
 -- The line beneath this is called `modeline`. See `:help modeline`
