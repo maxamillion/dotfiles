@@ -656,6 +656,8 @@ require('onedarkpro').setup {
   },
   options={
     terminal_colors=false,
+    cursorline=true,
+    transparency=true
   }
 }
 vim.cmd [[colorscheme onedark_dark]]
