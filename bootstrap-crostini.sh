@@ -69,7 +69,7 @@ for pkg in ${pkglist[@]}; do
 done
 
 # golang
-golang_version="1.20.7"
+golang_version="1.22.0"
 dpkg -l golang > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     sudo apt remove -y golang 
