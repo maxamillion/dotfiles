@@ -287,6 +287,23 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
+  {
+    'linux-cultist/venv-selector.nvim',
+    -- Python virtualenv selector
+    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
+    opts = {
+      -- Your options go here
+      -- name = "venv",
+      -- auto_refresh = false
+    },
+    event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+    keys = {
+      -- Keymap to open VenvSelector to pick a venv.
+      { '<leader>vs', '<cmd>VenvSelect<cr>' },
+      -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
+      { '<leader>vc', '<cmd>VenvSelectCached<cr>' },
+    },
+  },
 
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
@@ -480,6 +497,10 @@ local on_attach = function(_, bufnr)
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
+  -- -- easily controll the LSP state
+  -- nmap('<leader>lr', "<cmd>LspRestart<cr>", { "[l]sp [r]estart" })
+  -- nmap('<leader>ls', "<cmd>LspStart<cr>", { "[l]sp [s]tart" })
+  -- nmap('<leader>lS', "<cmd>LspStop<cr>", { "[l]sp [S]top" })
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', function()
