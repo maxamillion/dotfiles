@@ -59,6 +59,11 @@ pkglist=(
     "buildah"
     "fuse"
     "luarocks"
+    "cmake"
+    "ninja-build"
+    "gettext"
+    "unzip"
+    "curl"
 )
 for pkg in ${pkglist[@]}; do
     dpkg -s ${pkg} > /dev/null 2>&1

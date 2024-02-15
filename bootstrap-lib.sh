@@ -210,11 +210,29 @@ local_install_neovim_appimage() {
     fi
 
     local neovim_version="$(curl -s 'https://api.github.com/repos/neovim/neovim/tags' | jq -r '.[0].name')"
+    local neovim_numerical_version="${neovim_version#v*}"
+
+
     if [[ ! -f ${install_path} ]]; then
         printf "Installing neovim appimage... \n"
-        wget -c -O ${install_path} https://github.com/neovim/neovim/releases/download/${neovim_version}/nvim.appimage
-        chmod +x ${install_path}
+        if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
+            wget -c -O ${install_path} https://github.com/neovim/neovim/releases/download/${neovim_version}/nvim.appimage
+            chmod +x ${install_path}
+        elif [[ ${_MACHINE_ARCH} == "aarch64" ]]; then
+            pushd /tmp/
+                wget -c https://github.com/neovim/neovim/archive/refs/tags/${neovim_version}.tar.gz
+                tar -zxvf ${neovim_version}.tar.gz
+                pushd neovim-${neovim_numerical_version}/
+                    make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=${HOME}/.local/
+                    make install
+                popd
+                rm -fr neovim-${neovim_version}/
+            popd
+        fi
     fi
+
+
+
 }
 
 
