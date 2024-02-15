@@ -57,7 +57,6 @@ pkglist=(
     "podman"
     "skopeo"
     "buildah"
-    "fuse"
     "luarocks"
     "cmake"
     "ninja-build"
@@ -66,13 +65,17 @@ pkglist=(
     "curl"
     "fd-find"
 )
+pending_install_pkgs=""
 for pkg in ${pkglist[@]}; do
-    dpkg -s ${pkg} > /dev/null 2>&1
+    dpkg -s ${pkg} | grep "Status: install ok installed" > /dev/null 2>&1
     if [[ $? -ne 0 ]]; then
-        printf "Installing %s...\n" ${pkg}
-        sudo apt install -y ${pkg}
+        pending_install_pkgs+=" ${pkg}"
     fi
 done
+if [[ -n "${pending_install_pkgs}" ]]; then
+    printf "Installing packages... %s\n" "${pending_install_pkgs}"
+    sudo apt install ${pending_install_pkgs}
+fi
 
 # golang
 golang_version="1.22.0"
