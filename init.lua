@@ -242,7 +242,7 @@ require('lazy').setup({
   },
   {
     -- colorscheme
-    "olimorris/onedarkpro.nvim",
+    "ellisonleao/gruvbox.nvim",
     priority = 1000, -- Ensure it loads first
   },
   {
@@ -681,20 +681,16 @@ require('hlsearch').setup()
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
 -- set colorscheme options
-require('onedarkpro').setup {
-  highlights = {
-    Search = {
-      bg = '${yellow}',
-      fg = '${black}',
-    }
+require("gruvbox").setup({
+  terminal_colors = false,
+  italic = {
+    strings = false,
   },
-  options={
-    terminal_colors=false,
-    cursorline=true,
-    transparency=true
-  }
-}
-vim.cmd [[colorscheme onedark]]
+  invert_selection = true,
+  inverse = true, -- invert background for search, diffs, statuslines and errors
+  transparent_mode = true,
+})
+vim.cmd("colorscheme gruvbox")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
