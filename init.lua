@@ -242,8 +242,9 @@ require('lazy').setup({
   },
   {
     -- colorscheme
-    "ellisonleao/gruvbox.nvim",
+    'projekt0n/github-nvim-theme',
     priority = 1000, -- Ensure it loads first
+    lazy = false,
   },
   {
     -- Set lualine as statusline
@@ -681,16 +682,12 @@ require('hlsearch').setup()
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
 -- set colorscheme options
-require("gruvbox").setup({
-  terminal_colors = false,
-  italic = {
-    strings = false,
-  },
-  invert_selection = true,
-  inverse = true, -- invert background for search, diffs, statuslines and errors
-  transparent_mode = true,
-})
-vim.cmd("colorscheme gruvbox")
+require('github-theme').setup {
+  options = {
+    transparent = true,
+  }
+}
+vim.cmd("colorscheme github_dark_default")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
