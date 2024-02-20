@@ -246,13 +246,13 @@ require('lazy').setup({
     priority = 1000, -- Ensure it loads first
     lazy = false,
     config = function()
-      -- set colorscheme options
-      require('github-theme').setup {
-        options = {
-          transparent = true,
-        }
-      }
-      vim.cmd.colorscheme 'github_dark'
+      -- -- set colorscheme options
+      -- require('github-theme').setup {
+      --   options = {
+      --     transparent = true,
+      --   }
+      -- }
+      vim.cmd.colorscheme 'github_dark_default'
 
     end,
   },
