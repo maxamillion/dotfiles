@@ -687,7 +687,10 @@ require('github-theme').setup {
     transparent = true,
   }
 }
-vim.cmd("colorscheme github_dark_default")
+-- for some reason I have to run this twice in order to get the indent blank
+-- line highlights to be the correct color
+vim.cmd("colorscheme github_dark")
+vim.cmd("colorscheme github_dark")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
