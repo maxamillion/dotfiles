@@ -147,4 +147,13 @@ local_install_gh
 # Neovim
 local_install_neovim_appimage
 
+# Force wayland for firefox-esr
+if [[ ! -f ${HOME}/.local/applications/firefox-esr.desktop ]]; then
+    printf "Forcing wayland for firefox-esr...\n"
+    cp /usr/share/applications/firefox-esr.desktop ${HOME}/.local/share/applications/firefox-esr.desktop
+    sed -i \
+        's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
+        ${HOME}/.local/share/applications/firefox-esr.desktop
+fi
+
 printf "Done!\n"
