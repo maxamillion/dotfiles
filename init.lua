@@ -245,6 +245,16 @@ require('lazy').setup({
     'projekt0n/github-nvim-theme',
     priority = 1000, -- Ensure it loads first
     lazy = false,
+    config = function()
+      -- set colorscheme options
+      require('github-theme').setup {
+        options = {
+          transparent = true,
+        }
+      }
+      vim.cmd.colorscheme 'github_dark'
+
+    end,
   },
   {
     -- Set lualine as statusline
@@ -680,17 +690,6 @@ require('hlsearch').setup()
 -- force transparent background
 -- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-
--- set colorscheme options
-require('github-theme').setup {
-  options = {
-    transparent = true,
-  }
-}
--- for some reason I have to run this twice in order to get the indent blank
--- line highlights to be the correct color
-vim.cmd("colorscheme github_dark")
-vim.cmd("colorscheme github_dark")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
