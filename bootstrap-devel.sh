@@ -59,6 +59,7 @@ git_repos=(
     "${dev_dir}/ansible-hub-ui git@github.com:maxamillion/ansible-hub-ui.git https://github.com/ansible/ansible-hub-ui.git"
     "${dev_dir}/ansible-bender git@github.com:maxamillion/ansible-bender.git https://github.com/ansible-community/ansible-bender.git"
     "${dev_dir}/ansible-risk-insight git@github.com:maxamillion/ansible-risk-insight.git https://github.com/ansible/ansible-risk-insight.git"
+    "${dev_dir}/ansible-language-server git@github.com:maxamillion/ansible-language-server.git https://github.com/ansible/ansible-language-server.git"
     "${dev_dir}/openshift-ansible git@github.com:maxamillion/openshift-ansible.git https://github.com/openshift/openshift-ansible.git"
     "${dev_dir}/ecosystem-documentation git@github.com:maxamillion/ecosystem-documentation.git https://github.com/ansible/ecosystem-documentation.git"
     "${dev_dir}/awx git@github.com:maxamillion/awx.git https://github.com/ansible/awx.git"
