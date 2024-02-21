@@ -241,19 +241,12 @@ require('lazy').setup({
     },
   },
   {
-    -- colorscheme
-    'projekt0n/github-nvim-theme',
+    -- install gruvbox colorscheme
+    'ellisonleao/gruvbox.nvim',
     priority = 1000, -- Ensure it loads first
     lazy = false,
     config = function()
-      -- -- set colorscheme options
-      -- require('github-theme').setup {
-      --   options = {
-      --     transparent = true,
-      --   }
-      -- }
-      vim.cmd.colorscheme 'github_dark_default'
-
+      vim.cmd.colorscheme "gruvbox"
     end,
   },
   {
@@ -687,9 +680,4 @@ cmp.setup {
 -- dynamic hlsearch enable/disable
 require('hlsearch').setup()
 
--- force transparent background
--- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
--- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-
--- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
