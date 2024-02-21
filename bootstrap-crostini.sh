@@ -158,6 +158,9 @@ if [[ -f ${firefox_esr_desktop_file_path} ]]; then
             's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
             ${firefox_esr_desktop_local_path}
     fi
+elif [[ -f ${firefox_esr_desktop_local_path} ]]; then
+    printf "Removing local firefox-esr desktop file...\n"
+    rm ${firefox_esr_desktop_local_path}
 fi
 
 vscode_desktop_file_path="/usr/share/applications/code.desktop"
@@ -170,6 +173,10 @@ if [[ -f ${vscode_desktop_file_path} ]]; then
             's|Exec=/usr/share/code/code|Exec=/usr/share/code/code --enable-features=UseOzonePlatform --ozone-platform=wayland|g' \
             ${vscode_local_file_path}
     fi
+elif [[ -f ${vscode_local_file_path} ]]; then
+    printf "Removing local vscode desktop file...\n"
+    rm ${vscode_local_file_path}
 fi
+
 
 printf "Done!\n"
