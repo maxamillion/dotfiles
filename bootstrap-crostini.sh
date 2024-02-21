@@ -148,12 +148,16 @@ local_install_gh
 local_install_neovim_appimage
 
 # Force wayland for firefox-esr
-if [[ ! -f ${HOME}/.local/applications/firefox-esr.desktop ]]; then
-    printf "Forcing wayland for firefox-esr...\n"
-    cp /usr/share/applications/firefox-esr.desktop ${HOME}/.local/share/applications/firefox-esr.desktop
-    sed -i \
-        's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
-        ${HOME}/.local/share/applications/firefox-esr.desktop
+firefox_esr_desktop_file_path="/usr/share/applications/firefox-esr.desktop"
+firefox_esr_desktop_local_path="${HOME}/.local/share/applications/firefox-esr.desktop"
+if [[ -f ${firefox_esr_desktop_file_path} ]]; then 
+    if [[ ! -f ${firefox_esr_desktop_local_path} ]]; then
+        printf "Forcing wayland for firefox-esr...\n"
+        cp ${firefox_esr_desktop_file_path} ${firefox_esr_desktop_local_path}
+        sed -i \
+            's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
+            ${HOME}/.local/share/applications/firefox-esr.desktop
+    fi
 fi
 
 printf "Done!\n"
