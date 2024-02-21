@@ -156,7 +156,19 @@ if [[ -f ${firefox_esr_desktop_file_path} ]]; then
         cp ${firefox_esr_desktop_file_path} ${firefox_esr_desktop_local_path}
         sed -i \
             's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
-            ${HOME}/.local/share/applications/firefox-esr.desktop
+            ${firefox_esr_desktop_local_path}
+    fi
+fi
+
+vscode_desktop_file_path="/usr/share/applications/code.desktop"
+vscode_local_file_path="${HOME}/.local/share/applications/code.desktop"
+if [[ -f ${vscode_desktop_file_path} ]]; then
+    if [[ ! -f ${vscode_local_file_path} ]]; then
+        printf "Forcing wayland for vscode...\n"
+        cp ${vscode_desktop_file_path} ${vscode_local_file_path}
+        sed -i \
+            's|Exec=/usr/share/code/code|Exec=/usr/share/code/code --enable-features=UseOzonePlatform --ozone-platform=wayland|g' \
+            ${vscode_local_file_path}
     fi
 fi
 
