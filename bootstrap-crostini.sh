@@ -147,6 +147,9 @@ local_install_gh
 # Neovim
 local_install_neovim_appimage
 
+# Task
+local_install_task
+
 # Force wayland for firefox-esr
 firefox_esr_desktop_file_path="/usr/share/applications/firefox-esr.desktop"
 firefox_esr_desktop_local_path="${HOME}/.local/share/applications/firefox-esr.desktop"

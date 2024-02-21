@@ -231,6 +231,35 @@ local_install_neovim_appimage() {
 
 }
 
+local_install_task() {
+    local install_path="${HOME}/.local/bin/task"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/task"
+    if [[ ${1} == "update" ]]; then
+        rm -f ${install_path}
+        rm -f ${completions_install_path}
+    fi
+
+
+    local task_version="$(curl -s 'https://api.github.com/repos/go-task/task/tags' | jq -r '.[0].name')"
+    local task_numerical_version="${task_version#v*}"
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing task...\n"
+
+        pushd /tmp/
+            wget -c https://github.com/go-task/task/releases/download/${task_version}/task_linux_${_GOLANG_ARCH}.tar.gz
+            tar -zxvf task_linux_${_GOLANG_ARCH}.tar.gz
+            cp task ${install_path}
+            cp completion/bash/task.bash ${completions_install_path}
+
+            # cleanup the tarball artifacts
+            for file in $(tar --list --file task_linux_${_GOLANG_ARCH}.tar.gz); do
+                rm -f ${file}
+            done
+            rm -fr completion
+    fi
+}
+
 
 local_pipx_packages_install() {
     if which pipx > /dev/null 2>&1; then
