@@ -21,6 +21,7 @@ _PIPX_PACKAGE_LIST=(
     "bpytop"
     "python-lsp-server"
     "tldr"
+    "nodeenv"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
