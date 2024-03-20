@@ -204,7 +204,7 @@ local_install_gh() {
     fi
 }
 
-local_install_neovim_appimage() {
+local_install_neovim() {
     local install_path="${HOME}/.local/bin/nvim"
     if [[ ${1} == "update" ]]; then
         rm -f ${install_path}
@@ -282,6 +282,6 @@ update_local_installs() {
     local_install_terraform update
     local_install_rustup update
     local_install_gh update
-    local_install_neovim_appimage update
+    local_install_neovim update
     pipx upgrade-all
 }

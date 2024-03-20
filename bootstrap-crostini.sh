@@ -145,7 +145,7 @@ local_install_opa
 local_install_gh
 
 # Neovim
-local_install_neovim_appimage
+local_install_neovim
 
 # Task
 local_install_task
