@@ -75,8 +75,15 @@ EOF
 
 local_install_distrobox() {
     local install_path="${HOME}/.local/bin/distrobox"
+    local distrobox_version="$(curl -s 'https://api.github.com/repos/89luca89/distrobox/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        rm -f ${install_path}
+        if [[ -f ${install_path} ]]; then
+            local currently_installed_version=$(distrobox version | awk -F: '/^distrobox/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            if [[ ${distrobox_version} != "${currently_installed_version}" ]]; then
+                rm -f ${install_path}
+                rm -f "${install_path}-*"
+            fi
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -86,11 +93,16 @@ local_install_distrobox() {
 
 local_install_opa() {
     local install_path="${HOME}/.local/bin/opa"
+    local opa_version="$(curl -s 'https://api.github.com/repos/open-policy-agent/opa/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        rm -f ${install_path}
+        if [[ -f ${install_path} ]]; then
+            local currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            if [[ ${opa_version} != "v${currently_installed_version}" ]]; then
+                rm -f ${install_path}
+            fi
+        fi
     fi
 
-    local opa_version="$(curl -s 'https://api.github.com/repos/open-policy-agent/opa/tags' | jq -r '.[0].name')"
     if [[ ! -f ${install_path} ]]; then
         if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
             curl -L -o ${install_path} https://openpolicyagent.org/downloads/${opa_version}/opa_linux_amd64_static
@@ -104,8 +116,14 @@ local_install_opa() {
 
 local_install_minikube() {
     local install_path="${HOME}/.local/bin/minikube"
+    local minikube_version="$(curl -s 'https://api.github.com/repos/kubernetes/minikube/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        rm -f ${install_path}
+        if [[ -f ${install_path} ]]; then
+            local currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            if [[ ${minikube_version} != "${currently_installed_version}" ]]; then
+                rm -f ${install_path}
+            fi
+        fi
     fi
 
     # minikube install
@@ -119,15 +137,17 @@ local_install_minikube() {
 
 local_install_kind() {
     local install_path="${HOME}/.local/bin/kind"
+    # kind tags alpha and stable, if it's alpha, use the latest stable - query with jq
+    local kind_version="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[] | select(.name | contains("alpha") | not ).name' | head -1)"
     if [[ ${1} == "update" ]]; then
-        rm -f ${install_path}
+        if [[ -f ${install_path} ]]; then
+            local currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            if [[ ${kind_version} != "${currently_installed_version}" ]]; then
+                rm -f ${install_path}
+            fi
+        fi
     fi
 
-    local kind_version="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[0].name')"
-    if [[ ${kind_version} =~ "alpha" ]]; then
-        # kind tags alpha and stable, if it's alpha, use the latest stable
-        local kind_version="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[1].name')"
-    fi
     kind_numerical_version="${kind_version#v*}"
 
     # kind install
@@ -141,8 +161,14 @@ local_install_kind() {
 
 local_install_kubectl() {
     local install_path="${HOME}/.local/bin/kubectl"
+    local kubectl_version=$(curl -L -s https://dl.k8s.io/release/stable.txt)
     if [[ ${1} == "update" ]]; then
-        rm -f ${install_path}
+        if [[ -f ${install_path} ]]; then
+            local currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            if [[ ${kubectl_version} != "${currently_installed_version}" ]]; then
+                rm -f ${install_path}
+            fi
+        fi
     fi
 
     # kubectl install
@@ -156,11 +182,23 @@ local_install_kubectl() {
 
 local_install_terraform() {
     local install_path="${HOME}/.local/bin/terraform"
+
+    # terraform tags alpha, beta, and rc ... don't get those
+    local terraform_vprefix_version="$(
+        curl -s 'https://api.github.com/repos/hashicorp/terraform/tags' \
+            | jq -r '.[] | select(.name | contains("alpha") | not )| select(.name | contains("beta") | not ) | select(.name | contains("rc") | not).name' \
+            | head -1 \
+    )"
+
     if [[ ${1} == "update" ]]; then
-        rm -f ${install_path}
+        if [[ -f ${install_path} ]]; then
+            local currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            if [[ ${terraform_vprefix_version} != "${currently_installed_version}" ]]; then
+                rm -f ${install_path}
+            fi
+        fi
     fi
 
-    local terraform_vprefix_version="$(curl -s 'https://api.github.com/repos/hashicorp/terraform/tags' | jq -r '.[0].name')"
     local terraform_version="${terraform_vprefix_version#v*}"
     if [[ ! -f ${install_path} ]]; then
         printf "Installing terraform...\n"
@@ -178,8 +216,14 @@ local_install_terraform() {
 
 local_install_rustup() {
     local install_path="${HOME}/.cargo/bin/rustup"
+    local rustup_version="$(curl -s 'https://api.github.com/repos/open-policy-agent/opa/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        rm -f ${install_path}
+        if [[ -f ${install_path} ]]; then
+            local currently_installed_version=$(rustup --version| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            if [[ ${rustup_version} != "${currently_installed_version}" ]]; then
+                rm -f ${install_path}
+            fi
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
