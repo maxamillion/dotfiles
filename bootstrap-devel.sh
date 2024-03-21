@@ -11,13 +11,13 @@ execenvs_dir="${dev_dir}/ansible_execenvs"
 
 for dir in "${dev_dir}" "${collections_dir}";
 do
-    mkdir_if_needed "${dir}"
+    fn_mkdir_if_needed "${dir}"
 done
 
 fn_git_clone() {
     # $1 - Target clone dir
     # $2 - git repo
-    mkdir_if_needed $(dirname $1)
+    fn_mkdir_if_needed $(dirname $1)
     if ! [ -d $1 ]; then
         pushd $(dirname $1)
         git clone $2 $(basename $1)
@@ -29,7 +29,7 @@ fn_git_clone_with_upstream() {
     # $1 - Target clone dir
     # $2 - My git fork url
     # $3 - Upstream git url
-    mkdir_if_needed $(dirname $1)
+    fn_mkdir_if_needed $(dirname $1)
     if ! [ -d $1 ]; then
         pushd $(dirname $1)
         git clone $2 $(basename $1)
@@ -159,7 +159,7 @@ do
     fi
     if [[ "${repo_string_split[0]}" =~ "${collections_dir}" ]]; then
         collection_shortdir="${repo_string_split[0]#${collections_dir}/*}"
-        mkdir_if_needed ${HOME}/.ansible/collections/ansible_collections/${collection_shortdir%*/*}
+        fn_mkdir_if_needed ${HOME}/.ansible/collections/ansible_collections/${collection_shortdir%*/*}
         symlink_if_needed ${repo_string_split[0]} ${HOME}/.ansible/collections/ansible_collections/${collection_shortdir}
     fi
 done
