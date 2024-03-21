@@ -276,6 +276,7 @@ fn_system_setup_crostini() {
 
 fn_system_setup_el() {
     # Setup for RHEL and CentOS Stream
+    fn_mkdir_if_needed ~/.local/bin/
     
     # Install EPEL
     if ! rpm -q epel-release &>/dev/null; then
