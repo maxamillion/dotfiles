@@ -3,18 +3,16 @@ source ./bootstrap-lib.sh
 source /etc/os-release
 
 # tailscale
-dpkg -l tailscale > /dev/null 2>&1
-if [[ $? -ne 0 ]]; then
-    curl -fsSL https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
-    curl -fsSL https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+if ! dpkg -l tailscale > /dev/null 2>&1; then
+    curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg" | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+    curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.tailscale-keyring.list" | sudo tee /etc/apt/sources.list.d/tailscale.list
     sudo apt update
     sudo apt install -y tailscale
 fi
 
 # nodejs LTS
 NODE_MAJOR=20
-dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1
-if [[ $? -ne 0 ]]; then
+if ! dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1; then
     sudo apt-get update
     sudo apt-get install -y ca-certificates curl gnupg
     sudo mkdir -p /etc/apt/keyrings
@@ -64,27 +62,26 @@ pkglist=(
     "unzip"
     "curl"
     "fd-find"
+    "shellcheck"
 )
 pending_install_pkgs=""
-for pkg in ${pkglist[@]}; do
-    dpkg -s ${pkg} | grep "Status: install ok installed" > /dev/null 2>&1
-    if [[ $? -ne 0 ]]; then
+for pkg in "${pkglist[@]}"; do
+    if ! dpkg -s "${pkg}" | grep "Status: install ok installed" > /dev/null 2>&1; then
         pending_install_pkgs+=" ${pkg}"
     fi
 done
 if [[ -n "${pending_install_pkgs}" ]]; then
     printf "Installing packages... %s\n" "${pending_install_pkgs}"
-    sudo apt install ${pending_install_pkgs}
+    sudo apt install "${pending_install_pkgs}"
 fi
 
 # golang
 golang_version="1.22.0"
-dpkg -l golang > /dev/null 2>&1
-if [[ $? -eq 0 ]]; then
+if dpkg -l golang > /dev/null 2>&1; then
     sudo apt remove -y golang 
 fi
-go version | grep "$golang_version" > /dev/null 2>&1
-if [[ $? -ne 0 ]]; then
+
+if ! go version | grep "$golang_version" > /dev/null 2>&1; then
     sudo rm -fr /usr/local/go
 fi
 if [[ ! -d /usr/local/go ]]; then
@@ -156,14 +153,14 @@ firefox_esr_desktop_local_path="${HOME}/.local/share/applications/firefox-esr.de
 if [[ -f ${firefox_esr_desktop_file_path} ]]; then 
     if [[ ! -f ${firefox_esr_desktop_local_path} ]]; then
         printf "Forcing wayland for firefox-esr...\n"
-        cp ${firefox_esr_desktop_file_path} ${firefox_esr_desktop_local_path}
+        cp "${firefox_esr_desktop_file_path}" "${firefox_esr_desktop_local_path}"
         sed -i \
             's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
-            ${firefox_esr_desktop_local_path}
+            "${firefox_esr_desktop_local_path}"
     fi
 elif [[ -f ${firefox_esr_desktop_local_path} ]]; then
     printf "Removing local firefox-esr desktop file...\n"
-    rm ${firefox_esr_desktop_local_path}
+    rm "${firefox_esr_desktop_local_path}"
 fi
 
 vscode_desktop_file_path="/usr/share/applications/code.desktop"
@@ -171,14 +168,14 @@ vscode_local_file_path="${HOME}/.local/share/applications/code.desktop"
 if [[ -f ${vscode_desktop_file_path} ]]; then
     if [[ ! -f ${vscode_local_file_path} ]]; then
         printf "Forcing wayland for vscode...\n"
-        cp ${vscode_desktop_file_path} ${vscode_local_file_path}
+        cp "${vscode_desktop_file_path}" "${vscode_local_file_path}"
         sed -i \
             's|Exec=/usr/share/code/code|Exec=/usr/share/code/code --enable-features=UseOzonePlatform --ozone-platform=wayland|g' \
-            ${vscode_local_file_path}
+            "${vscode_local_file_path}"
     fi
-elif [[ -f ${vscode_local_file_path} ]]; then
+elif [[ -f "${vscode_local_file_path}" ]]; then
     printf "Removing local vscode desktop file...\n"
-    rm ${vscode_local_file_path}
+    rm "${vscode_local_file_path}"
 fi
 
 
