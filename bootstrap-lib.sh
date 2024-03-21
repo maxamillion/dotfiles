@@ -140,7 +140,6 @@ fn_flathub_install() {
     fi
     for flatpak_pkg in "${flatpak_pkgs[@]}"; do
         if ! flatpak list | grep "${flatpak_pkg}" &>/dev/null; then
-            echo "DEBUG: flatpak install -y flathub ${flatpak_pkg}"
             flatpak install -y flathub "${flatpak_pkg}"
         fi
     done
