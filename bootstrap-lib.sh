@@ -258,13 +258,15 @@ system_setup_crostini() {
 
 system_setup_el() {
     # Install EPEL
-    if [[ -f /etc/centos-release ]]; then
-        dnf -y install epel-release
-    else
-        local rhel_major_version
-        rhel_major_version="$(rpm -E %rhel)"
-        subscription-manager repos --enable "codeready-builder-for-rhel-${rhel_major_version}-$(arch)-rpms"
-        dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${rhel_major_version}.noarch.rpm" 
+    if ! rpm -q epel-release &>/dev/null; then
+        if [[ -f /etc/centos-release ]]; then
+            dnf -y install epel-release
+        else
+            local rhel_major_version
+            rhel_major_version="$(rpm -E %rhel)"
+            subscription-manager repos --enable "codeready-builder-for-rhel-${rhel_major_version}-$(arch)-rpms"
+            dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${rhel_major_version}.noarch.rpm" 
+        fi
     fi
 
     # Tailscale
@@ -305,7 +307,9 @@ system_setup_el() {
     system_install_packages "${pkglist[@]}"
 
     # virtualenvwrapper
-    pip install --user virtualenvwrapper
+    if ! pip list | grep virtualenvwrapper &>/dev/null; then
+        pip install --user virtualenvwrapper
+    fi
 }
 
 local_user_ssh_agent() {
