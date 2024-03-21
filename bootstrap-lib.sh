@@ -277,6 +277,8 @@ system_setup_el() {
         "vim-enhanced"
         "python3"
         "python3-pip"
+        "nodejs"
+        "npm"
         "git"
         "tig"
         "tmux"
