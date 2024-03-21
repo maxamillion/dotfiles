@@ -33,14 +33,14 @@ if [[ ${_MACHINE_ARCH} == "aarch64" ]]; then
 fi
 #
 # Ensure the needed dirs exist
-mkdir_if_needed() {
+fn_mkdir_if_needed() {
     if [[ ! -d "${1}" ]]; then
         mkdir -p "${1}"
     fi
 }
 
 # Symlink the conf files
-symlink_if_needed() {
+fn_symlink_if_needed() {
     if [[ ! -f $2 ]] && [[ ! -L $2 ]]; then
         printf "Symlinking: %s -> %s\n" "$1" "$2"
         if [[ ! -d "$(dirname "$2")" ]]; then
@@ -53,7 +53,7 @@ symlink_if_needed() {
     fi
 }
 
-rm_on_update_if_needed() {
+fn_rm_on_update_if_needed() {
     # 
     # Arguments:
     #   $1 - str: path to local installed executable
@@ -74,7 +74,7 @@ rm_on_update_if_needed() {
     fi
 }
 
-system_install_tailscale() {
+fn_system_install_tailscale() {
     source /etc/os-release
     if [[ "${ID}" == "debian" ]]; then 
         # tailscale
@@ -97,7 +97,7 @@ system_install_tailscale() {
 
 }
 
-system_install_packages() {
+fn_system_install_packages() {
     # accept a list of packages and install them
     
     source /etc/os-release
@@ -127,8 +127,27 @@ system_install_packages() {
     fi
 }
 
-system_setup_crostini() {
-    system_install_tailscale
+fn_flathub_install() {
+    local flatpak_pkgs
+    flatpak_pkgs=(
+        "hu.irl.cameractrls"
+        "com.slack.Slack"
+        "im.riot.Riot"
+        "com.irccloud.desktop"
+    )
+    if ! flatpak remotes | grep flathub &>/dev/null; then
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    fi
+    for flatpak_pkg in "${flatpak_pkgs[@]}"; do
+        if ! flatpak list | grep "${flatpak_pkg}" &>/dev/null; then
+            echo "DEBUG: flatpak install -y flathub ${flatpak_pkg}"
+            flatpak install -y flathub "${flatpak_pkg}"
+        fi
+    done
+}
+
+fn_system_setup_crostini() {
+    fn_system_install_tailscale
 
     # nodejs LTS
     NODE_MAJOR=20
@@ -182,7 +201,7 @@ system_setup_crostini() {
         "fd-find"
         "shellcheck"
     )
-    system_install_packages "${pkglist[@]}"
+    fn_system_install_packages "${pkglist[@]}"
 
     # golang
     golang_version="1.22.0"
@@ -256,7 +275,7 @@ system_setup_crostini() {
     fi
 }
 
-system_setup_el() {
+fn_system_setup_el() {
     # Install EPEL
     if ! rpm -q epel-release &>/dev/null; then
         if [[ -f /etc/centos-release ]]; then
@@ -270,7 +289,7 @@ system_setup_el() {
     fi
 
     # Tailscale
-    system_install_tailscale
+    fn_system_install_tailscale
 
     # random dev stuff
     pkglist=(
@@ -305,13 +324,37 @@ system_setup_el() {
         "curl"
         "fd-find"
         "ShellCheck"
+        "dconf"
     )
-    system_install_packages "${pkglist[@]}"
+    fn_system_install_packages "${pkglist[@]}"
 
     # virtualenvwrapper
     if ! pip list | grep virtualenvwrapper &>/dev/null; then
         pip install --user virtualenvwrapper
     fi
+
+    # key remap because fuck the capslock key
+    local current_xkb_options
+    local new_xkb_options
+    current_xkb_options=$(dconf read /org/gnome/desktop/input-sources/xkb-options 2>/dev/null)
+    if [[ -z "${current_xkb_options}" ]]; then
+        # if current_xkb_options is empty, set it
+        new_xkb_options="['caps:escape']"
+    else
+        # if current_xkb_options is empty, modify it
+        new_xkb_options=${current_xkb_options//\[/\[\'caps:escape\', }
+    fi
+    if ! [[ "${current_xkb_options}" =~ "caps:escape" ]]; then
+        dconf write /org/gnome/desktop/input-sources/xkb-options "${new_xkb_options}"
+    fi
+
+    # set alt-tab behavior for sanity
+    gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
+    gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]"
+    gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+    gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+
+    fn_flathub_install
 }
 
 local_user_ssh_agent() {
@@ -335,7 +378,7 @@ EOF
     fi
 }
 
-local_install_distrobox() {
+fn_local_install_distrobox() {
     local install_path="${HOME}/.local/bin/distrobox"
     local latest_release
     local currently_installed_version
@@ -345,7 +388,7 @@ local_install_distrobox() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(distrobox version | awk -F: '/^distrobox/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}" "${install_path}-*")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -354,7 +397,7 @@ local_install_distrobox() {
     fi
 }
 
-local_install_opa() {
+fn_local_install_opa() {
     local install_path="${HOME}/.local/bin/opa"
     local latest_release
     local currently_installed_version
@@ -364,7 +407,7 @@ local_install_opa() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -379,7 +422,7 @@ local_install_opa() {
     fi
 }
 
-local_install_minikube() {
+fn_local_install_minikube() {
     local install_path="${HOME}/.local/bin/minikube"
     local latest_release
     local currently_installed_version
@@ -389,7 +432,7 @@ local_install_minikube() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -402,7 +445,7 @@ local_install_minikube() {
     fi
 }
 
-local_install_kind() {
+fn_local_install_kind() {
     local install_path="${HOME}/.local/bin/kind"
     local latest_release
     local currently_installed_version
@@ -412,7 +455,7 @@ local_install_kind() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -427,7 +470,7 @@ local_install_kind() {
     fi
 }
 
-local_install_kubectl() {
+fn_local_install_kubectl() {
     local install_path="${HOME}/.local/bin/kubectl"
     local latest_release
     local currently_installed_version
@@ -437,7 +480,7 @@ local_install_kubectl() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -450,7 +493,7 @@ local_install_kubectl() {
     fi
 }
 
-local_install_terraform() {
+fn_local_install_terraform() {
     local install_path="${HOME}/.local/bin/terraform"
     local latest_release
     local currently_installed_version
@@ -466,7 +509,7 @@ local_install_terraform() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -484,7 +527,7 @@ local_install_terraform() {
     fi
 }
 
-local_install_rustup() {
+fn_local_install_rustup() {
     local install_path="${HOME}/.cargo/bin/rustup"
     local latest_release
     local currently_installed_version
@@ -494,7 +537,7 @@ local_install_rustup() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -503,7 +546,7 @@ local_install_rustup() {
     fi
 }
 
-local_install_gh() {
+fn_local_install_gh() {
     local install_path="${HOME}/.local/bin/gh"
     local latest_release
     local currently_installed_version
@@ -513,7 +556,7 @@ local_install_gh() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -527,7 +570,7 @@ local_install_gh() {
     fi
 }
 
-local_install_neovim() {
+fn_local_install_neovim() {
     local install_path="${HOME}/.local/bin/nvim"
     local latest_release
     local currently_installed_version
@@ -537,7 +580,7 @@ local_install_neovim() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -558,7 +601,7 @@ local_install_neovim() {
     fi
 }
 
-local_install_task() {
+fn_local_install_task() {
     local install_path="${HOME}/.local/bin/task"
     local completions_install_path="${HOME}/.local/share/bash-completion/completions/task"
     local latest_release
@@ -567,7 +610,7 @@ local_install_task() {
         if [[ -f "${install_path}" ]]; then
             currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
-            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
@@ -590,7 +633,7 @@ local_install_task() {
 }
 
 
-local_pipx_packages_install() {
+fn_local_pipx_packages_install() {
     if which pipx > /dev/null 2>&1; then
         for pypkg in "${_PIPX_PACKAGE_LIST[@]}";
         do
@@ -601,16 +644,16 @@ local_pipx_packages_install() {
     fi
 }
 
-update_local_installs() {
-    local_install_distrobox update
-    local_install_opa update
-    local_install_minikube update
-    local_install_kind update
-    local_install_kubectl update
-    local_install_terraform update
-    local_install_rustup update
-    local_install_gh update
-    local_install_neovim update
-    local_install_task update
+fn_update_local_installs() {
+    fn_local_install_distrobox update
+    fn_local_install_opa update
+    fn_local_install_minikube update
+    fn_local_install_kind update
+    fn_local_install_kubectl update
+    fn_local_install_terraform update
+    fn_local_install_rustup update
+    fn_local_install_gh update
+    fn_local_install_neovim update
+    fn_local_install_task update
     pipx upgrade-all
 }
