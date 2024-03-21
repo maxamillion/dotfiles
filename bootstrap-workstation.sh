@@ -9,7 +9,7 @@ if [[ "${ID}" == "debian" ]]; then
     fn_system_setup_crostini
 fi
 
-if [[ "${ID}" == "redhat" || "${ID}" == "centos" ]]; then 
+if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
     fn_system_setup_el
 fi
 
