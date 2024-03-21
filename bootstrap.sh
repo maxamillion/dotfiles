@@ -36,13 +36,6 @@ symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipytho
 
 ./bootstrap-workstation.sh
 
-if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim;
-    vim +'PlugInstall!' +qall
-    vim +'CocInstall coc-json coc-sh coc-tsserver coc-pyright @yaegassy/coc-ansible coc-go coc-rust-analyzer coc-yaml' +qall
-fi
-
 # This doesn't appear to be necessary, but keep it around just in case
 #link_if_needed ~/dotfiles/sshrc ~/.ssh/rc
 
