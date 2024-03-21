@@ -34,10 +34,7 @@ symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
 symlink_if_needed ~/dotfiles/init.lua           ~/.config/nvim/init.lua
 symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 
-short_hostname=${HOSTNAME%%.*}
-if [[ "penguin" == ${short_hostname} ]]; then
-    . ./bootstrap-crostini.sh
-fi
+./bootstrap-workstation.sh
 
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \

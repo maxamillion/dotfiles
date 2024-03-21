@@ -22,6 +22,7 @@ _PIPX_PACKAGE_LIST=(
     "python-lsp-server"
     "tldr"
     "nodeenv"
+    "ipython"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
@@ -59,24 +60,252 @@ rm_on_update_if_needed() {
     #   $2 - str: latest upstream release
     #   $3 - str: string representation of the current locally installed version
     #   $4 - array: list of files to remove
-    echo "DEBUG OUTPUT: rm_on_update_if_needed"
-    echo "$1"
-    echo "$2"
-    echo "$3"
     local uninstall_paths
     uninstall_paths=("$@")
     # drop the first three strings
     unset "uninstall_paths[0]"
     unset "uninstall_paths[1]"
     unset "uninstall_paths[2]"
-    echo "${uninstall_paths[@]}"
-
 
     if [[ -f ${1} ]]; then
         if [[ ${2} != "${3}" ]]; then
             rm -f "${uninstall_paths[@]}"
         fi
     fi
+}
+
+system_install_tailscale() {
+    source /etc/os-release
+    if [[ "${ID}" == "debian" ]]; then 
+        # tailscale
+        if ! dpkg -l tailscale > /dev/null 2>&1; then
+            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg" | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.tailscale-keyring.list" | sudo tee /etc/apt/sources.list.d/tailscale.list
+            sudo apt update
+            sudo apt install -y tailscale
+        fi
+    fi
+    if [[ "${ID}" == "redhat" || "${ID}" == "centos" ]]; then 
+        if ! rpm -q tailscale &>/dev/null; then
+            local rhel_major_version
+            rhel_major_version=$(rpm -E %rhel)
+            sudo dnf config-manager --add-repo "https://pkgs.tailscale.com/stable/rhel/${rhel_major_version}/tailscale.repo"
+            sudo dnf install -y tailscale
+            sudo systemctl enable --now tailscaled
+        fi
+    fi
+
+}
+
+system_install_packages() {
+    # accept a list of packages and install them
+    
+    source /etc/os-release
+
+    local pending_install_pkgs=()
+    for pkg in "${@}"; do
+        if [[ "${ID}" == "debian" ]]; then 
+            if ! dpkg -s "${pkg}" | grep "Status: install ok installed" > /dev/null 2>&1; then
+                pending_install_pkgs+=("${pkg}")
+            fi
+        fi
+    if [[ "${ID}" == "redhat" || "${ID}" == "centos" ]]; then 
+            if ! rpm -q "${pkg}" &>/dev/null; then
+                pending_install_pkgs+=("${pkg}")
+            fi
+        fi
+    done
+    if [[ -n "${pending_install_pkgs[*]}" ]]; then
+        printf "Installing packages... %s\n" "${pending_install_pkgs[@]}"
+        if [[ "${ID}" == "debian" ]]; then 
+            sudo apt install "${pending_install_pkgs[@]}"
+        fi
+        if [[ "${ID}" == "redhat" || "${ID}" == "centos" ]]; then 
+            # intentionally want word splitting so don't quote
+            sudo dnf install -y --allowerasing "${pending_install_pkgs[@]}"
+        fi
+    fi
+}
+
+system_setup_crostini() {
+    system_install_tailscale
+
+    # nodejs LTS
+    NODE_MAJOR=20
+    if ! dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1; then
+        sudo apt-get update
+        sudo apt-get install -y ca-certificates curl gnupg
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+        sudo apt update
+        sudo apt install -y nodejs
+    fi
+
+    # random dev stuff
+    pkglist=(
+        "vim-nox"
+        "apt-file"
+        "python3"
+        "python3-pip"
+        "python3-venv"
+        "python3-q"
+        "python3-pylsp"
+        "python-is-python3"
+        "git"
+        "tig"
+        "tmux"
+        "htop"
+        "iotop"
+        "strace"
+        "tree"
+        "pipx"
+        "virtualenvwrapper"
+        "libonig-dev"
+        "firefox-esr"
+        "debian-goodies"
+        "flatpak"
+        "bubblewrap"
+        "tshark"
+        "termshark"
+        "nmap"
+        "jq"
+        "podman"
+        "skopeo"
+        "buildah"
+        "luarocks"
+        "cmake"
+        "ninja-build"
+        "gettext"
+        "unzip"
+        "curl"
+        "fd-find"
+        "shellcheck"
+    )
+    system_install_packages "${pkglist[@]}"
+
+    # golang
+    golang_version="1.22.0"
+    if dpkg -l golang > /dev/null 2>&1; then
+        sudo apt remove -y golang 
+    fi
+
+    if ! go version | grep "$golang_version" > /dev/null 2>&1; then
+        sudo rm -fr /usr/local/go
+    fi
+    if [[ ! -d /usr/local/go ]]; then
+        printf "Installing golang...\n"
+        sudo curl -o "/usr/local/go-${golang_version}.tar.gz" "https://dl.google.com/go/go${golang_version}.linux-$(dpkg --print-architecture).tar.gz"
+        sudo tar -zxvf /usr/local/go-${golang_version}.tar.gz --directory=/usr/local/
+        sudo rm /usr/local/go-${golang_version}.tar.gz
+    fi
+
+    # podman subuid/subgid
+    podman_system_migrate=""
+    if ! grep -q "${USER}:10000:65536" /etc/subuid; then
+        sudo sh -c "echo ${USER}:10000:65536 >> /etc/subuid"
+        podman_system_migrate="true"
+    fi
+    if ! grep -q "${USER}:10000:65536" /etc/subgid; then
+        sudo sh -c "echo ${USER}:10000:65536 >> /etc/subgid"
+        podman_system_migrate="true"
+    fi
+    if [[ ${podman_system_migrate} == "true" ]]; then
+        printf "Migrating podman system...\n"
+        podman system migrate
+    fi
+
+    # install ollama.ai
+    if [[ ! -f /usr/local/bin/ollama ]]; then
+        printf "Installing ollama...\n"
+        curl https://ollama.ai/install.sh | sh
+
+        # don't actually start it until I want to use it
+        sudo systemctl disable ollama.service
+    fi
+
+    # Force wayland for firefox-esr
+    firefox_esr_desktop_file_path="/usr/share/applications/firefox-esr.desktop"
+    firefox_esr_desktop_local_path="${HOME}/.local/share/applications/firefox-esr.desktop"
+    if [[ -f ${firefox_esr_desktop_file_path} ]]; then 
+        if [[ ! -f ${firefox_esr_desktop_local_path} ]]; then
+            printf "Forcing wayland for firefox-esr...\n"
+            cp "${firefox_esr_desktop_file_path}" "${firefox_esr_desktop_local_path}"
+            sed -i \
+                's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
+                "${firefox_esr_desktop_local_path}"
+        fi
+    elif [[ -f ${firefox_esr_desktop_local_path} ]]; then
+        printf "Removing local firefox-esr desktop file...\n"
+        rm "${firefox_esr_desktop_local_path}"
+    fi
+
+    vscode_desktop_file_path="/usr/share/applications/code.desktop"
+    vscode_local_file_path="${HOME}/.local/share/applications/code.desktop"
+    if [[ -f ${vscode_desktop_file_path} ]]; then
+        if [[ ! -f ${vscode_local_file_path} ]]; then
+            printf "Forcing wayland for vscode...\n"
+            cp "${vscode_desktop_file_path}" "${vscode_local_file_path}"
+            sed -i \
+                's|Exec=/usr/share/code/code|Exec=/usr/share/code/code --enable-features=UseOzonePlatform --ozone-platform=wayland|g' \
+                "${vscode_local_file_path}"
+        fi
+    elif [[ -f "${vscode_local_file_path}" ]]; then
+        printf "Removing local vscode desktop file...\n"
+        rm "${vscode_local_file_path}"
+    fi
+}
+
+system_setup_el() {
+    # Install EPEL
+    if [[ -f /etc/centos-release ]]; then
+        dnf -y install epel-release
+    else
+        local rhel_major_version
+        rhel_major_version="$(rpm -E %rhel)"
+        subscription-manager repos --enable "codeready-builder-for-rhel-${rhel_major_version}-$(arch)-rpms"
+        dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${rhel_major_version}.noarch.rpm" 
+    fi
+
+    # Tailscale
+    system_install_tailscale
+
+    # random dev stuff
+    pkglist=(
+        "vim-enhanced"
+        "python3"
+        "python3-pip"
+        "git"
+        "tig"
+        "tmux"
+        "htop"
+        "iotop"
+        "strace"
+        "tree"
+        "pipx"
+        "flatpak"
+        "bubblewrap"
+        "wireshark-cli"
+        "nmap"
+        "jq"
+        "podman"
+        "skopeo"
+        "buildah"
+        "luarocks"
+        "cmake"
+        "gcc"
+        "gcc-c++"
+        "golang"
+        "gettext"
+        "unzip"
+        "curl"
+        "fd-find"
+        "ShellCheck"
+    )
+    system_install_packages "${pkglist[@]}"
+
+    # virtualenvwrapper
+    pip install --user virtualenvwrapper
 }
 
 local_user_ssh_agent() {
@@ -106,10 +335,12 @@ local_install_distrobox() {
     local currently_installed_version
 
     latest_release="$(curl -s 'https://api.github.com/repos/89luca89/distrobox/tags' | jq -r '.[0].name')"
-    currently_installed_version=$(distrobox version | awk -F: '/^distrobox/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}" "${install_path}-*")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(distrobox version | awk -F: '/^distrobox/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}" "${install_path}-*")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -123,10 +354,12 @@ local_install_opa() {
     local currently_installed_version
 
     latest_release="$(curl -s 'https://api.github.com/repos/open-policy-agent/opa/tags' | jq -r '.[0].name')"
-    currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -146,10 +379,12 @@ local_install_minikube() {
     local currently_installed_version
 
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes/minikube/tags' | jq -r '.[0].name')"
-    currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     # minikube install
@@ -167,10 +402,12 @@ local_install_kind() {
     local currently_installed_version
     # kind tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[] | select(.name | contains("alpha") | not ).name' | head -1)"
-    currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     kind_numerical_version="${latest_release#v*}"
@@ -190,10 +427,12 @@ local_install_kubectl() {
     local currently_installed_version
 
     latest_release=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-    currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     # kubectl install
@@ -216,11 +455,13 @@ local_install_terraform() {
             | jq -r '.[] | select(.name | contains("alpha") | not )| select(.name | contains("beta") | not ) | select(.name | contains("rc") | not).name' \
             | head -1 \
     )"
-    currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
 
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     local terraform_version="${latest_release#v*}"
@@ -243,10 +484,12 @@ local_install_rustup() {
     local currently_installed_version
 
     latest_release="$(curl -s 'https://api.github.com/repos/rust-lang/rustup/tags' | jq -r '.[0].name')"
-    currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -260,10 +503,12 @@ local_install_gh() {
     local currently_installed_version
 
     latest_release="$(curl -s 'https://api.github.com/repos/cli/cli/tags' | jq -r '.[0].name')"
-    currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     local gh_numerical_version="${latest_release#v*}"
@@ -282,10 +527,12 @@ local_install_neovim() {
     local currently_installed_version
 
     latest_release="$(curl -s 'https://api.github.com/repos/neovim/neovim/tags' | jq -r '.[0].name')"
-    currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     local neovim_numerical_version="${latest_release#v*}"
@@ -309,11 +556,13 @@ local_install_task() {
     local install_path="${HOME}/.local/bin/task"
     local completions_install_path="${HOME}/.local/share/bash-completion/completions/task"
     local latest_release
-    currently_installed_version=$(task --version| awk '/^Task version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
     latest_release="$(curl -s 'https://api.github.com/repos/go-task/task/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        local uninstall_paths=("${install_path}" "${completions_install_path}")
-        rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
