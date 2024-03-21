@@ -275,6 +275,8 @@ fn_system_setup_crostini() {
 }
 
 fn_system_setup_el() {
+    # Setup for RHEL and CentOS Stream
+    
     # Install EPEL
     if ! rpm -q epel-release &>/dev/null; then
         if [[ -f /etc/centos-release ]]; then
@@ -326,6 +328,11 @@ fn_system_setup_el() {
         "dconf"
     )
     fn_system_install_packages "${pkglist[@]}"
+
+    # Chrome is stilly and special because $reasons 
+    if ! rpm -q google-chrome-stable &>/dev/null; then
+        dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    fi
 
     # virtualenvwrapper
     if ! pip list | grep virtualenvwrapper &>/dev/null; then
