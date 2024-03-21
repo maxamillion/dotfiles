@@ -333,6 +333,21 @@ fn_system_setup_el() {
     if ! rpm -q google-chrome-stable &>/dev/null; then
         dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
     fi
+    # force wayland for chrome
+    chrome_desktop_file_path="/usr/share/applications/google-chrome.desktop"
+    chrome_desktop_local_path="${HOME}/.local/share/applications/google-chrome.desktop"
+    if [[ -f ${chrome_desktop_file_path} ]]; then 
+        if [[ ! -f ${chrome_desktop_local_path} ]]; then
+            printf "Forcing wayland for google-chrome...\n"
+            cp "${chrome_desktop_file_path}" "${chrome_desktop_local_path}"
+            sed -i \
+                's|Exec=/usr/bin/google-chrome-stable|Exec=google-chrome-stable --enable-features=UseOzonePlatform --ozone-platform=wayland|'
+                "${chrome_desktop_local_path}"
+        fi
+    elif [[ -f ${chrome_desktop_local_path} ]]; then
+        printf "Removing local google-chrome desktop file...\n"
+        rm "${chrome_desktop_local_path}"
+    fi
 
     # virtualenvwrapper
     if ! pip list | grep virtualenvwrapper &>/dev/null; then
