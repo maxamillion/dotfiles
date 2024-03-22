@@ -41,7 +41,20 @@ fn_mkdir_if_needed() {
 
 fn_setup_rhel_csb() {
     # Use Billings' COPR
-    sudo dnf copr enable copr.devel.redhat.com/jbilling/unoffical-rhel9
+    if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
+        cat > /etc/yum.repos.d/billings-csb.repo <<- "EOF"
+        [copr:copr.devel.redhat.com:jbilling:unoffical-rhel9]
+        name=Copr repo for unoffical-rhel9 owned by jbilling
+        baseurl=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/rhel-9-$basearch/
+        type=rpm-md
+        skip_if_unavailable=True
+        gpgcheck=0
+        gpgkey=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/pubkey.gpg
+        repo_gpgcheck=0
+        enabled=1
+        enabled_metadata=1
+EOF
+    fi
 #     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
 #         cat > /etc/yum.repos.d/redhat-csb.repo <<- EOF
 #             [rhel-csb]
