@@ -160,6 +160,6 @@ do
     if [[ "${repo_string_split[0]}" =~ "${collections_dir}" ]]; then
         collection_shortdir="${repo_string_split[0]#${collections_dir}/*}"
         fn_mkdir_if_needed ${HOME}/.ansible/collections/ansible_collections/${collection_shortdir%*/*}
-        symlink_if_needed ${repo_string_split[0]} ${HOME}/.ansible/collections/ansible_collections/${collection_shortdir}
+        fn_symlink_if_needed ${repo_string_split[0]} ${HOME}/.ansible/collections/ansible_collections/${collection_shortdir}
     fi
 done
