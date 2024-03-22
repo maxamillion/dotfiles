@@ -330,6 +330,7 @@ fn_system_setup_el() {
         "fd-find"
         "ShellCheck"
         "dconf"
+        "xsel"
     )
     fn_system_install_packages "${pkglist[@]}"
 
