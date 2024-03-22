@@ -386,13 +386,7 @@ fn_system_setup_crostini() {
     fi
 }
 
-fn_system_setup_el() {
-    local rhel_major_version
-    rhel_major_version="$(rpm -E %rhel)"
-
-    # Setup for RHEL and CentOS Stream
-    fn_mkdir_if_needed ~/.local/bin/
-    
+fn_system_install_epel(){
     # Install EPEL
     if ! rpm -q epel-release &>/dev/null; then
         if [[ -f /etc/centos-release ]]; then
@@ -403,12 +397,23 @@ fn_system_setup_el() {
         fi
     fi
 
+}
+
+fn_system_setup_el() {
+    local rhel_major_version
+    rhel_major_version="$(rpm -E %rhel)"
+
+    # Setup for RHEL and CentOS Stream
+    fn_mkdir_if_needed ~/.local/bin/
+
+    fn_system_install_epel
+
     # Tailscale
     fn_system_install_tailscale
 
     # random dev stuff
-    local pkglist
-    pkglist=(
+    local rhel_pkglist
+    rhel_pkglist=(
         "vim-enhanced"
         "python3"
         "python3-pip"
@@ -442,8 +447,10 @@ fn_system_setup_el() {
         "ShellCheck"
         "dconf"
         "xsel"
+        "epson-inkjet-printer-escpr"
+        "epson-inkjet-printer-escpr2"
     )
-    fn_system_install_packages "${pkglist[@]}"
+    fn_system_install_packages "${rhel_pkglist[@]}"
 
     fn_system_install_chrome
 
