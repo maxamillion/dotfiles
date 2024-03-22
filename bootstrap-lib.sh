@@ -303,6 +303,7 @@ fn_system_setup_el() {
         "vim-enhanced"
         "python3"
         "python3-pip"
+        "python3.11"
         "nodejs"
         "npm"
         "git"
