@@ -37,16 +37,6 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-# Source private bash bits I don't want on github dotfiles repo
-if [ -f ~/.bashrc_private ]; then
-    . ~/.bashrc_private
-fi
-
-# Source termux bash bits if they exist
-if [ -f ~/.bashrc_termux ]; then
-    . ~/.bashrc_termux
-fi
-
 # GitHub CLI bash completion local install
 if [ -f ~/.local/bin/gh ]; then
     source <(~/.local/bin/gh completion -s bash)
@@ -56,8 +46,6 @@ fi
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     if [ -f /usr/bin/python3 ]; then
         export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-    elif [ -f /usr/bin/python2 ] && ! [ -f /usr/bin/python ]; then
-        export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
     else
         export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
     fi
@@ -156,9 +144,6 @@ fi
 
 # "Bash aliases you can't live without"
 # https://opensource.com/article/19/7/bash-aliases
-alias lt='ls --human-readable --size -1 -S --classify'
-alias mnt="mount | awk -F' ' '{ printf \"%s\t%s\n\",\$1,\$3; }' | column -t | grep -E ^/dev/ | sort"
-
 
 # Fedora aliases
 alias fedpkg="fedpkg --user=maxamillion"
@@ -176,7 +161,6 @@ alias pu='pullupstream'
 alias pud='pullupstream devel'
 alias pum='pullupstream master'
 alias pa='pullansible'
-alias ptp='ptpython3'
 alias ipy='ipython --TerminalInteractiveShell.editing_mode=vi'
 alias ackp='ack --python'
 
@@ -189,11 +173,6 @@ alias ksf='kswitch -p maxamillion@FEDORAPROJECT.ORG'
 alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
 
 # ansible dev/test aliases
-alias atu='pytest -r a --cov=. --cov-report=html --fulltrace --color yes'
-alias atu2='ansible-test units --python 2.7'
-alias atu3='ansible-test units --python 3.6'
-alias ats2='ansible-test sanity --python 2.7'
-alias ats3='ansible-test sanity --python 3.6'
 alias alintc='podman run --rm -t --workdir $(pwd) -v $(pwd):$(pwd) quay.io/ansible/creator-ee ansible-lint --exclude changelogs/ --profile=production'
 
 # ssh into cloud instances ignoring warnings and such
@@ -214,8 +193,8 @@ alias zegrep='zegrep --color=auto'
 alias zfgrep='zfgrep --color=auto'
 alias zgrep='zgrep --color=auto'
 
-# containers .... podman, whatever is hot next week ....
-alias pr='podman run --rm --net=host -ti'
+# containers .... podman
+alias pr='podman run --rm -ti'
 alias mk='minikube kubectl --'
 
 # toolbox enter
@@ -224,8 +203,6 @@ alias te='toolbox enter'
 # update everything in pip
 # 100% "borrowed" from stack overflow
 #   https://stackoverflow.com/questions/2720014/upgrading-all-packages-with-pip
-alias pip2up="pip2 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip2 install -U"
-alias pip3up="pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U"
 alias pipuup="pip list --user --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 2  | xargs -n1 pip install --user -U"
 
 if rpm -q vim-common &> /dev/null; then
@@ -241,24 +218,6 @@ alias hexd='od -A x -t x1z -v'
 ###############################################################################
 # BEGIN: Misc functions
 
-# Fedora upstream clone fork topic branch fedpkg setup
-fedpkgfork() {
-    if ! [ -d ~/src/dev/fedpkg/ ]; then
-        mkdir -p ~/src/dev/fedpkg
-    fi
-
-    if ! [ -d ${1} ]; then
-        if git clone \
-            ssh://maxamillion@pkgs.fedoraproject.org/forks/maxamillion/rpms/${1}.git \
-            ~/src/dev/fedpkg/${1}
-        then
-            pushd ~/src/dev/fedpkg/${1}
-                git remote add upstream https://src.fedoraproject.org/rpms/${1}.git
-            popd
-        fi
-    fi
-}
-
 # Go back to allowing keyring daemon to manage this ... for now
 #export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
 #ssh_agent() {
@@ -273,36 +232,18 @@ yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"
 }
 
-gen_passwd () {
-    if [[ -z $1 ]]; then
-        tr -cd '[:graph:]' < /dev/urandom | fold -w30 | head -n1
-    else
-        tr -cd '[:graph:]' < /dev/urandom | fold -w"$1" | head -n1
-    fi
-}
-
 cleancontainers() {
     # Clean exited containers
     for container in $(podman ps -a | awk '/Exited/{ print $1}')
     do
-        podman rm $container
+        podman rm "${container}"
     done
 
     # Clean dangling images
     for i in $(podman images -f 'dangling=true' -q)
     do
-        podman rmi $i
+        podman rmi "${i}"
     done
-}
-
-# acs-engine stuff
-devacs() {
-#ACSENGINE_GOPATH="acs-engine"
-    export ACSENGINE_ROOT="~/go/src/github.com/Azure/acs-engine"
-    export GOPATH=~/go/
-    export PATH=$PATH:${GOPATH}/bin
-    export PATH=$PATH:${ACSENGINE_ROOT}/bin
-    alias cba="cd $ACSENGINE_ROOT"
 }
 
 # User specific environment and startup programs
@@ -334,9 +275,9 @@ unproxy() {
     unset HTTPS_PROXY;
 }
 
-_conditionally_symlink() {
+fn_conditionally_symlink() {
     # function signature:
-    #   _conditionally_symlink src_path dest_path
+    #   fn_conditionally_symlink src_path dest_path
     if [[ -e "${1}" ]]; then
         if ! [[ -e "${2}" ]]; then
             printf "%s -> %s\n:" "${1}" "${2}"
@@ -390,58 +331,58 @@ rhtvenv() {
 
 
     ## SELinux
-    _conditionally_symlink "${pylib64_path}/selinux/" \
+    fn_conditionally_symlink "${pylib64_path}/selinux/" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/selinux"
 
-    _conditionally_symlink "${pylib64_path}/semanage.py" \
+    fn_conditionally_symlink "${pylib64_path}/semanage.py" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/semanage.py"
 
     local selinux_so=$(find "${pylib64_path}" -name _selinux*.so)
-    _conditionally_symlink "${selinux_so}" \
+    fn_conditionally_symlink "${selinux_so}" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/${selinux_so##*/}"
 
     local semanage_so=$(find "${pylib64_path}" -name _semanage*.so)
-    _conditionally_symlink "${semanage_so}" \
+    fn_conditionally_symlink "${semanage_so}" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/${semanage_so##*/}"
 
     ## RPM
-    _conditionally_symlink "${pylib64_path}/rpm" \
+    fn_conditionally_symlink "${pylib64_path}/rpm" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/rpm"
 
     ## DNF (YUM4)
-    _conditionally_symlink "${pylib_path}/dnf" \
+    fn_conditionally_symlink "${pylib_path}/dnf" \
         "${venv_basepath}/lib/python${py_shortver}/site-packages/dnf"
 
-    _conditionally_symlink "${pylib_path}/dnf-plugins" \
+    fn_conditionally_symlink "${pylib_path}/dnf-plugins" \
         "${venv_basepath}/lib/python${py_shortver}/site-packages/dnf-plugins"
 
-    _conditionally_symlink "${pylib_path}/dnfpluginscore" \
+    fn_conditionally_symlink "${pylib_path}/dnfpluginscore" \
         "${venv_basepath}/lib/python${py_shortver}/site-packages/dnfpluginscore"
 
-    _conditionally_symlink "${pylib64_path}/libdnf" \
+    fn_conditionally_symlink "${pylib64_path}/libdnf" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/libdnf"
 
-    _conditionally_symlink "${pylib64_path}/hawkey" \
+    fn_conditionally_symlink "${pylib64_path}/hawkey" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/hawkey"
 
-    _conditionally_symlink "${pylib64_path}/libcomps" \
+    fn_conditionally_symlink "${pylib64_path}/libcomps" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/libcomps"
 
-    _conditionally_symlink "${pylib64_path}/gpg" \
+    fn_conditionally_symlink "${pylib64_path}/gpg" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/gpg"
 
     ## YUM (<= 3.x)
-    _conditionally_symlink "${pylib_path}/yum" \
+    fn_conditionally_symlink "${pylib_path}/yum" \
         "${venv_basepath}/lib/python${py_shortver}/site-packages/yum"
-    _conditionally_symlink "${pylib_path}/yumutils" \
+    fn_conditionally_symlink "${pylib_path}/yumutils" \
                 "${venv_basepath}/lib/python${py_shortver}/site-packages/yumutils"
 
     ## Insights Client
-    _conditionally_symlink "${pylib_path}/insights_client" \
+    fn_conditionally_symlink "${pylib_path}/insights_client" \
                 "${venv_basepath}/lib/python${py_shortver}/site-packages/insights_client"
 
     ## firewalld 
-    _conditionally_symlink "${pylib_path}/firewall" \
+    fn_conditionally_symlink "${pylib_path}/firewall" \
                 "${venv_basepath}/lib/python${py_shortver}/site-packages/firewall"
 
     printf "DONE!\n"
