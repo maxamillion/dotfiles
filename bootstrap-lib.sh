@@ -203,10 +203,10 @@ fn_system_tuned_power_management() {
         if [[ "${device}" =~ "BAT" ]]; then
             fn_system_install_packages "${pkglist[@]}"
 
-            if ! [[ -d /etc/tuned/tuned_powertop/ ]]; then
+            if ! sudo tuned-adm active | grep "tuned_powertop" &>/dev/null; then
                 sudo systemctl start tuned
                 sudo powertop2tuned tuned_powertop
-                sudo tuned-adm tuned_powertop
+                sudo tuned-adm profile tuned_powertop
                 sudo systemctl enable tuned
             fi
         fi
