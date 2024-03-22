@@ -315,7 +315,6 @@ fn_system_setup_el() {
         "tree"
         "pipx"
         "flatpak"
-        "bubblewrap"
         "wireshark-cli"
         "nmap"
         "jq"
