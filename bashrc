@@ -176,7 +176,7 @@ alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
 alias alintc='podman run --rm -t --workdir $(pwd) -v $(pwd):$(pwd) quay.io/ansible/creator-ee ansible-lint --exclude changelogs/ --profile=production'
 
 # ssh into cloud instances ignoring warnings and such
-alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=QUIET "$@"'
+alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
 # Go back to allowing keyring daemon to manage this ... for now
 ## start ssh agent (if necessary)
