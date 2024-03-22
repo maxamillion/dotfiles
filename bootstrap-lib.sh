@@ -39,6 +39,38 @@ fn_mkdir_if_needed() {
     fi
 }
 
+fn_system_install_chrome() {
+    # Chrome is stilly and special because $reasons 
+    if ! rpm -q google-chrome-stable &>/dev/null; then
+        sudo dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    fi
+
+    ###########################################################################
+    # FIXME: This does not behave well on RHEL9 so we'll wait for now ...
+    #
+    #   For some reason this messes up the scaling of the display, font
+    #   preferences, and accessability settings.
+    ###########################################################################
+    # # force wayland for chrome
+    # chrome_desktop_file_path="/usr/share/applications/google-chrome.desktop"
+    # chrome_desktop_local_path="${HOME}/.local/share/applications/google-chrome.desktop"
+    # if [[ -f ${chrome_desktop_file_path} ]]; then
+    #     if [[ ! -f ${chrome_desktop_local_path} ]]; then
+    #         printf "Forcing wayland for google-chrome...\n"
+    #         cp "${chrome_desktop_file_path}" "${chrome_desktop_local_path}"
+    #
+    #         sed -i \
+    #             's|Exec=/usr/bin/google-chrome-stable|Exec=google-chrome-stable --enable-features=UseOzonePlatform --ozone-platform=wayland|'
+    #             "${chrome_desktop_local_path}"
+    #         update-desktop-database ~/.local/share/applications/
+    #     fi
+    # elif [[ -f ${chrome_desktop_local_path} ]]; then
+    #     printf "Removing local google-chrome desktop file...\n"
+    #     rm "${chrome_desktop_local_path}"
+    # fi
+}
+
+
 fn_setup_rhel_csb() {
     source /etc/os-release
     # Use Billings' COPR
@@ -160,6 +192,28 @@ fn_system_install_packages() {
     fi
 }
 
+fn_system_tuned_power_management() {
+    local pkglist
+    pkglist=(
+        "tuned"
+        "tuned-utils"
+    )
+    # detect battery, only run powertop if we have one
+    for device in /sys/class/power_supply/*; do
+        if [[ "${device}" =~ "BAT" ]]; then
+            fn_system_install_packages "${pkglist[@]}"
+
+            if ! [[ -d /etc/tuned/tuned_powertop/ ]]; then
+                sudo systemctl start tuned
+                sudo powertop2tuned tuned_powertop
+                sudo tuned-adm tuned_powertop
+                sudo systemctl enable tuned
+            fi
+        fi
+    done
+}
+
+
 fn_flathub_install() {
     local flatpak_pkgs
     flatpak_pkgs=(
@@ -176,6 +230,30 @@ fn_flathub_install() {
             flatpak install -y flathub "${flatpak_pkg}"
         fi
     done
+}
+
+fn_system_gnome_settings() {
+    # key remap because fuck the capslock key
+    local current_xkb_options
+    local new_xkb_options
+    current_xkb_options=$(dconf read /org/gnome/desktop/input-sources/xkb-options 2>/dev/null)
+    if [[ -z "${current_xkb_options}" ]] || [[ "${current_xkb_options}" == "@as []" ]]; then
+        # if current_xkb_options is empty, set it
+        new_xkb_options="['caps:escape']"
+    else
+        # if current_xkb_options is empty, modify it
+        new_xkb_options=${current_xkb_options//\[/\[\'caps:escape\', }
+    fi
+    if ! [[ "${current_xkb_options}" =~ "caps:escape" ]]; then
+        dconf write /org/gnome/desktop/input-sources/xkb-options "${new_xkb_options}"
+    fi
+
+    # set alt-tab behavior for sanity
+    gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
+    gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]"
+    gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+    gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+
 }
 
 fn_system_setup_crostini() {
@@ -318,7 +396,7 @@ fn_system_setup_el() {
     # Install EPEL
     if ! rpm -q epel-release &>/dev/null; then
         if [[ -f /etc/centos-release ]]; then
-            dnf -y install epel-release
+            sudo dnf -y install epel-release
         else
             sudo subscription-manager repos --enable "codeready-builder-for-rhel-${rhel_major_version}-$(arch)-rpms"
             sudo dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${rhel_major_version}.noarch.rpm"
@@ -367,62 +445,19 @@ fn_system_setup_el() {
     )
     fn_system_install_packages "${pkglist[@]}"
 
-    # Chrome is stilly and special because $reasons 
-    if ! rpm -q google-chrome-stable &>/dev/null; then
-        dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-    fi
+    fn_system_install_chrome
 
-    ###########################################################################
-    # FIXME: This does not behave well on RHEL9 so we'll wait for now ...
-    #
-    #   For some reason this messes up the scaling of the display, font
-    #   preferences, and accessability settings.
-    ###########################################################################
-    # # force wayland for chrome
-    # chrome_desktop_file_path="/usr/share/applications/google-chrome.desktop"
-    # chrome_desktop_local_path="${HOME}/.local/share/applications/google-chrome.desktop"
-    # if [[ -f ${chrome_desktop_file_path} ]]; then
-    #     if [[ ! -f ${chrome_desktop_local_path} ]]; then
-    #         printf "Forcing wayland for google-chrome...\n"
-    #         cp "${chrome_desktop_file_path}" "${chrome_desktop_local_path}"
-    #
-    #         sed -i \
-    #             's|Exec=/usr/bin/google-chrome-stable|Exec=google-chrome-stable --enable-features=UseOzonePlatform --ozone-platform=wayland|'
-    #             "${chrome_desktop_local_path}"
-    #         update-desktop-database ~/.local/share/applications/
-    #     fi
-    # elif [[ -f ${chrome_desktop_local_path} ]]; then
-    #     printf "Removing local google-chrome desktop file...\n"
-    #     rm "${chrome_desktop_local_path}"
-    # fi
+    fn_flathub_install
 
     # virtualenvwrapper
     if ! pip list | grep virtualenvwrapper &>/dev/null; then
         pip install --user virtualenvwrapper
     fi
 
-    # key remap because fuck the capslock key
-    local current_xkb_options
-    local new_xkb_options
-    current_xkb_options=$(dconf read /org/gnome/desktop/input-sources/xkb-options 2>/dev/null)
-    if [[ -z "${current_xkb_options}" ]] || [[ "${current_xkb_options}" == "@as []" ]]; then
-        # if current_xkb_options is empty, set it
-        new_xkb_options="['caps:escape']"
-    else
-        # if current_xkb_options is empty, modify it
-        new_xkb_options=${current_xkb_options//\[/\[\'caps:escape\', }
-    fi
-    if ! [[ "${current_xkb_options}" =~ "caps:escape" ]]; then
-        dconf write /org/gnome/desktop/input-sources/xkb-options "${new_xkb_options}"
-    fi
+    fn_system_gnome_settings
 
-    # set alt-tab behavior for sanity
-    gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
-    gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]"
-    gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
-    gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+    fn_system_tuned_power_management
 
-    fn_flathub_install
 }
 
 local_user_ssh_agent() {
