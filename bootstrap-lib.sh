@@ -41,15 +41,17 @@ fn_mkdir_if_needed() {
 
 # Symlink the conf files
 fn_symlink_if_needed() {
-    if [[ ! -f $2 ]] && [[ ! -L $2 ]]; then
-        printf "Symlinking: %s -> %s\n" "$1" "$2"
-        if [[ ! -d "$(dirname "$2")" ]]; then
-            mkdir -p "$(dirname "$2")"
-        fi
-        ln -s "$1" "$2"
+    if [[ -f ${2} ]] && [[ ! -L ${2} ]]; then
+        printf "File found: %s ... backing up\n" "$2"
+        # if the destination file exists and isn't a symlink, back it up
+        mv "${2}" "${2}.old$(date +%Y%m%d)"
     fi
-    if [[ -f $2 ]] && [[ ! -L $2 ]]; then
-        printf "File found: %s\n" "$2"
+    if [[ ! -f ${2} ]] && [[ ! -L ${2} ]]; then
+        printf "Symlinking: %s -> %s\n" "$1" "$2"
+        if [[ ! -d "$(dirname "${2}")" ]]; then
+            mkdir -p "$(dirname "${2}")"
+        fi
+        ln -s "${1}" "${2}"
     fi
 }
 
