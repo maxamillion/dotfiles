@@ -43,29 +43,29 @@ fn_setup_rhel_csb() {
     source /etc/os-release
     # Use Billings' COPR
     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
-        cat > /etc/yum.repos.d/billings-csb.repo <<- "EOF"
-        [copr:copr.devel.redhat.com:jbilling:unoffical-rhel9]
-        name=Copr repo for unoffical-rhel9 owned by jbilling
-        baseurl=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/rhel-9-$basearch/
-        type=rpm-md
-        skip_if_unavailable=True
-        gpgcheck=0
-        gpgkey=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/pubkey.gpg
-        repo_gpgcheck=0
-        enabled=1
-        enabled_metadata=1
+        sudo tee /etc/yum.repos.d/billings-csb.repo &>/dev/null << "EOF"
+[copr:copr.devel.redhat.com:jbilling:unoffical-rhel9]
+name=Copr repo for unoffical-rhel9 owned by jbilling
+baseurl=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/rhel-9-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=0
+gpgkey=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
 EOF
     fi
 #     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
-#         cat > /etc/yum.repos.d/redhat-csb.repo <<- EOF
-#             [rhel-csb]
-#             name=RHEL CSB packages
-#             baseurl=http://hdn.corp.redhat.com/rhel8-csb
-#             enabled=1
-#             gpgcheck=1
-#             gpgkey=http://hdn.corp.redhat.com/rhel8-csb/RPM-GPG-KEY-helpdesk
-#             skip_if_unavailable=yes
-#             includepkgs=redhat-internal-*,oneplay-gstreamer-codecs-pack,zoom,ffmpeg-libs,xvidcore
+#       sudo tee /etc/yum.repos.d/redhat-csb.repo &>/dev/null << EOF
+# [rhel-csb]
+# name=RHEL CSB packages
+# baseurl=http://hdn.corp.redhat.com/rhel8-csb
+# enabled=1
+# gpgcheck=1
+# gpgkey=http://hdn.corp.redhat.com/rhel8-csb/RPM-GPG-KEY-helpdesk
+# skip_if_unavailable=yes
+# includepkgs=redhat-internal-*,oneplay-gstreamer-codecs-pack,zoom,ffmpeg-libs,xvidcore
 # EOF
     # fi
 }
