@@ -363,7 +363,7 @@ fn_system_setup_el() {
     local current_xkb_options
     local new_xkb_options
     current_xkb_options=$(dconf read /org/gnome/desktop/input-sources/xkb-options 2>/dev/null)
-    if [[ -z "${current_xkb_options}" ]]; then
+    if [[ -z "${current_xkb_options}" ]] || [[ "${current_xkb_options}" == "@as []" ]]; then
         # if current_xkb_options is empty, set it
         new_xkb_options="['caps:escape']"
     else
