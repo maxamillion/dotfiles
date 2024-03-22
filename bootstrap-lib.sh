@@ -40,6 +40,7 @@ fn_mkdir_if_needed() {
 }
 
 fn_setup_rhel_csb() {
+    source /etc/os-release
     # Use Billings' COPR
     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
         cat > /etc/yum.repos.d/billings-csb.repo <<- "EOF"
