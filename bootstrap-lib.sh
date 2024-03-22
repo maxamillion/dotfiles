@@ -39,6 +39,23 @@ fn_mkdir_if_needed() {
     fi
 }
 
+fn_setup_rhel_csb() {
+    # Use Billings' COPR
+    sudo dnf copr enable copr.devel.redhat.com/jbilling/unoffical-rhel9
+#     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
+#         cat > /etc/yum.repos.d/redhat-csb.repo <<- EOF
+#             [rhel-csb]
+#             name=RHEL CSB packages
+#             baseurl=http://hdn.corp.redhat.com/rhel8-csb
+#             enabled=1
+#             gpgcheck=1
+#             gpgkey=http://hdn.corp.redhat.com/rhel8-csb/RPM-GPG-KEY-helpdesk
+#             skip_if_unavailable=yes
+#             includepkgs=redhat-internal-*,oneplay-gstreamer-codecs-pack,zoom,ffmpeg-libs,xvidcore
+# EOF
+    # fi
+}
+
 # Symlink the conf files
 fn_symlink_if_needed() {
     if [[ -f ${2} ]] && [[ ! -L ${2} ]]; then
