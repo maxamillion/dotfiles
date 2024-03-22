@@ -29,7 +29,7 @@ fn_symlink_if_needed ~/dotfiles/ssh_config         ~/.ssh/config
 fn_symlink_if_needed ~/dotfiles/Xresources         ~/.Xresources
 fn_symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
 fn_symlink_if_needed ~/dotfiles/profile            ~/.profile
-fn_symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
+#fn_symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
 fn_symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
 fn_symlink_if_needed ~/dotfiles/init.lua           ~/.config/nvim/init.lua
 fn_symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
