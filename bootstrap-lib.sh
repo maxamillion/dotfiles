@@ -192,28 +192,6 @@ fn_system_install_packages() {
     fi
 }
 
-fn_system_tuned_power_management() {
-    local pkglist
-    pkglist=(
-        "tuned"
-        "tuned-utils"
-    )
-    # detect battery, only run powertop if we have one
-    for device in /sys/class/power_supply/*; do
-        if [[ "${device}" =~ "BAT" ]]; then
-            fn_system_install_packages "${pkglist[@]}"
-
-            if ! sudo tuned-adm active | grep "tuned_powertop" &>/dev/null; then
-                sudo systemctl start tuned
-                sudo powertop2tuned tuned_powertop
-                sudo tuned-adm profile tuned_powertop
-                sudo systemctl enable tuned
-            fi
-        fi
-    done
-}
-
-
 fn_flathub_install() {
     local flatpak_pkgs
     flatpak_pkgs=(
@@ -462,8 +440,6 @@ fn_system_setup_el() {
     fi
 
     fn_system_gnome_settings
-
-    fn_system_tuned_power_management
 
 }
 
