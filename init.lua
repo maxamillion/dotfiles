@@ -40,6 +40,9 @@ vim.keymap.set('', '<leader>7', '7gt', { noremap = true })
 vim.keymap.set('', '<leader>8', '8gt', { noremap = true })
 vim.keymap.set('', '<leader>9', '9gt', { noremap = true })
 
+-- quick set filetype to yaml.ansible for sanity
+vim.keymap.set('n', '<leader>ya', ':set filetype=yaml.ansible<CR>', { noremap = true, silent = true })
+
 -- Set highlight on search
 vim.o.hlsearch = true
 
