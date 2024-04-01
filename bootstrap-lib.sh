@@ -139,6 +139,23 @@ fn_rm_on_update_if_needed() {
     fi
 }
 
+fn_system_polkit_libvirt_nonroot_user() {
+    local polkit_file_path="/etc/polkit-1/rules.d/50-org.libvirt.unix.manage.rules"
+    if ! [[ -f "${polkit_file_path}" ]]; then
+        printf "Setting polkit libvirt non-root user...\n"
+        sudo tee "${polkit_file_path}" &>/dev/null << EOF
+polkit.addRule(function(action, subject) {
+        if (action.id == "org.libvirt.unix.manage" &&
+            subject.user == "${USER}") {
+                return polkit.Result.YES;
+                polkit.log("action=" + action);
+                polkit.log("subject=" + subject);
+        }
+});
+EOF
+fi
+}
+
 fn_system_install_tailscale() {
     source /etc/os-release
     if [[ "${ID}" == "debian" ]]; then 
@@ -431,6 +448,8 @@ fn_system_setup_el() {
     fn_system_install_packages "${rhel_pkglist[@]}"
 
     fn_system_install_chrome
+
+    fn_system_polkit_libvirt_nonroot_user
 
     fn_flathub_install
 
