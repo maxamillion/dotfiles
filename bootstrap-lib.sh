@@ -141,7 +141,7 @@ fn_rm_on_update_if_needed() {
 
 fn_system_polkit_libvirt_nonroot_user() {
     local polkit_file_path="/etc/polkit-1/rules.d/50-org.libvirt.unix.manage.rules"
-    if ! [[ -f "${polkit_file_path}" ]]; then
+    if ! sudo test -f "${polkit_file_path}"; then
         printf "Setting polkit libvirt non-root user...\n"
         sudo tee "${polkit_file_path}" &>/dev/null << EOF
 polkit.addRule(function(action, subject) {
