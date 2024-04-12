@@ -216,6 +216,7 @@ fn_flathub_install() {
         "com.slack.Slack"
         "im.riot.Riot"
         "com.irccloud.desktop"
+        "org.onlyoffice.desktopeditors"
     )
     if ! flatpak remotes | grep flathub &>/dev/null; then
         flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
