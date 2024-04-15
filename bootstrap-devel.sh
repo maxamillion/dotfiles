@@ -143,6 +143,7 @@ git_repos=(
     "${collections_dir}/redhat_cop/ee_utilities git@github.com:maxamillion/ee_utilities.git https://github.com/redhat-cop/ee_utilities.git"
     "${collections_dir}/redhat_cop/aap_utilities git@github.com:maxamillion/aap_utilities.git https://github.com/redhat-cop/aap_utilities.git"
     "${collections_dir}/kubevirt/core git@github.com:maxamillion/kubevirt.core.git https://github.com/kubevirt/kubevirt.core"
+    "${collections_dir}/kubernetes/core git@github.com:maxamillion/kubernetes.core.git https://github.com/ansible-collections/kubernetes.core"
     # "${collections_dir}/community/qradar git@github.com:maxamillion/community.qradar.git https://github.com/ansible-collections/community.qradar.git"
     # "${collections_dir}/community/es git@github.com:maxamillion/community.es.git https://github.com/ansible-collections/community.es.git"
     # "${collections_dir}/ibm/qradar git@github.com:maxamillion/ibm_qradar.git https://github.com/ansible-collections/ibm.qradar.git"
