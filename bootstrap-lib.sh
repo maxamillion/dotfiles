@@ -435,6 +435,7 @@ fn_system_setup_el() {
         "cmake"
         "gcc"
         "gcc-c++"
+        "ninja-build"
         "golang"
         "gettext"
         "unzip"
