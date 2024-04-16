@@ -106,6 +106,7 @@ git_repos=(
     "${dev_dir}/podman-system-role git@github.com:maxamillion/podman-system-role.git https://github.com/linux-system-roles/podman.git"
     "${dev_dir}/distrobox git@github.com:maxamillion/distrobox.git https://github.com/89luca89/distrobox.git"
     "${dev_dir}/layering-examples git@github.com:maxamillion/layering-examples.git https://github.com/coreos/layering-examples.git"
+    "${dev_dir}/instructlab-cli git@github.com:maxamillion/instructlab-cli.git git@github.com:instruct-lab/cli.git"
     # "${dev_dir}/ids_install git@github.com:maxamillion/ids_install.git https://github.com/ansible-security/ids_install.git"
     # "${dev_dir}/ids_config git@github.com:maxamillion/ids_config.git https://github.com/ansible-security/ids_config.git"
     # "${dev_dir}/ids_rule git@github.com:maxamillion/ids_rule.git https://github.com/ansible-security/ids_rule.git"
