@@ -589,6 +589,7 @@ local servers = {
   ansiblels ={},
   rust_analyzer = {},
   bashls = {},
+  clangd = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
