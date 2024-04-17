@@ -42,6 +42,7 @@ fn_git_clone_with_upstream() {
 
 # local_clone_destination_dir my_fork_or_repo [upstream_repo]
 git_repos=(
+    "${dev_dir}/pytorch git@github.com:maxamillion/pytorch.git https://github.com/pytorch/pytorch.git"
     "${dev_dir}/ansible git@github.com:maxamillion/ansible.git https://github.com/ansible/ansible.git"
     "${dev_dir}/ara git@github.com:maxamillion/ara.git https://github.com/ansible-community/ara.git"
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
@@ -107,6 +108,7 @@ git_repos=(
     "${dev_dir}/distrobox git@github.com:maxamillion/distrobox.git https://github.com/89luca89/distrobox.git"
     "${dev_dir}/layering-examples git@github.com:maxamillion/layering-examples.git https://github.com/coreos/layering-examples.git"
     "${dev_dir}/instructlab-cli git@github.com:maxamillion/instructlab-cli.git git@github.com:instruct-lab/cli.git"
+    "${dev_dir}/instructlab-taxonomy git@github.com:maxamillion/instructlab-taxonomy.git git@github.com:instruct-lab/taxonomy.git"
     # "${dev_dir}/ids_install git@github.com:maxamillion/ids_install.git https://github.com/ansible-security/ids_install.git"
     # "${dev_dir}/ids_config git@github.com:maxamillion/ids_config.git https://github.com/ansible-security/ids_config.git"
     # "${dev_dir}/ids_rule git@github.com:maxamillion/ids_rule.git https://github.com/ansible-security/ids_rule.git"
