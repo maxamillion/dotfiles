@@ -43,6 +43,7 @@ fn_git_clone_with_upstream() {
 # local_clone_destination_dir my_fork_or_repo [upstream_repo]
 git_repos=(
     "${dev_dir}/pytorch git@github.com:maxamillion/pytorch.git https://github.com/pytorch/pytorch.git"
+    "${dev_dir}/rebuilding-the-wheel git@gitlab.com:maxamillion/rebuilding-the-wheel.git https://gitlab.com/fedora/sigs/ai-ml/rebuilding-the-wheel.git"
     "${dev_dir}/ansible git@github.com:maxamillion/ansible.git https://github.com/ansible/ansible.git"
     "${dev_dir}/ara git@github.com:maxamillion/ara.git https://github.com/ansible-community/ara.git"
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
