@@ -287,6 +287,12 @@ fn_conditionally_symlink() {
 
 }
 
+function cudaenv() {
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+    export CUDA_HOME=/usr/local/cuda
+    export PATH=$PATH:${CUDA_HOME}/bin
+}
+
 function beaker_console()
 {
     local OPT=$(shopt -p -o nounset)
