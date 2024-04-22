@@ -136,6 +136,7 @@ git_repos=(
     "${collections_dir}/community/okd git@github.com:maxamillion/community.okd.git https://github.com/ansible-collections/community.okd.git"
     "${collections_dir}/community/cip git@github.com:maxamillion/community.cip.git https://github.com/ansible-collections/community.cip.git"
     "${collections_dir}/community/vmware git@github.com:maxamillion/community.vmware.git https://github.com/ansible-collections/community.vmware.git"
+    "${collections_dir}/cloud/common git@github.com:maxamillion/cloud.common.git https://github.com/ansible-collections/cloud.common.git"
     "${collections_dir}/containers/podman git@github.com:maxamillion/ansible-podman-collections.git https://github.com/containers/ansible-podman-collections.git"
     "${collections_dir}/infra/osbuild git@github.com:maxamillion/infra.osbuild.git https://github.com/redhat-cop/infra.osbuild.git"
     "${collections_dir}/fedora/iot git@github.com:maxamillion/fedora.iot.git"
