@@ -219,11 +219,11 @@ fn_flathub_install() {
         "org.onlyoffice.desktopeditors"
     )
     if ! flatpak remotes | grep flathub &>/dev/null; then
-        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     fi
     for flatpak_pkg in "${flatpak_pkgs[@]}"; do
         if ! flatpak list | grep "${flatpak_pkg}" &>/dev/null; then
-            flatpak install -y flathub "${flatpak_pkg}"
+            flatpak install --user -y flathub "${flatpak_pkg}"
         fi
     done
 }
