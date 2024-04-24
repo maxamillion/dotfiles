@@ -37,6 +37,11 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
+# Handle my hosts for shortnames of things in my homelab
+if [ -f ~/.myhosts ]; then
+    export HOSTALIASES="${HOME}/.myhosts"
+fi
+
 # GitHub CLI bash completion local install
 if [ -f ~/.local/bin/gh ]; then
     source <(~/.local/bin/gh completion -s bash)
