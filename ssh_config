@@ -63,24 +63,4 @@ Host file.rdu
   PermitLocalCommand yes
 #  LocalCommand ~/bin/irssi-fnotify.sh --start %r@%h
   User admiller
-Host optiplex3060m
-  HostName 192.168.218.105
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-Host optiplex3050m
-  HostName 192.168.218.101
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-Host optiplex3040t
-  HostName 192.168.218.102
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
-Host xps8940
-  HostName 100.90.199.6
-  User root
-  ServerAliveInterval 120
-  TCPKeepAlive yes
 
