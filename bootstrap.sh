@@ -28,6 +28,7 @@ fn_symlink_if_needed ~/dotfiles/ptpython_config.py ~/.ptpython/config.py
 fn_symlink_if_needed ~/dotfiles/ssh_config         ~/.ssh/config
 fn_symlink_if_needed ~/dotfiles/Xresources         ~/.Xresources
 fn_symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
+fn_symlink_if_needed ~/dotfiles/bash_profile       ~/.bash_profile
 fn_symlink_if_needed ~/dotfiles/profile            ~/.profile
 #fn_symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
 fn_symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
