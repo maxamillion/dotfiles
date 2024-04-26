@@ -464,9 +464,9 @@ fn_system_setup_el() {
 
 }
 
-local_user_ssh_agent() {
+fn_local_user_ssh_agent() {
     # ssh-agent systemd user unit
-    mkdir_if_needed ~/.config/systemd/user
+    fn_mkdir_if_needed ~/.config/systemd/user
 
     if [[ ! -f ~/.config/systemd/user/ssh-agent.service ]]; then
         cat > ~/.config/systemd/user/ssh-agent.service << "EOF"
