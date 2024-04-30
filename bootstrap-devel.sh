@@ -21,7 +21,7 @@ fn_git_clone() {
     if ! [ -d $1 ]; then
         pushd $(dirname $1)
         git clone $2 $(basename $1)
-        popd
+        popd || exit
     fi
 }
 
@@ -32,11 +32,12 @@ fn_git_clone_with_upstream() {
     fn_mkdir_if_needed $(dirname $1)
     if ! [ -d $1 ]; then
         pushd $(dirname $1)
-        git clone $2 $(basename $1)
+        if git clone $2 $(basename $1); then
             pushd $(basename $1)
                 git remote add upstream $3
-            popd
-        popd
+            popd || exit
+        popd || exit
+        fi
     fi
 }
 
