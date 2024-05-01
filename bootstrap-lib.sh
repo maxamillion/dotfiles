@@ -386,6 +386,7 @@ fn_system_install_epel(){
     # Install EPEL
     if ! rpm -q epel-release &>/dev/null; then
         if [[ -f /etc/centos-release ]]; then
+            sudo dnf config-manager --enable crb
             sudo dnf -y install epel-release
         else
             sudo subscription-manager repos --enable "codeready-builder-for-rhel-${rhel_major_version}-$(arch)-rpms"
