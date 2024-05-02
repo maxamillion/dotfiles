@@ -7,14 +7,13 @@ if [[ "${ID}" == "debian" ]]; then
     fn_local_user_ssh_agent
 
     fn_system_setup_crostini
+    # rustup
+    fn_local_install_rustup
 fi
 
 if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
     fn_system_setup_el
 fi
-
-# rustup
-fn_local_install_rustup
 
 # k8s stuff
 fn_local_install_minikube

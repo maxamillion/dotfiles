@@ -439,6 +439,8 @@ fn_system_setup_el() {
         "gcc-c++"
         "ninja-build"
         "golang"
+        "rust"
+        "cargo"
         "gettext"
         "unzip"
         "curl"
@@ -734,13 +736,17 @@ fn_local_pipx_packages_install() {
 }
 
 fn_update_local_installs() {
+
+    if [[ "${ID}" == "debian" ]]; then
+        fn_local_install_rustup update
+    fi
+
     fn_local_install_distrobox update
     fn_local_install_opa update
     fn_local_install_minikube update
     fn_local_install_kind update
     fn_local_install_kubectl update
     fn_local_install_terraform update
-    fn_local_install_rustup update
     fn_local_install_gh update
     fn_local_install_neovim update
     fn_local_install_task update
