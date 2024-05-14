@@ -23,6 +23,7 @@ _PIPX_PACKAGE_LIST=(
     "tldr"
     "nodeenv"
     "ipython"
+    "archey4"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
