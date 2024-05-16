@@ -308,6 +308,7 @@ fn_system_setup_crostini() {
         "curl"
         "fd-find"
         "shellcheck"
+        "ripgrep"
     )
     fn_system_install_packages "${pkglist[@]}"
 
@@ -449,6 +450,7 @@ fn_system_setup_el() {
         "ShellCheck"
         "dconf"
         "xsel"
+        "ripgrep"
         "epson-inkjet-printer-escpr"
         "epson-inkjet-printer-escpr2"
     )
