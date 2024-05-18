@@ -589,7 +589,6 @@ local servers = {
   ansiblels ={},
   rust_analyzer = {},
   bashls = {},
-  clangd = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
@@ -602,6 +601,12 @@ local servers = {
     },
   },
 }
+
+local arch = jit and jit.arch-- Safely check for LuaJIT
+if arch == "x64" then
+  -- clangd doesn't work on aarch64
+  servers['clangd'] = {}
+end
 
 -- Setup neovim lua configuration
 require('neodev').setup()
