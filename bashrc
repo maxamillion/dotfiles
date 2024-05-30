@@ -463,7 +463,10 @@ atest(){
 ###############################################################################
 # BEGIN: Git helpers
 grabpr () {
-    git fetch upstream pull/$1/head:pr/$1 && git checkout pr/$1
+    git fetch upstream pull/${1}/head:pr/${1} && git checkout pr/${1}
+}
+grabmr () {
+    git fetch upstream merge-requests/${1}/head:mr/${1} && git checkout mr/${1}
 }
 
 pullupstream () {
