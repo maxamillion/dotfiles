@@ -44,6 +44,7 @@ fi
 
 # GitHub CLI bash completion local install
 if [ -f ~/.local/bin/gh ]; then
+    # shellcheck source=/dev/null
     source <(~/.local/bin/gh completion -s bash)
 fi
 
@@ -55,8 +56,10 @@ if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
         export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
     fi
     export WORKON_HOME=${HOME}/.virtualenvs
+    # shellcheck source=/dev/null
     . ~/.local/bin/virtualenvwrapper.sh
 elif [ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
+    # shellcheck source=/dev/null
     . /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 fi
 
@@ -67,26 +70,33 @@ fi
 
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/.local/bin/oc ]; then
+    # shellcheck source=/dev/null
     source <(~/bin/oc completion bash)
 fi
 if [ -f ~/.local/bin/kubectl ]; then
+    # shellcheck source=/dev/null
     source <(~/.local/bin/kubectl completion bash)
 fi
 if [ -f ~/.local/bin/openshift-install ]; then
+    # shellcheck source=/dev/null
     source <(~/.local/bin/openshift-install completion bash)
 fi
 if [ -f ~/.local/bin/kind ]; then
+    # shellcheck source=/dev/null
     source <(~/.local/bin/kind completion bash)
 fi
 if [ -f ~/.local/bin/minikube ]; then
+    # shellcheck source=/dev/null
     source <(~/.local/bin/minikube completion bash)
 fi
 
 # rustup
 if [ -f ~/.cargo/env ]; then
+    # shellcheck source=/dev/null
     source "${HOME}/.cargo/env"
 fi
 if [ -f ~/.cargo/bin/rustup ]; then
+    # shellcheck source=/dev/null
     source <(~/.cargo/bin/rustup completions bash cargo)
 fi
 
@@ -102,6 +112,7 @@ if ! shopt -oq posix; then
         . /etc/bash_completion
     fi
     if [ -f ~/.local/poetry.bash-completion ]; then
+        # shellcheck source=/dev/null
         . ~/.local/poetry.bash-completion
     fi
     if [ -f ~/.local/bin/pipx ]; then
@@ -211,6 +222,7 @@ alias te='toolbox enter'
 alias pipuup="pip list --user --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 2  | xargs -n1 pip install --user -U"
 
 if rpm -q vim-common &> /dev/null; then
+    # shellcheck disable=SC2139
     alias vless="$(rpm -ql vim-common | grep less.sh)"
 fi
 
