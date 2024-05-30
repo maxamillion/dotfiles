@@ -233,23 +233,28 @@ fn_system_gnome_settings() {
     # key remap because fuck the capslock key
     local current_xkb_options
     local new_xkb_options
-    current_xkb_options=$(dconf read /org/gnome/desktop/input-sources/xkb-options 2>/dev/null)
-    if [[ -z "${current_xkb_options}" ]] || [[ "${current_xkb_options}" == "@as []" ]]; then
-        # if current_xkb_options is empty, set it
-        new_xkb_options="['caps:escape']"
-    else
-        # if current_xkb_options is empty, modify it
-        new_xkb_options=${current_xkb_options//\[/\[\'caps:escape\', }
-    fi
-    if ! [[ "${current_xkb_options}" =~ "caps:escape" ]]; then
-        dconf write /org/gnome/desktop/input-sources/xkb-options "${new_xkb_options}"
+
+    if dconf help &>/dev/null; then
+        current_xkb_options=$(dconf read /org/gnome/desktop/input-sources/xkb-options 2>/dev/null)
+        if [[ -z "${current_xkb_options}" ]] || [[ "${current_xkb_options}" == "@as []" ]]; then
+            # if current_xkb_options is empty, set it
+            new_xkb_options="['caps:escape']"
+        else
+            # if current_xkb_options is empty, modify it
+            new_xkb_options=${current_xkb_options//\[/\[\'caps:escape\', }
+        fi
+        if ! [[ "${current_xkb_options}" =~ "caps:escape" ]]; then
+            dconf write /org/gnome/desktop/input-sources/xkb-options "${new_xkb_options}"
+        fi
     fi
 
-    # set alt-tab behavior for sanity
-    gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
-    gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]"
-    gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
-    gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+    if gsettings help &>/dev/null; then
+        # set alt-tab behavior for sanity
+        gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
+        gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]"
+        gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+        gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+    fi
 
 }
 
