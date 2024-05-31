@@ -314,19 +314,21 @@ function cudaenv() {
 # Get SELinux/dnf/yum/rpm Python bindings symlink'd into the local python venv
 # for Red Hat family of distros
 rhtvenv() {
-    local py_path=$(which python)
+    local py_path
+    py_path=$(which python)
     if ! [[ ${py_path} =~ 'virtualenv' ]] && [[ -z "${VIRTUAL_ENV}" ]]; then
         printf "NOT IN A VIRTUALENV!\n"
         return 1
     fi
     local venv_basepath="${py_path%*/*/*}"
 
-    local py_version=$(python -c 'import platform; print(platform.python_version());')
+    local py_version
+    py_version=$(python -c 'import platform; print(platform.python_version());')
     local py_shortver="${py_version%*.*}"
     local pylib64_path="/usr/lib64/python${py_shortver}/site-packages/"
     local pylib_path="/usr/lib/python${py_shortver}/site-packages/"
     if ! [[ -d "${pylib64_path}" ]]; then
-        printf "${pylib64_path} doesn't exist, check host python version!\n"
+        printf "%s doesn't exist, check host python version!\n" "${pylib64_path}"
         return 1
     fi
 
@@ -338,11 +340,13 @@ rhtvenv() {
     fn_conditionally_symlink "${pylib64_path}/semanage.py" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/semanage.py"
 
-    local selinux_so=$(find "${pylib64_path}" -name _selinux*.so)
+    local selinux_so
+    selinux_so=$(find "${pylib64_path}" -name "_selinux*.so")
     fn_conditionally_symlink "${selinux_so}" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/${selinux_so##*/}"
 
-    local semanage_so=$(find "${pylib64_path}" -name _semanage*.so)
+    local semanage_so
+    semanage_so=$(find "${pylib64_path}" -name "_semanage*.so")
     fn_conditionally_symlink "${semanage_so}" \
         "${venv_basepath}/lib64/python${py_shortver}/site-packages/${semanage_so##*/}"
 
@@ -397,37 +401,35 @@ rhtvenv() {
 # BEGIN: Ansible hacking functions
 
 # "Globals" for Ansible hacking functions
-ansible_dev_dir="~/src/dev/ansible/"
-
-# Expand the tilda
-eval ansible_dev_dir=${ansible_dev_dir}
+ansible_dev_dir="${HOME}/src/dev/ansible/"
 
 ahack() {
     if [[ -d ${ansible_dev_dir} ]]; then
-        pushd ${ansible_dev_dir}
+        pushd "${ansible_dev_dir}" || return
             make clean
+            # shellcheck source=/dev/null
             source hacking/env-setup
-        popd
+        popd || return
     else
-        printf "ERROR: Ansible dev dir not found: ${ansible_dev_dir}\n"
+        printf "ERROR: Ansible dev dir not found: %s\n" "${ansible_dev_dir}"
     fi
 }
 
 aclean() {
     if [[ -d ${ansible_dev_dir} ]]; then
-        pushd ${ansible_dev_dir}
+        pushd "|${ansible_dev_dir}" || return
             make clean
-        popd
+        popd || return
     else
-        printf "ERROR: Ansible dev dir not found: ${ansible_dev_dir}\n"
+        printf "ERROR: Ansible dev dir not found: %s\n" "${ansible_dev_dir}"
     fi
 }
 
 ardebug(){
     if [[ -d ~/.ansible/tmp ]]; then
-        ardebug_dirs=( $(ls ~/.ansible/tmp) )
-        pushd ~/.ansible/tmp/${ardebug_dirs[-1]}
-            python3 *.py explode && cd debug_dir
+        mapfile -t ardebug_dirs < <(ls "${HOME}/.ansible/tmp")
+        pushd "${HOME}/.ansible/tmp/${ardebug_dirs[-1]}" || return
+            python3 ./*.py explode && cd debug_dir || return
     else
         printf "ERROR: Ansible KEEP_REMOTE_FILES dir not found"
     fi
@@ -453,10 +455,10 @@ atest(){
 ###############################################################################
 # BEGIN: Git helpers
 grabpr () {
-    git fetch upstream pull/${1}/head:pr/${1} && git checkout pr/${1}
+    git fetch upstream "pull/${1}/head:pr/${1}" && git checkout "pr/${1}"
 }
 grabmr () {
-    git fetch upstream merge-requests/${1}/head:mr/${1} && git checkout mr/${1}
+    git fetch upstream "merge-requests/${1}/head:mr/${1}" && git checkout "mr/${1}"
 }
 
 pullupstream () {
@@ -478,19 +480,19 @@ pullupstream () {
 gceverything() {
     for dir in ~/src/*;
     do
-        if [[ "$(basename ${dir})" != 'dev' ]]
+        if [[ "$(basename "${dir}")" != 'dev' ]]
         then
-            pushd ${dir}
+            pushd "${dir}" || return
                 git gc
-            popd &> /dev/null
+            popd &> /dev/null || return
         fi
     done
 
     for dir in ~/src/dev/*;
     do
-        pushd ${dir}
+        pushd "${dir}" || return
             git gc
-        popd &> /dev/null
+        popd &> /dev/null || return
     done
 }
 
@@ -540,21 +542,20 @@ git_auto_bisect_ansible(){
         return 1
     fi
 
-    read -p "Test command: " test_command
+    read -r -p "Test command: " test_command
     if [[ -z "${test_command}" ]]; then
         printf "Test command can not be empty\n"
         return 1
     fi
 
-    workon ansible
-    if [[ "$?" -ne "0" ]]; then
-        printf "No virtualenv named ansible3.\n"
+    if ! [[ -d "${HOME}/.virtualenvs/ansible/" ]]; then
+        printf "No virtualenv named ansible.\n"
         return 1
     fi
     ahack # clean the env
     workon ansible
 
-    git bisect start ${bad_branch} ${good_branch}
+    git bisect start "${bad_branch}" "${good_branch}"
 
     if [[ -z "${reverse}" ]]; then
         eval "git bisect run ${test_command}"
@@ -572,14 +573,13 @@ git_revlist_test_ansible(){
         printf "git_revlist_test \n"
     fi
 
-    read -p "Test command: " test_command
+    read -r -p "Test command: " test_command
     if [[ -z "${test_command}" ]]; then
         printf "Test command can not be empty\n"
         return 1
     fi
 
-    workon ansible
-    if [[ "$?" -ne "0" ]]; then
+    if ! [[ -d "${HOME}/.virtualenvs/ansible/" ]]; then
         printf "No virtualenv named ansible.\n"
         return 1
     fi
@@ -588,12 +588,11 @@ git_revlist_test_ansible(){
 
     for ref in $(git rev-list "${branch}")
     do
-        printf "CHECKING OUT: ${ref}\n"
+        printf "CHECKING OUT: %s\n" "${ref}"
         git checkout "${ref}"
         ahack
-        eval "${test_command}"
-        if [[ "$?" -eq "0" ]]; then
-            printf "First good commit found: ${ref}\n"
+        if eval "${test_command}"; then 
+            printf "First good commit found: %s \n" "${ref}"
             return 0
         fi
     done
@@ -674,22 +673,22 @@ pathremove () {
         export "$PATHVARIABLE"="$NEWPATH"
 }
 pathprepend () {
-        pathremove $1 $2
+        pathremove "$1" "$2"
         local PATHVARIABLE=${2:-PATH}
         export "$PATHVARIABLE"="$1${!PATHVARIABLE:+:${!PATHVARIABLE}}"
 }
 
 pathappend () {
-        pathremove $1 $2
+        pathremove "$1" "$2"
         local PATHVARIABLE=${2:-PATH}
         export "$PATHVARIABLE"="${!PATHVARIABLE:+${!PATHVARIABLE}:}$1"
 }
 
 export GOPATH=$HOME/go
-pathappend $GOPATH/bin
-pathappend $HOME/node_modules/.bin
-pathappend $HOME/bin
-pathappend $HOME/.local/bin
+pathappend "${GOPATH}/bin"
+pathappend "${HOME}/node_modules/.bin"
+pathappend "${HOME}/bin"
+pathappend "${HOME}/.local/bin"
 pathappend /usr/local/go/bin
 
 # END Modify PATH
@@ -815,14 +814,15 @@ __prompt_command() {
     prompt_out+="$(__my_vcs_prompt)"
     prompt_out+="$pwd_c"
     if [[ $PWD =~ $HOME ]]; then
-        prompt_out+=" ~${PWD#${HOME}}"
+        prompt_out+=" ~${PWD#"${HOME}"}"
     else
         prompt_out+=" $PWD"
     fi
     prompt_out+="$normal_c"
     prompt_out+="]"
 
-    printf "$prompt_out\n" -1
+    # shellcheck disable=SC2059
+    printf "$prompt_out\n"
 
     return $exit_code
 }
