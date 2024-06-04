@@ -170,9 +170,9 @@ fn_system_install_tailscale() {
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         if ! rpm -q tailscale &>/dev/null; then
-            local rhel_major_version
-            rhel_major_version=$(rpm -E %rhel)
-            sudo dnf config-manager --add-repo "https://pkgs.tailscale.com/stable/rhel/${rhel_major_version}/tailscale.repo"
+            local el_major_version
+            el_major_version=$(rpm -E %rhel)
+            sudo dnf config-manager --add-repo "https://pkgs.tailscale.com/stable/rhel/${el_major_version}/tailscale.repo"
             sudo dnf install -y tailscale
             sudo systemctl enable --now tailscaled
         fi
@@ -396,16 +396,16 @@ fn_system_install_epel(){
             sudo dnf config-manager --enable crb
             sudo dnf -y install epel-release
         else
-            sudo subscription-manager repos --enable "codeready-builder-for-rhel-${rhel_major_version}-$(arch)-rpms"
-            sudo dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${rhel_major_version}.noarch.rpm"
+            sudo subscription-manager repos --enable "codeready-builder-for-rhel-${el_major_version}-$(arch)-rpms"
+            sudo dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${el_major_version}.noarch.rpm"
         fi
     fi
 
 }
 
 fn_system_setup_el() {
-    local rhel_major_version
-    rhel_major_version="$(rpm -E %rhel)"
+    local el_major_version
+    el_major_version="$(rpm -E %rhel)"
 
     # Setup for RHEL and CentOS Stream
     fn_mkdir_if_needed ~/.local/bin/
@@ -416,8 +416,8 @@ fn_system_setup_el() {
     fn_system_install_tailscale
 
     # random dev stuff
-    local rhel_pkglist
-    rhel_pkglist=(
+    local el_pkglist
+    el_pkglist=(
         "vim-enhanced"
         "python3"
         "python3-pip"
@@ -458,8 +458,10 @@ fn_system_setup_el() {
         "ripgrep"
         "epson-inkjet-printer-escpr"
         "epson-inkjet-printer-escpr2"
+        "centpkg"
+        "centpkg-sig"
     )
-    fn_system_install_packages "${rhel_pkglist[@]}"
+    fn_system_install_packages "${el_pkglist[@]}"
 
     fn_system_install_chrome
 
