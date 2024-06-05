@@ -544,6 +544,7 @@ fn_local_install_opa() {
 
 fn_local_install_minikube() {
     local install_path="${HOME}/.local/bin/minikube"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/minikube"
     local latest_release
     local currently_installed_version
 
@@ -560,11 +561,13 @@ fn_local_install_minikube() {
         curl -LO "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${_GOLANG_ARCH}"
         chmod +x "./minikube-linux-${_GOLANG_ARCH}"
         mv "./minikube-linux-${_GOLANG_ARCH}" "${install_path}"
+        ${install_path} completion bash > "${completions_install_path}"
     fi
 }
 
 fn_local_install_kind() {
     local install_path="${HOME}/.local/bin/kind"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kind"
     local latest_release
     local currently_installed_version
     # kind tags alpha and stable, if it's alpha, use the latest stable - query with jq
@@ -583,11 +586,13 @@ fn_local_install_kind() {
         curl -Lo ./kind "https://kind.sigs.k8s.io/dl/${latest_release}/kind-linux-${_GOLANG_ARCH}"
         chmod +x ./kind
         mv ./kind "${install_path}"
+        ${install_path} completion bash > "${completions_install_path}"
     fi
 }
 
 fn_local_install_kubectl() {
     local install_path="${HOME}/.local/bin/kubectl"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kubectl"
     local latest_release
     local currently_installed_version
 
@@ -604,6 +609,7 @@ fn_local_install_kubectl() {
         curl -LO "https://dl.k8s.io/release/${latest_release}/bin/linux/${_GOLANG_ARCH}/kubectl"
         chmod +x ./kubectl
         mv ./kubectl "${install_path}"
+        ${install_path} completion bash > "${completions_install_path}"
     fi
 }
 
@@ -739,6 +745,7 @@ fn_local_install_task() {
 fn_local_install_yq() {
     local install_path="${HOME}/.local/bin/yq"
     local latest_release
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/yq"
     latest_release="$(
         curl -s 'https://api.github.com/repos/mikefarah/yq/tags' \
             | jq -r '.[] | select(.name | contains("Test") | not).name' \
@@ -756,6 +763,7 @@ fn_local_install_yq() {
         pushd /tmp/ || return
             wget -c "https://github.com/mikefarah/yq/releases/download/${latest_release}/yq_linux_${_GOLANG_ARCH}.tar.gz" -O - \
                 | tar xz && mv "yq_linux_${_GOLANG_ARCH}" "${install_path}"
+            ${install_path} completion bash > "${completions_install_path}"
         popd || return
     fi
 }

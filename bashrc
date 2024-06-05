@@ -73,25 +73,9 @@ if [ -f ~/.local/bin/oc ]; then
     # shellcheck source=/dev/null
     source <(~/.local/bin/oc completion bash)
 fi
-if [ -f ~/.local/bin/kubectl ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/kubectl completion bash)
-fi
 if [ -f ~/.local/bin/openshift-install ]; then
     # shellcheck source=/dev/null
     source <(~/.local/bin/openshift-install completion bash)
-fi
-if [ -f ~/.local/bin/kind ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/kind completion bash)
-fi
-if [ -f ~/.local/bin/minikube ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/minikube completion bash)
-fi
-if [ -f ~/.local/bin/yq ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/yq completion bash)
 fi
 
 # rustup
