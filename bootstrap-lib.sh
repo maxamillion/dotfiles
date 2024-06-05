@@ -461,6 +461,9 @@ fn_system_setup_el() {
         "centpkg"
         "centpkg-sig"
     )
+
+    sudo usermod "${USER}" -a -G mock
+
     fn_system_install_packages "${el_pkglist[@]}"
 
     fn_system_install_chrome
