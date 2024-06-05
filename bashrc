@@ -89,6 +89,10 @@ if [ -f ~/.local/bin/minikube ]; then
     # shellcheck source=/dev/null
     source <(~/.local/bin/minikube completion bash)
 fi
+if [ -f ~/.local/bin/yq ]; then
+    # shellcheck source=/dev/null
+    source <(~/.local/bin/yq completion bash)
+fi
 
 # rustup
 if [ -f ~/.cargo/env ]; then

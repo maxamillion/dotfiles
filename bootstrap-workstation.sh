@@ -41,4 +41,7 @@ fn_local_install_neovim
 # Task
 fn_local_install_task
 
+# yq
+fn_local_install_yq
+
 printf "Done!\n"

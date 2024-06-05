@@ -736,6 +736,31 @@ fn_local_install_task() {
     fi
 }
 
+fn_local_install_yq() {
+    local install_path="${HOME}/.local/bin/yq"
+    local latest_release
+    latest_release="$(
+        curl -s 'https://api.github.com/repos/mikefarah/yq/tags' \
+            | jq -r '.[] | select(.name | contains("Test") | not).name' \
+            | head -1
+    )"
+    if [[ ${1} == "update" ]]; then
+        currently_installed_version=$(yq --version | awk '{ print $4 }')
+        local uninstall_paths=("${install_path}" "${completions_install_path}")
+        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing yq...\n"
+
+        pushd /tmp/ || return
+            wget -c "https://github.com/mikefarah/yq/releases/download/${latest_release}/yq_linux_${_GOLANG_ARCH}.tar.gz" -O - \
+                | tar xz && mv "yq_linux_${_GOLANG_ARCH}" "${install_path}"
+        popd || return
+    fi
+}
+
+
 
 fn_local_pipx_packages_install() {
     if which pipx > /dev/null 2>&1; then
