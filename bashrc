@@ -71,7 +71,7 @@ fi
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/.local/bin/oc ]; then
     # shellcheck source=/dev/null
-    source <(~/bin/oc completion bash)
+    source <(~/.local/bin/oc completion bash)
 fi
 if [ -f ~/.local/bin/kubectl ]; then
     # shellcheck source=/dev/null
