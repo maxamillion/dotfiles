@@ -666,6 +666,7 @@ fn_local_install_gh() {
     local install_path="${HOME}/.local/bin/gh"
     local latest_release
     local currently_installed_version
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/gh"
 
     latest_release="$(curl -s 'https://api.github.com/repos/cli/cli/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
@@ -680,7 +681,7 @@ fn_local_install_gh() {
         curl -Lo /tmp/gh.tar.gz "https://github.com/cli/cli/releases/download/${latest_release}/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}.tar.gz"
         tar -zxvf /tmp/gh.tar.gz -C /tmp/
         cp "/tmp/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}/bin/gh" "${install_path}"
-        cp "/tmp/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}/share/man/man1/*" "${HOME}/.local/share/man/man1/"
+        ${install_path} completion -s bash > "${completions_install_path}"
     fi
 }
 

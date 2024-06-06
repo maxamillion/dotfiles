@@ -42,12 +42,6 @@ if [ -f ~/.myhosts ]; then
     export HOSTALIASES="${HOME}/.myhosts"
 fi
 
-# GitHub CLI bash completion local install
-if [ -f ~/.local/bin/gh ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/gh completion -s bash)
-fi
-
 # Local user install of virtualenvwrapper
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     if [ -f /usr/bin/python3 ]; then
@@ -72,6 +66,10 @@ fi
 if [ -f ~/.local/bin/oc ]; then
     # shellcheck source=/dev/null
     source <(~/.local/bin/oc completion bash)
+fi
+if [ -f ~/.local/bin/crc ]; then
+    # shellcheck source=/dev/null
+    source <(~/.local/bin/crc completion bash)
 fi
 if [ -f ~/.local/bin/openshift-install ]; then
     # shellcheck source=/dev/null
