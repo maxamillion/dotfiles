@@ -44,4 +44,7 @@ fn_local_install_task
 # yq
 fn_local_install_yq
 
+# ollama
+fn_local_install_ollama
+
 printf "Done!\n"

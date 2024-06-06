@@ -348,15 +348,6 @@ fn_system_setup_crostini() {
         podman system migrate
     fi
 
-    # install ollama.ai
-    if [[ ! -f /usr/local/bin/ollama ]]; then
-        printf "Installing ollama...\n"
-        curl https://ollama.ai/install.sh | sh
-
-        # don't actually start it until I want to use it
-        sudo systemctl disable ollama.service
-    fi
-
     # Force wayland for firefox-esr
     firefox_esr_desktop_file_path="/usr/share/applications/firefox-esr.desktop"
     firefox_esr_desktop_local_path="${HOME}/.local/share/applications/firefox-esr.desktop"
@@ -766,6 +757,29 @@ fn_local_install_yq() {
                 | tar xz && mv "yq_linux_${_GOLANG_ARCH}" "${install_path}"
             ${install_path} completion bash > "${completions_install_path}"
         popd || return
+    fi
+}
+
+fn_local_install_ollama() {
+    local install_path="${HOME}/.local/bin/ollama"
+    local latest_release
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/ollama"
+    latest_release="$(
+        curl -s 'https://api.github.com/repos/ollama/ollama/tags' \
+            | jq -r '.[] | select(.name | contains("rc") | not).name' \
+            | head -1
+    )"
+    if [[ ${1} == "update" ]]; then
+        currently_installed_version=$(yq --version | awk '{ print $4 }')
+        local uninstall_paths=("${install_path}" "${completions_install_path}")
+        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing ollama...\n"
+
+        curl -L "https://ollama.com/download/ollama-linux-${_GOLANG_ARCH}" -o "${install_path}"
+        chmod +x "${install_path}"
     fi
 }
 
