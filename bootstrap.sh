@@ -12,6 +12,7 @@ fn_mkdir_if_needed ~/.ssh
 fn_mkdir_if_needed ~/.vimundo
 fn_mkdir_if_needed ~/.vim
 fn_mkdir_if_needed ~/.ipython/profile_default/
+fn_mkdir_if_needed ~/.shelloracle/
 
 fn_symlink_if_needed ~/dotfiles/snclirc            ~/.snclirc
 fn_symlink_if_needed ~/dotfiles/dunstrc            ~/.config/dunst/dunstrc
@@ -35,6 +36,7 @@ fn_symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
 fn_symlink_if_needed ~/dotfiles/init.lua           ~/.config/nvim/init.lua
 fn_symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 fn_symlink_if_needed ~/dotfiles/myhosts            ~/.myhosts
+fn_symlink_if_needed ~/dotfiles/shelloracle-config.toml ~/.shelloracle/config.toml
 
 ./bootstrap-workstation.sh
 
