@@ -847,6 +847,5 @@ fn_update_local_installs() {
     fn_local_install_task update
     fn_local_install_yq update
     fn_local_install_ollama update
-    fn_local_install_mods update
     pipx upgrade-all
 }
