@@ -770,7 +770,7 @@ fn_local_install_ollama() {
             | head -1
     )"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(yq --version | awk '{ print $4 }')
+        currently_installed_version=$(ollama --version | grep "client version" | awk '{ print $5 }')
         local uninstall_paths=("${install_path}" "${completions_install_path}")
         fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
     fi
@@ -782,8 +782,6 @@ fn_local_install_ollama() {
         chmod +x "${install_path}"
     fi
 }
-
-
 
 fn_local_pipx_packages_install() {
     if which pipx > /dev/null 2>&1; then
@@ -811,5 +809,7 @@ fn_update_local_installs() {
     fn_local_install_gh update
     fn_local_install_neovim update
     fn_local_install_task update
+    fn_local_install_yq update
+    fn_local_install_ollama update
     pipx upgrade-all
 }
