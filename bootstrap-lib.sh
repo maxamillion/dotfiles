@@ -24,6 +24,7 @@ _PIPX_PACKAGE_LIST=(
     "nodeenv"
     "ipython"
     "archey4"
+    "shelloracle"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
@@ -489,7 +490,9 @@ ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
 [Install]
 WantedBy=default.target
 EOF
-        systemctl --user enable ssh-agent
+        systemctl --user daemon-reload
+        systemctl --user enable ssh-agent.service
+        systemctl --user start ssh-agent.service
     fi
 }
 
@@ -780,6 +783,29 @@ fn_local_install_ollama() {
 
         curl -L "https://ollama.com/download/ollama-linux-${_GOLANG_ARCH}" -o "${install_path}"
         chmod +x "${install_path}"
+
+        # ollama systemd user unit
+        fn_mkdir_if_needed ~/.config/systemd/user
+
+        if [[ ! -f ~/.config/systemd/user/ollama.service ]]; then
+            cat > ~/.config/systemd/user/ollama.service << EOF
+[Unit]
+Description=Ollama Service - User mode
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=${install_path} serve
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target
+EOF
+            systemctl --user daemon-reload
+            systemctl --user enable ollama.service
+            systemctl --user start ollama.service
+       fi
     fi
 }
 
