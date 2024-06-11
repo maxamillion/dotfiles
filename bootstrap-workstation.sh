@@ -47,4 +47,7 @@ fn_local_install_yq
 # ollama
 fn_local_install_ollama
 
+# mods
+fn_local_install_mods
+
 printf "Done!\n"

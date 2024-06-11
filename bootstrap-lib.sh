@@ -754,7 +754,7 @@ fn_local_install_yq() {
 
         pushd /tmp/ || return
             wget -c "https://github.com/mikefarah/yq/releases/download/${latest_release}/yq_linux_${_GOLANG_ARCH}.tar.gz" -O - \
-                | tar xz && mv "yq_linux_${_GOLANG_ARCH}" "${install_path}"
+                | tar xz && cp "yq_linux_${_GOLANG_ARCH}" "${install_path}"
             ${install_path} completion bash > "${completions_install_path}"
         popd || return
     fi
@@ -780,6 +780,42 @@ fn_local_install_ollama() {
 
         curl -L "https://ollama.com/download/ollama-linux-${_GOLANG_ARCH}" -o "${install_path}"
         chmod +x "${install_path}"
+    fi
+}
+
+fn_local_install_mods() {
+    local install_path="${HOME}/.local/bin/mods"
+    local latest_release
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/mods"
+    latest_release="$(curl -s 'https://api.github.com/repos/charmbracelet/mods/tags' | jq '.[0].name' | tr -d '"')"
+    latest_release_numerical_version="${latest_release#v*}"
+    if [[ ${1} == "update" ]]; then
+        currently_installed_version=$(ollama --version | grep "client version" | awk '{ print $5 }')
+        local uninstall_paths=("${install_path}" "${completions_install_path}")
+        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing mods...\n"
+
+
+        pushd /tmp/ || return
+            if [[ ${_GOLANG_ARCH} == "amd64" ]]; then
+                mods_tarname="mods_${latest_release_numerical_version}_Linux_x86_64.tar.gz"
+            else
+                mods_tarname="mods_${latest_release_numerical_version}_Linux_${_GOLANG_ARCH}.tar.gz"
+            fi
+            wget -c "https://github.com/charmbracelet/mods/releases/download/${latest_release}/${mods_tarname}"
+            tar zxvf "${mods_tarname}"
+            pushd "${mods_tarname%.tar.gz}" || return
+                cp "mods" "${install_path}"
+                chmod +x "${install_path}"
+
+                cp "completions/mods.bash" "${completions_install_path}"
+            popd || return
+            rm -fr "${mods_tarname%.tar.gz}"
+            rm "${mods_tarname}"
+        popd || return
     fi
 }
 
@@ -811,5 +847,6 @@ fn_update_local_installs() {
     fn_local_install_task update
     fn_local_install_yq update
     fn_local_install_ollama update
+    fn_local_install_mods update
     pipx upgrade-all
 }
