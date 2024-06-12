@@ -219,8 +219,9 @@ fn_flathub_install() {
         "im.riot.Riot"
         "com.irccloud.desktop"
         "org.onlyoffice.desktopeditors"
+        "org.flameshot.Flameshot"
     )
-    if ! flatpak remotes | grep flathub &>/dev/null; then
+    if ! flatpak remotes --user | grep flathub &>/dev/null; then
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     fi
     for flatpak_pkg in "${flatpak_pkgs[@]}"; do
