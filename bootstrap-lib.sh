@@ -178,6 +178,13 @@ fn_system_install_tailscale() {
             sudo systemctl enable --now tailscaled
         fi
     fi
+    if [[ "${ID}" == "fedora" ]]; then
+        if ! rpm -q tailscale &>/dev/null; then
+            sudo dnf config-manager --add-repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+            sudo dnf install -y tailscale
+            sudo systemctl enable --now tailscaled
+        fi
+    fi
 
 }
 
@@ -193,7 +200,7 @@ fn_system_install_packages() {
                 pending_install_pkgs+=("${pkg}")
             fi
         fi
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
             if ! rpm -q "${pkg}" &>/dev/null; then
                 pending_install_pkgs+=("${pkg}")
             fi
@@ -204,7 +211,7 @@ fn_system_install_packages() {
         if [[ "${ID}" == "debian" ]]; then 
             sudo apt install "${pending_install_pkgs[@]}"
         fi
-        if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
             # intentionally want word splitting so don't quote
             sudo dnf install -y --allowerasing "${pending_install_pkgs[@]}"
         fi
@@ -293,7 +300,6 @@ fn_system_setup_crostini() {
         "strace"
         "tree"
         "pipx"
-        "virtualenvwrapper"
         "libonig-dev"
         "firefox-esr"
         "debian-goodies"
@@ -395,21 +401,21 @@ fn_system_install_epel(){
 
 }
 
-fn_system_setup_el() {
-    local el_major_version
-    el_major_version="$(rpm -E %rhel)"
-
-    # Setup for RHEL and CentOS Stream
+fn_system_setup_fedora_el() {
+    # Setup for Fedora/RHEL/CentOS-Stream
+    #
     fn_mkdir_if_needed ~/.local/bin/
 
-    fn_system_install_epel
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        fn_system_install_epel
+    fi
 
     # Tailscale
     fn_system_install_tailscale
 
     # random dev stuff
-    local el_pkglist
-    el_pkglist=(
+    local fedora_el_pkglist
+    fedora_el_pkglist=(
         "vim-enhanced"
         "python3"
         "python3-pip"
@@ -456,7 +462,7 @@ fn_system_setup_el() {
 
     sudo usermod "${USER}" -a -G mock
 
-    fn_system_install_packages "${el_pkglist[@]}"
+    fn_system_install_packages "${fedora_el_pkglist[@]}"
 
     fn_system_install_chrome
 
@@ -464,13 +470,14 @@ fn_system_setup_el() {
 
     fn_flathub_install
 
+    fn_system_gnome_settings
+}
+
+fn_local_install_virtualenvwrapper(){
     # virtualenvwrapper
     if ! pip list | grep virtualenvwrapper &>/dev/null; then
         pip install --user virtualenvwrapper
     fi
-
-    fn_system_gnome_settings
-
 }
 
 fn_local_user_ssh_agent() {

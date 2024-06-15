@@ -11,8 +11,8 @@ if [[ "${ID}" == "debian" ]]; then
     fn_local_install_rustup
 fi
 
-if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-    fn_system_setup_el
+if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
+    fn_system_setup_fedora_el
 fi
 
 # k8s stuff
@@ -25,6 +25,9 @@ fn_local_install_terraform
 
 # pipx
 fn_local_pipx_packages_install
+
+# virtualenvwrapper
+fn_local_install_virtualenvwrapper
 
 # rootless distrobox
 fn_local_install_distrobox
