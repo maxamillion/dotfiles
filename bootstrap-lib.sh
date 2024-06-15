@@ -405,6 +405,7 @@ fn_system_setup_fedora_el() {
     # Setup for Fedora/RHEL/CentOS-Stream
     #
     fn_mkdir_if_needed ~/.local/bin/
+    fn_mkdir_if_needed ~/.local/share/bash-completion/completions/
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         fn_system_install_epel
@@ -419,15 +420,11 @@ fn_system_setup_fedora_el() {
         "vim-enhanced"
         "python3"
         "python3-pip"
-        "python3.12"
-        "python3.12-pip"
         "nodejs"
-        "npm"
         "git"
         "tig"
         "tmux"
         "htop"
-        "iotop"
         "strace"
         "tree"
         "pipx"
@@ -460,6 +457,21 @@ fn_system_setup_fedora_el() {
         "centpkg-sig"
     )
 
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        fedora_el_pkglist+=(
+            "python3.12"
+            "python3.12-pip"
+            "iotop"
+            "npm"
+        )
+    fi
+    if [[ "${ID}" == "fedora" ]]; then
+        fedora_el_pkglist+=(
+            "iotop-c"
+            "nodejs-npm"
+            "python3-devel"
+        )
+    fi
     sudo usermod "${USER}" -a -G mock
 
     fn_system_install_packages "${fedora_el_pkglist[@]}"
@@ -856,7 +868,8 @@ fn_local_pipx_packages_install() {
     if which pipx > /dev/null 2>&1; then
         for pypkg in "${_PIPX_PACKAGE_LIST[@]}";
         do
-            if [[ ! -d ${HOME}/.local/pipx/venvs/${pypkg} ]]; then
+            if [[ ! -d ${HOME}/.local/pipx/venvs/${pypkg} ]] \
+                && [[ ! -d ${HOME}/.local/share/pipx/venvs/${pypkg} ]]; then
                 pipx install "${pypkg}"
             fi
         done
