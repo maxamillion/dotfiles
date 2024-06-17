@@ -307,15 +307,17 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
   {
-    'linux-cultist/venv-selector.nvim',
-    -- Python virtualenv selector
-    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
-    opts = {
-      -- Your options go here
-      -- name = "venv",
-      -- auto_refresh = false
+    "linux-cultist/venv-selector.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig", 
+      "mfussenegger/nvim-dap", "mfussenegger/nvim-dap-python", --optional
+      { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
     },
-    event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+    lazy = false,
+    branch = "regexp", -- This is the regexp branch, use this for the new version
+    config = function()
+        require("venv-selector").setup()
+    end,
     keys = {
       -- Keymap to open VenvSelector to pick a venv.
       { '<leader>vs', '<cmd>VenvSelect<cr>' },
@@ -323,7 +325,6 @@ require('lazy').setup({
       { '<leader>vc', '<cmd>VenvSelectCached<cr>' },
     },
   },
-
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
 }, {})
