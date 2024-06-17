@@ -226,6 +226,7 @@ fn_flathub_install() {
         "im.riot.Riot"
         "com.irccloud.desktop"
         "org.onlyoffice.desktopeditors"
+        "io.podman_desktop.PodmanDesktop"
     )
     if ! flatpak remotes --user | grep flathub &>/dev/null; then
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -455,6 +456,7 @@ fn_system_setup_fedora_el() {
         "epson-inkjet-printer-escpr2"
         "centpkg"
         "centpkg-sig"
+        "subscription-manager"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
@@ -470,6 +472,7 @@ fn_system_setup_fedora_el() {
             "iotop-c"
             "nodejs-npm"
             "python3-devel"
+            "fedpkg"
         )
     fi
     sudo usermod "${USER}" -a -G mock
