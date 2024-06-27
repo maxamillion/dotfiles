@@ -224,7 +224,6 @@ fn_flathub_install() {
         "hu.irl.cameractrls"
         "com.slack.Slack"
         "im.riot.Riot"
-        "com.irccloud.desktop"
         "org.onlyoffice.desktopeditors"
         "io.podman_desktop.PodmanDesktop"
     )
