@@ -24,7 +24,6 @@ _PIPX_PACKAGE_LIST=(
     "nodeenv"
     "ipython"
     "archey4"
-    "shelloracle"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then

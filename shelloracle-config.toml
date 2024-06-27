@@ -3,5 +3,5 @@ provider = "Ollama"
 
 [provider.Ollama]
 host = "localhost"
-model = "dolphin-mistral"
+model = "granite-code"
 port = 11434
