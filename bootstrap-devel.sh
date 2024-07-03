@@ -49,7 +49,7 @@ git_repos=(
     "${dev_dir}/ansible git@github.com:maxamillion/ansible.git https://github.com/ansible/ansible.git"
     "${dev_dir}/ara git@github.com:maxamillion/ara.git https://github.com/ansible-community/ara.git"
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
-    "${dev_dir}/handbook git@github.com:maxamillion/handbook.git https://github.com/ansible/handbook.git"
+    "${dev_dir}/handbook git@github.com:maxamillion/handbook.git git@github.com:ansible/handbook.git"
     "${dev_dir}/ansible-runner git@github.com:maxamillion/ansible-runner.git https://github.com/ansible/ansible-runner.git"
     "${dev_dir}/ansible-rulebook git@github.com:maxamillion/ansible-rulebook.git https://github.com/ansible/ansible-rulebook.git"
     "${dev_dir}/ansible-sdk git@github.com:maxamillion/ansible-sdk.git https://github.com/ansible/ansible-sdk.git"
