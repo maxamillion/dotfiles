@@ -24,6 +24,7 @@ _PIPX_PACKAGE_LIST=(
     "nodeenv"
     "ipython"
     "archey4"
+    "bandit"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
