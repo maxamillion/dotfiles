@@ -20,6 +20,9 @@ fn_local_install_minikube
 fn_local_install_kind
 fn_local_install_kubectl
 
+# rosa
+fn_local_install_rosa
+
 # terraform
 fn_local_install_terraform
 

@@ -75,10 +75,6 @@ if [ -f ~/.local/bin/openshift-install ]; then
     # shellcheck source=/dev/null
     source <(~/.local/bin/openshift-install completion bash)
 fi
-if [ -f ~/.local/bin/rosa ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/rosa completion bash)
-fi
 
 # rustup
 if [ -f ~/.cargo/env ]; then

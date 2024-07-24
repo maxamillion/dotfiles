@@ -628,6 +628,32 @@ fn_local_install_kubectl() {
     fi
 }
 
+fn_local_install_rosa() {
+    local install_path="${HOME}/.local/bin/rosa"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/rosa"
+    local latest_release
+    local currently_installed_version
+
+    latest_release=$(curl -s 'https://api.github.com/repos/openshift/rosa/tags' | jq -r '.[] | select(.name | contains("-rc") | not).name' | head -1)
+    latest_numerical_version="${latest_release#v*}"
+    if [[ ${1} == "update" ]]; then
+        currently_installed_version=$(rosa version 2>/dev/null | grep "${latest_numerical_version}" | td -d 'INFO: ')
+        local uninstall_paths=("${install_path}")
+        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+    fi
+
+    # rosa install
+    if [[ ! -f ${install_path} ]]; then
+        pushd /tmp/ || return
+            printf "Installing rosa...\n"
+            wget -c "https://github.com/openshift/rosa/releases/download/${latest_release}/rosa_Linux_${_MACHINE_ARCH}.tar.gz"
+            tar zxvf "rosa_Linux_${_MACHINE_ARCH}.tar.gz"
+            cp rosa "${install_path}"
+            ${install_path} completion bash > "${completions_install_path}"
+        popd || return
+    fi
+}
+
 fn_local_install_terraform() {
     local install_path="${HOME}/.local/bin/terraform"
     local latest_release
