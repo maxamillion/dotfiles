@@ -575,7 +575,8 @@ fn_local_install_minikube() {
         printf "Installing minikube...\n"
         curl -LO "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${_GOLANG_ARCH}"
         chmod +x "./minikube-linux-${_GOLANG_ARCH}"
-        mv "./minikube-linux-${_GOLANG_ARCH}" "${install_path}"
+        cp "./minikube-linux-${_GOLANG_ARCH}" "${install_path}"
+        rm "./minikube-linux-${_GOLANG_ARCH}"
         ${install_path} completion bash > "${completions_install_path}"
     fi
 }
@@ -600,7 +601,8 @@ fn_local_install_kind() {
         printf "Installing kind...\n"
         curl -Lo ./kind "https://kind.sigs.k8s.io/dl/${latest_release}/kind-linux-${_GOLANG_ARCH}"
         chmod +x ./kind
-        mv ./kind "${install_path}"
+        cp ./kind "${install_path}"
+        rm ./kind 
         ${install_path} completion bash > "${completions_install_path}"
     fi
 }
@@ -623,7 +625,8 @@ fn_local_install_kubectl() {
         printf "Installing kubectl...\n"
         curl -LO "https://dl.k8s.io/release/${latest_release}/bin/linux/${_GOLANG_ARCH}/kubectl"
         chmod +x ./kubectl
-        mv ./kubectl "${install_path}"
+        cp ./kubectl "${install_path}"
+        rm ./kubectl
         ${install_path} completion bash > "${completions_install_path}"
     fi
 }
