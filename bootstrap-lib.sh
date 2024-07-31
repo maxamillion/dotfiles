@@ -651,8 +651,16 @@ fn_local_install_rosa() {
     if [[ ! -f ${install_path} ]]; then
         pushd /tmp/ || return
             printf "Installing rosa...\n"
-            wget -c "https://github.com/openshift/rosa/releases/download/${latest_release}/rosa_Linux_${_MACHINE_ARCH}.tar.gz"
-            tar zxvf "rosa_Linux_${_MACHINE_ARCH}.tar.gz"
+            if [[ "${_MACHINE_ARCH}" == "x86_64" ]]; then
+                wget -c "https://github.com/openshift/rosa/releases/download/${latest_release}/rosa_Linux_${_MACHINE_ARCH}.tar.gz"
+                tar zxvf "rosa_Linux_${_MACHINE_ARCH}.tar.gz"
+            elif [[ "${_MACHINE_ARCH}" == "aarch64" ]]; then
+                wget -c "https://github.com/openshift/rosa/releases/download/${latest_release}/rosa_Linux_${_GOLANG_ARCH}.tar.gz"
+                tar zxvf "rosa_Linux_${_GOLANG_ARCH}.tar.gz"
+            else
+                printf "ERROR: Unsupported ROSA architecture: ${_MACHINE_ARCH}\n"
+                return
+            fi
             cp rosa "${install_path}"
             ${install_path} completion bash > "${completions_install_path}"
         popd || return
