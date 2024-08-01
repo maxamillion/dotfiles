@@ -26,5 +26,5 @@ windows:
     - cd ~/
 - window_name: r
   shell_command_before:
-    - cd ~/                    # run as a first command in all panes
+    - cd ~/dotfiles/
   window_index: 9
