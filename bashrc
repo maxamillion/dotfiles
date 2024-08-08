@@ -64,16 +64,19 @@ fi
 
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/.local/bin/oc ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/oc completion bash)
+    if ! [ -f "${HOME}/.local/share/bash-completion/completions/oc" ]; then
+        "${HOME}/.local/bin/oc" completion bash > "${HOME}/.local/share/bash-completion/completions/oc"
+    fi
 fi
 if [ -f ~/.local/bin/crc ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/crc completion bash)
+    if ! [ -f "${HOME}/.local/share/bash-completion/completions/crc" ]; then
+        "${HOME}/.local/bin/crc" completion bash > "${HOME}/.local/share/bash-completion/completions/crc"
+    fi
 fi
 if [ -f ~/.local/bin/openshift-install ]; then
-    # shellcheck source=/dev/null
-    source <(~/.local/bin/openshift-install completion bash)
+    if ! [ -f "${HOME}/.local/share/bash-completion/completions/openshift-install" ]; then
+        "${HOME}/.local/bin/openshift-install" completion bash > "${HOME}/.local/share/bash-completion/completions/openshift-install"
+    fi
 fi
 
 # rustup
