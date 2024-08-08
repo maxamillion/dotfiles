@@ -876,7 +876,7 @@ fn_local_install_mods() {
     latest_release="$(curl -s 'https://api.github.com/repos/charmbracelet/mods/tags' | jq '.[0].name' | tr -d '"')"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(ollama --version | grep "client version" | awk '{ print $5 }')
+        currently_installed_version=$(mods --version | grep "client version" | awk '{ print $5 }')
         local uninstall_paths=("${install_path}" "${completions_install_path}")
         fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
     fi
@@ -901,6 +901,34 @@ fn_local_install_mods() {
             popd || return
             rm -fr "${mods_tarname%.tar.gz}"
             rm "${mods_tarname}"
+        popd || return
+    fi
+}
+
+fn_local_install_k9s() {
+    local install_path="${HOME}/.local/bin/k9s"
+    local latest_release
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/k9s"
+    latest_release="$(curl -s 'https://api.github.com/repos/derailed/k9s/tags' | jq '.[0].name' | tr -d '"')"
+    latest_release_numerical_version="${latest_release#v*}"
+    if [[ ${1} == "update" ]]; then
+        currently_installed_version=$(k9s version | grep "Version" | awk '{ print $2 }')
+        local uninstall_paths=("${install_path}" "${completions_install_path}")
+        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing k9s...\n"
+
+
+        pushd /tmp/ || return
+            k9s_tarname="k9s_Linux_${_GOLANG_ARCH}.tar.gz"
+            wget -c "https://github.com/derailed/k9s/releases/download/${latest_release}/k9s_Linux_${_GOLANG_ARCH}.tar.gz"
+            tar zxvf "${k9s_tarname}"
+            cp "k9s" "${install_path}"
+            chmod +x "${install_path}"
+            "${install_path}" completion bash > "${completions_install_path}"
+            rm "${k9s_tarname}"
         popd || return
     fi
 }

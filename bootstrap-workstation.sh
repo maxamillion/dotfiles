@@ -19,6 +19,7 @@ fi
 fn_local_install_minikube
 fn_local_install_kind
 fn_local_install_kubectl
+fn_local_install_k9s
 
 # rosa
 fn_local_install_rosa
