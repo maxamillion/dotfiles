@@ -54,4 +54,7 @@ fn_local_install_yq
 # ollama
 fn_local_install_ollama
 
+# print errors if there are any
+fn_print_errors
+
 printf "Done!\n"

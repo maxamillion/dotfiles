@@ -3,6 +3,8 @@
 # Basic library functions for my dotfiles
 #
 
+_ERRORS=()
+
 _MACHINE_ARCH=$(uname -m)
 
 # pipx install pypkglist 
@@ -33,7 +35,20 @@ fi
 if [[ ${_MACHINE_ARCH} == "aarch64" ]]; then
     _GOLANG_ARCH="arm64"
 fi
-#
+
+fn_log_error() {
+    _ERRORS+=("${@}")
+}
+
+fn_print_errors() {
+    if [[ -n "${_ERRORS[*]}" ]]; then
+        printf "\n\nERRORS:\n"
+        for error in "${_ERRORS[@]}"; do
+            printf "%s\n" "${error}"
+        done
+    fi
+}
+
 # Ensure the needed dirs exist
 fn_mkdir_if_needed() {
     if [[ ! -d "${1}" ]]; then
@@ -44,7 +59,8 @@ fn_mkdir_if_needed() {
 fn_system_install_chrome() {
     # Chrome is stilly and special because $reasons 
     if ! rpm -q google-chrome-stable &>/dev/null; then
-        sudo dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+        sudo dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm \
+            || fn_log_error "${FUNCNAME[0]}: failed to dnf install google-chrome-stable"
     fi
 
     ###########################################################################
@@ -75,9 +91,10 @@ fn_system_install_chrome() {
 
 fn_setup_rhel_csb() {
     source /etc/os-release
+    local repofile="/etc/yum.repos.d/billings-csb.repo"
     # Use Billings' COPR
     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
-        sudo tee /etc/yum.repos.d/billings-csb.repo &>/dev/null << "EOF"
+        sudo tee ${repofile} &>/dev/null << "EOF"
 [copr:copr.devel.redhat.com:jbilling:unoffical-rhel9]
 name=Copr repo for unoffical-rhel9 owned by jbilling
 baseurl=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/rhel-9-$basearch/
@@ -89,6 +106,9 @@ repo_gpgcheck=0
 enabled=1
 enabled_metadata=1
 EOF
+    fi
+    if ! [[ -f ${repofile} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to setup copr"
     fi
 #     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
 #       sudo tee /etc/yum.repos.d/redhat-csb.repo &>/dev/null << EOF
@@ -109,12 +129,12 @@ fn_symlink_if_needed() {
     if [[ -f ${2} ]] && [[ ! -L ${2} ]]; then
         printf "File found: %s ... backing up\n" "$2"
         # if the destination file exists and isn't a symlink, back it up
-        mv "${2}" "${2}.old$(date +%Y%m%d)"
+        mv "${2}" "${2}.old$(date +%Y%m%d)" || fn_log_error "${FUNCNAME[0]}: failed to back up ${2}"
     fi
     if [[ ! -f ${2} ]] && [[ ! -L ${2} ]]; then
         printf "Symlinking: %s -> %s\n" "$1" "$2"
         if [[ ! -d "$(dirname "${2}")" ]]; then
-            mkdir -p "$(dirname "${2}")"
+            mkdir -p "$(dirname "${2}")" || fn_log_error "${FUNCNAME[0]}: failed to mkdir $(dirname "${2}")"
         fi
         ln -s "${1}" "${2}"
     fi
@@ -136,7 +156,7 @@ fn_rm_on_update_if_needed() {
 
     if [[ -f ${1} ]]; then
         if [[ ${2} != "${3}" ]]; then
-            rm -f "${uninstall_paths[@]}"
+            rm -f "${uninstall_paths[@]}" || fn_log_error "${FUNCNAME[0]}: failed to rm ${1}"
         fi
     fi
 }
@@ -156,17 +176,30 @@ polkit.addRule(function(action, subject) {
 });
 EOF
 fi
+    if ! [[ -f ${polkit_file_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to set polkit libvirt non-root user"
+    fi
 }
 
 fn_system_install_tailscale() {
     source /etc/os-release
     if [[ "${ID}" == "debian" ]]; then 
         # tailscale
+        local tailscale_keyring="/usr/share/keyrings/tailscale-archive-keyring.gpg"
+        local tailscale_aptlist="/etc/apt/sources.list.d/tailscale.list"
         if ! dpkg -l tailscale > /dev/null 2>&1; then
-            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg" | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
-            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.tailscale-keyring.list" | sudo tee /etc/apt/sources.list.d/tailscale.list
+            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg" | sudo tee ${tailscale_keyring} >/dev/null
+            if ! [[ -f ${tailscale_keyring} ]]; then
+                fn_log_error "${FUNCNAME[0]}: failed to download ${tailscale_keyring}"
+            fi
+
+            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.tailscale-keyring.list" | sudo tee ${tailscale_aptlist}
+            if ! [[ -f ${tailscale_aptlist} ]]; then
+                fn_log_error "${FUNCNAME[0]}: failed to download ${tailscale_aptlist}"
+            fi
+
             sudo apt update
-            sudo apt install -y tailscale
+            sudo apt install -y tailscale || fn_log_error "${FUNCNAME[0]}: failed to install tailscale"
         fi
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
@@ -174,15 +207,15 @@ fn_system_install_tailscale() {
             local el_major_version
             el_major_version=$(rpm -E %rhel)
             sudo dnf config-manager --add-repo "https://pkgs.tailscale.com/stable/rhel/${el_major_version}/tailscale.repo"
-            sudo dnf install -y tailscale
-            sudo systemctl enable --now tailscaled
+            sudo dnf install -y tailscale || fn_log_error "${FUNCNAME[0]}: failed to install tailscale"
+            sudo systemctl enable --now tailscaled || fn_log_error "${FUNCNAME[0]}: failed to enable tailscale.service"
         fi
     fi
     if [[ "${ID}" == "fedora" ]]; then
         if ! rpm -q tailscale &>/dev/null; then
             sudo dnf config-manager --add-repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
-            sudo dnf install -y tailscale
-            sudo systemctl enable --now tailscaled
+            sudo dnf install -y tailscale || fn_log_error "${FUNCNAME[0]}: failed to install tailscale"
+            sudo systemctl enable --now tailscaled || fn_log_error "${FUNCNAME[0]}: failed to enable tailscale.service"
         fi
     fi
 
@@ -209,11 +242,11 @@ fn_system_install_packages() {
     if [[ -n "${pending_install_pkgs[*]}" ]]; then
         printf "Installing packages... %s\n" "${pending_install_pkgs[@]}"
         if [[ "${ID}" == "debian" ]]; then 
-            sudo apt install "${pending_install_pkgs[@]}"
+            sudo apt install "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
         fi
         if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
             # intentionally want word splitting so don't quote
-            sudo dnf install -y --allowerasing "${pending_install_pkgs[@]}"
+            sudo dnf install -y --allowerasing "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
         fi
     fi
 }
@@ -228,11 +261,13 @@ fn_flathub_install() {
         "io.podman_desktop.PodmanDesktop"
     )
     if ! flatpak remotes --user | grep flathub &>/dev/null; then
-        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
+            || fn_log_error "${FUNCNAME[0]}: failed to add flathub remote"
     fi
     for flatpak_pkg in "${flatpak_pkgs[@]}"; do
         if ! flatpak list | grep "${flatpak_pkg}" &>/dev/null; then
-            flatpak install --user -y flathub "${flatpak_pkg}"
+            flatpak install --user -y flathub "${flatpak_pkg}" \
+                || fn_log_error "${FUNCNAME[0]}: failed to install flatpak ${flatpak_pkg}"
         fi
     done
 }
@@ -252,16 +287,21 @@ fn_system_gnome_settings() {
             new_xkb_options=${current_xkb_options//\[/\[\'caps:escape\', }
         fi
         if ! [[ "${current_xkb_options}" =~ "caps:escape" ]]; then
-            dconf write /org/gnome/desktop/input-sources/xkb-options "${new_xkb_options}"
+            dconf write /org/gnome/desktop/input-sources/xkb-options "${new_xkb_options}" \
+                || fn_log_error "${FUNCNAME[0]}: failed to set xkb-options"
         fi
     fi
 
     if gsettings help &>/dev/null; then
         # set alt-tab behavior for sanity
-        gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
-        gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]"
-        gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
-        gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+        gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]" \
+            || fn_log_error "${FUNCNAME[0]}: failed to set gsettings switch-applications"
+        gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]" \
+            || fn_log_error "${FUNCNAME[0]}: failed to set gsettings switch-applications-backward"
+        gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']" \
+            || fn_log_error "${FUNCNAME[0]}: failed to set gsettings switch-windows"
+        gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']" \
+            || fn_log_error "${FUNCNAME[0]}: failed to set gsettings switch-windows-backward"
     fi
 
 }
@@ -269,16 +309,25 @@ fn_system_gnome_settings() {
 fn_system_setup_crostini() {
     fn_system_install_tailscale
 
+    local nodejs_keyring="/etc/apt/keyrings/nodesource.gpg"
+    local nodejs_aptfile="/etc/apt/sources.list.d/nodesource.list"
+
     # nodejs LTS
     NODE_MAJOR=20
     if ! dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1; then
         sudo apt-get update
-        sudo apt-get install -y ca-certificates curl gnupg
+        sudo apt-get install -y ca-certificates curl gnupg || fn_log_error "${FUNCNAME[0]}: failed to install ca-certificates curl gnupg"
         sudo mkdir -p /etc/apt/keyrings
-        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o "${nodejs_keyring}"
+        if ! [[ -f "${nodejs_keyring}" ]]; then
+            fn_log_error "${FUNCNAME[0]}: failed to download ${nodejs_keyring}"
+        fi
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee "${nodejs_aptfile}"
+        if ! [[ -f ${nodejs_aptfile} ]]; then
+            fn_log_error "${FUNCNAME[0]}: failed to download ${nodejs_aptfile}"
+        fi
         sudo apt update
-        sudo apt install -y nodejs
+        sudo apt install -y nodejs || fn_log_error "${FUNCNAME[0]}: failed to install nodejs"
     fi
 
     # random dev stuff
@@ -336,9 +385,12 @@ fn_system_setup_crostini() {
     fi
     if [[ ! -d /usr/local/go ]]; then
         printf "Installing golang...\n"
-        sudo curl -o "/usr/local/go-${golang_version}.tar.gz" "https://dl.google.com/go/go${golang_version}.linux-$(dpkg --print-architecture).tar.gz"
-        sudo tar -zxvf /usr/local/go-${golang_version}.tar.gz --directory=/usr/local/
-        sudo rm /usr/local/go-${golang_version}.tar.gz
+        sudo curl -o "/usr/local/go-${golang_version}.tar.gz" "https://dl.google.com/go/go${golang_version}.linux-$(dpkg --print-architecture).tar.gz" \
+            || fn_log_error "${FUNCNAME[0]}: failed to download /usr/local/go-${golang_version}.tar.gz"
+        sudo tar -zxvf /usr/local/go-${golang_version}.tar.gz --directory=/usr/local/ \
+            || fn_log_error "${FUNCNAME[0]}: failed to extract /usr/local/go-${golang_version}.tar.gz"
+        sudo rm /usr/local/go-${golang_version}.tar.gz \
+            || fn_log_error "${FUNCNAME[0]}: failed to remove /usr/local/go-${golang_version}.tar.gz"
     fi
 
     # podman subuid/subgid
@@ -367,6 +419,9 @@ fn_system_setup_crostini() {
                 's|Exec=/usr/lib/firefox-esr/firefox-esr %u|Exec=env MOZ_ENABLE_WAYLAND=1 /usr/lib/firefox-esr/firefox-esr %u|' \
                 "${firefox_esr_desktop_local_path}"
         fi
+        if [[ ! -f ${firefox_esr_desktop_local_path} ]]; then
+            fn_log_error "${FUNCNAME[0]}: failed to set local firefox-esr desktop file"
+        fi
     elif [[ -f ${firefox_esr_desktop_local_path} ]]; then
         printf "Removing local firefox-esr desktop file...\n"
         rm "${firefox_esr_desktop_local_path}"
@@ -382,6 +437,9 @@ fn_system_setup_crostini() {
                 's|Exec=/usr/share/code/code|Exec=/usr/share/code/code --enable-features=UseOzonePlatform --ozone-platform=wayland|g' \
                 "${vscode_local_file_path}"
         fi
+        if [[ ! -f ${vscode_local_file_path} ]]; then
+            fn_log_error "${FUNCNAME[0]}: failed to set local vscode desktop file"
+        fi
     elif [[ -f "${vscode_local_file_path}" ]]; then
         printf "Removing local vscode desktop file...\n"
         rm "${vscode_local_file_path}"
@@ -392,11 +450,13 @@ fn_system_install_epel(){
     # Install EPEL
     if ! rpm -q epel-release &>/dev/null; then
         if [[ -f /etc/centos-release ]]; then
-            sudo dnf config-manager --enable crb
-            sudo dnf -y install epel-release
+            sudo dnf config-manager --enable crb || fn_log_error "${FUNCNAME[0]}: failed to enable crb"
+            sudo dnf -y install epel-release || fn_log_error "${FUNCNAME[0]}: failed to install epel-release"
         else
-            sudo subscription-manager repos --enable "codeready-builder-for-rhel-${el_major_version}-$(arch)-rpms"
-            sudo dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${el_major_version}.noarch.rpm"
+            sudo subscription-manager repos --enable "codeready-builder-for-rhel-${el_major_version}-$(arch)-rpms" \
+                || fn_log_error "${FUNCNAME[0]}: failed to enable codeready-builder-for-rhel-${el_major_version}-$(arch)-rpms"
+            sudo dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${el_major_version}.noarch.rpm" \
+                || fn_log_error "${FUNCNAME[0]}: failed to install epel-release"
         fi
     fi
 
@@ -492,16 +552,17 @@ fn_system_setup_fedora_el() {
 fn_local_install_virtualenvwrapper(){
     # virtualenvwrapper
     if ! pip list | grep virtualenvwrapper &>/dev/null; then
-        pip install --user virtualenvwrapper
+        pip install --user virtualenvwrapper || fn_log_error "${FUNCNAME[0]}: failed to install virtualenvwrapper"
     fi
 }
 
 fn_local_user_ssh_agent() {
     # ssh-agent systemd user unit
+    local ssh_agent_unit="${HOME}/.config/systemd/user/ssh-agent.service"
     fn_mkdir_if_needed ~/.config/systemd/user
 
-    if [[ ! -f ~/.config/systemd/user/ssh-agent.service ]]; then
-        cat > ~/.config/systemd/user/ssh-agent.service << "EOF"
+    if [[ ! -f ${ssh_agent_unit} ]]; then
+        cat > ${ssh_agent_unit} << "EOF"
 [Unit]
 Description=SSH key agent
 
@@ -513,9 +574,12 @@ ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
 [Install]
 WantedBy=default.target
 EOF
+        if [[ ! -f ${ssh_agent_unit} ]]; then 
+            fn_log_error "${FUNCNAME[0]}: failed to create ${ssh_agent_unit}"
+        fi
         systemctl --user daemon-reload
-        systemctl --user enable ssh-agent.service
-        systemctl --user start ssh-agent.service
+        systemctl --user enable ssh-agent.service || fn_log_error "${FUNCNAME[0]}: failed to enable ssh-agent.service"
+        systemctl --user start ssh-agent.service || fn_log_error "${FUNCNAME[0]}: failed to start ssh-agent.service"
     fi
 }
 
@@ -533,6 +597,9 @@ fn_local_install_distrobox() {
 
     if [[ ! -f ${install_path} ]]; then
         curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+        if [[ ! -f ${install_path} ]]; then
+            fn_log_error "${FUNCNAME[0]}: failed to install distrobox"
+        fi
     fi
 }
 
@@ -555,6 +622,9 @@ fn_local_install_opa() {
         if [[ ${_MACHINE_ARCH} == "aarch64" ]]; then
             curl -L -o "${install_path}" "https://openpolicyagent.org/downloads/${latest_release}/opa_linux_arm64_static"
         fi  
+        if [[ ! -f ${install_path} ]]; then
+            fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+        fi
         chmod +x "${install_path}"
     fi
 }
@@ -580,6 +650,10 @@ fn_local_install_minikube() {
         cp "./minikube-linux-${_GOLANG_ARCH}" "${install_path}"
         rm "./minikube-linux-${_GOLANG_ARCH}"
         ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
@@ -607,6 +681,10 @@ fn_local_install_kind() {
         rm ./kind 
         ${install_path} completion bash > "${completions_install_path}"
     fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
 }
 
 fn_local_install_kubectl() {
@@ -630,6 +708,10 @@ fn_local_install_kubectl() {
         cp ./kubectl "${install_path}"
         rm ./kubectl
         ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
@@ -665,6 +747,10 @@ fn_local_install_rosa() {
             ${install_path} completion bash > "${completions_install_path}"
         popd || return
     fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
 }
 
 fn_local_install_terraform() {
@@ -697,6 +783,10 @@ fn_local_install_terraform() {
         popd || return
         chmod +x "${install_path}"
     fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
 }
 
 fn_local_install_rustup() {
@@ -713,6 +803,10 @@ fn_local_install_rustup() {
 
     if [[ ! -f ${install_path} ]]; then
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
@@ -736,6 +830,10 @@ fn_local_install_gh() {
         tar -zxvf /tmp/gh.tar.gz -C /tmp/
         cp "/tmp/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}/bin/gh" "${install_path}"
         ${install_path} completion -s bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
@@ -766,6 +864,10 @@ fn_local_install_neovim() {
             rm -fr "neovim-${latest_release}/"
         popd || return
     fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
 }
 
 fn_local_install_task() {
@@ -795,6 +897,10 @@ fn_local_install_task() {
             rm -fr completion
         popd || return
     fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
 }
 
 fn_local_install_yq() {
@@ -820,6 +926,10 @@ fn_local_install_yq() {
                 | tar xz && cp "yq_linux_${_GOLANG_ARCH}" "${install_path}"
             ${install_path} completion bash > "${completions_install_path}"
         popd || return
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
@@ -863,9 +973,13 @@ RestartSec=3
 WantedBy=default.target
 EOF
             systemctl --user daemon-reload
-            systemctl --user enable ollama.service
-            systemctl --user start ollama.service
+            systemctl --user enable ollama.service || fn_log_error "${FUNCNAME[0]}: failed to enable ollama.service"
+            systemctl --user start ollama.service || fn_log_error "${FUNCNAME[0]}: failed to start ollama.service"
        fi
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
@@ -903,6 +1017,9 @@ fn_local_install_mods() {
             rm "${mods_tarname}"
         popd || return
     fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
 }
 
 fn_local_install_k9s() {
@@ -931,6 +1048,9 @@ fn_local_install_k9s() {
             rm "${k9s_tarname}"
         popd || return
     fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
 }
 
 fn_local_pipx_packages_install() {
@@ -939,7 +1059,7 @@ fn_local_pipx_packages_install() {
         do
             if [[ ! -d ${HOME}/.local/pipx/venvs/${pypkg} ]] \
                 && [[ ! -d ${HOME}/.local/share/pipx/venvs/${pypkg} ]]; then
-                pipx install "${pypkg}"
+                pipx install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to pipx install ${pypkg}"
             fi
         done
     fi
