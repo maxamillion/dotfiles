@@ -176,7 +176,7 @@ polkit.addRule(function(action, subject) {
 });
 EOF
 fi
-    if ! [[ -f ${polkit_file_path} ]]; then
+    if ! sudo test -f ${polkit_file_path}; then
         fn_log_error "${FUNCNAME[0]}: failed to set polkit libvirt non-root user"
     fi
 }
