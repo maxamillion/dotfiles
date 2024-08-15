@@ -121,6 +121,28 @@ fi
 #    export TERM=screen-256color
 #fi
 
+# deal with tmux ssh agent forwarding on remote systems
+if [[ -n "${SSH_CONNECTION}" || -n "${SSH_CLIENT}" || -n "${SSH_TTY}" ]]; then
+    if [[ -n "$TMUX" ]]; then
+        # From the following blog post to fix ssh agent forwarding with tmux
+        # sessions, but do it all in bashrc for simplicity and not fuck with
+        # xauth in ~/.ssh/rc
+        #
+        # https://werat.dev/blog/happy-ssh-agent-forwarding/
+
+        # Modify the symlink no matter what
+        if [[ -S "${SSH_AUTH_SOCK}" ]]; then
+            ln -sf "${SSH_AUTH_SOCK}" ~/.ssh/ssh_auth_sock
+        fi
+
+        # DO NOT to modify the symlink if current is still alive
+        #if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+        #    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+        #fi
+        export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
+    fi
+fi
+
 # vi mode because I'm not a fucking heathen
 set -o vi
 bind '"\e.":yank-last-arg'
