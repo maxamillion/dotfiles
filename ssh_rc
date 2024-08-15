@@ -1,0 +1,12 @@
+# From the following blog post to fix ssh agent forwarding with tmux sessions
+# https://werat.dev/blog/happy-ssh-agent-forwarding/
+
+# Modify the symlink no matter what
+if [ -S "$SSH_AUTH_SOCK" ]; then
+    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+fi
+
+# DO NOT to modify the symlink if current is still alive
+#if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+#    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+#fi

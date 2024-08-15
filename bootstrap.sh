@@ -37,6 +37,7 @@ fn_symlink_if_needed ~/dotfiles/init.lua           ~/.config/nvim/init.lua
 fn_symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 fn_symlink_if_needed ~/dotfiles/myhosts            ~/.myhosts
 fn_symlink_if_needed ~/dotfiles/shelloracle-config.toml ~/.shelloracle/config.toml
+fn_symlink_if_needed ~/dotfiles/ssh_rc              ~/.ssh/rc
 
 ./bootstrap-workstation.sh
 
