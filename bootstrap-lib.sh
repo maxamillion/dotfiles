@@ -448,6 +448,8 @@ fn_system_setup_crostini() {
 
 fn_system_install_epel(){
     # Install EPEL
+    local el_major_version
+    el_major_version=$(rpm -E %rhel)
     if ! rpm -q epel-release &>/dev/null; then
         if [[ -f /etc/centos-release ]]; then
             sudo dnf config-manager --enable crb || fn_log_error "${FUNCNAME[0]}: failed to enable crb"
