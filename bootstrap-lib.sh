@@ -27,6 +27,7 @@ _PIPX_PACKAGE_LIST=(
     "ipython"
     "archey4"
     "bandit"
+    "dool"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
