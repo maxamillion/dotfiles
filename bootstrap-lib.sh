@@ -502,7 +502,6 @@ fn_system_setup_fedora_el() {
         "cmake"
         "gcc"
         "gcc-c++"
-        "ninja-build"
         "golang"
         "rust"
         "cargo"
@@ -536,6 +535,7 @@ fn_system_setup_fedora_el() {
             "nodejs-npm"
             "python3-devel"
             "fedpkg"
+            "ninja-build"
         )
     fi
     sudo usermod "${USER}" -a -G mock
