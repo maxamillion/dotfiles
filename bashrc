@@ -708,7 +708,7 @@ pathappend /usr/local/go/bin
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("latitude7390" "optiplex3000" "penguin")
+_localhosts=("penguin")
 short_hostname=${HOSTNAME%%.*}
 if [[ "penguin" == "${short_hostname}" ]]; then
     export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
