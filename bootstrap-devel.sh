@@ -113,6 +113,7 @@ git_repos=(
     "${dev_dir}/layering-examples git@github.com:maxamillion/layering-examples.git https://github.com/coreos/layering-examples.git"
     "${dev_dir}/instructlab git@github.com:maxamillion/instructlab.git https://github.com/instructlab/instructlab.git"
     "${dev_dir}/taxonomy git@github.com:maxamillion/taxonomy.git https://github.com/instructlab/taxonomy.git"
+    "${dev_dir}/dool git@github.com:maxamillion/dool.git https://github.com/scottchiefbaker/dool.git"
     # "${dev_dir}/ids_install git@github.com:maxamillion/ids_install.git https://github.com/ansible-security/ids_install.git"
     # "${dev_dir}/ids_config git@github.com:maxamillion/ids_config.git https://github.com/ansible-security/ids_config.git"
     # "${dev_dir}/ids_rule git@github.com:maxamillion/ids_rule.git https://github.com/ansible-security/ids_rule.git"
