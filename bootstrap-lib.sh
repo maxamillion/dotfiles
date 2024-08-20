@@ -1056,6 +1056,20 @@ fn_local_install_k9s() {
     fi
 }
 
+fn_local_install_syft() {
+    local install_path="${HOME}/.local/bin/syft"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/syft"
+    if [[ ${1} == "update" ]]; then
+        rm ${install_path} ${completions_install_path}
+    fi
+    curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ~/.local/bin/
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    else
+        "${install_path}" completion bash > "${completions_install_path}"
+    fi
+}
+
 fn_local_pipx_packages_install() {
     if which pipx > /dev/null 2>&1; then
         for pypkg in "${_PIPX_PACKAGE_LIST[@]}";

@@ -54,6 +54,9 @@ fn_local_install_yq
 # ollama
 fn_local_install_ollama
 
+# syft
+fn_local_install_syft
+
 # print errors if there are any
 fn_print_errors
 
