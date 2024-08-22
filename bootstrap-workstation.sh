@@ -13,6 +13,10 @@ fi
 
 if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
     fn_system_setup_fedora_el
+
+    # virtualenvwrapper
+    fn_local_install_virtualenvwrapper
+
 fi
 
 # k8s stuff
@@ -29,9 +33,6 @@ fn_local_install_terraform
 
 # pipx
 fn_local_pipx_packages_install
-
-# virtualenvwrapper
-fn_local_install_virtualenvwrapper
 
 # rootless distrobox
 fn_local_install_distrobox

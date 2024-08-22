@@ -341,6 +341,7 @@ fn_system_setup_crostini() {
         "python3-venv"
         "python3-q"
         "python3-pylsp"
+        "python3-virtualenvwrapper"
         "python-is-python3"
         "git"
         "tig"
