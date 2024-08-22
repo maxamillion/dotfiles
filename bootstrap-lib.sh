@@ -28,6 +28,7 @@ _PIPX_PACKAGE_LIST=(
     "archey4"
     "bandit"
     "dool"
+    "csvkit"
 )
 
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
