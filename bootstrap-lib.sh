@@ -7,30 +7,6 @@ _ERRORS=()
 
 _MACHINE_ARCH=$(uname -m)
 
-# pipx install pypkglist 
-_PIPX_PACKAGE_LIST=(
-    "ptpython"
-    "tox"
-    "httpie"
-    "flake8"
-    "pep8"
-    "pyflakes"
-    "pylint"
-    "black"
-    "pipenv"
-    "poetry"
-    "tmuxp"
-    "bpytop"
-    "python-lsp-server"
-    "tldr"
-    "nodeenv"
-    "ipython"
-    "archey4"
-    "bandit"
-    "dool"
-    "csvkit"
-)
-
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
     _GOLANG_ARCH="amd64"
 fi
@@ -1073,8 +1049,32 @@ fn_local_install_syft() {
 }
 
 fn_local_pipx_packages_install() {
+    # pipx install pypkglist 
+    local pipx_pkgs=(
+        "ptpython"
+        "tox"
+        "httpie"
+        "flake8"
+        "pep8"
+        "pyflakes"
+        "pylint"
+        "black"
+        "pipenv"
+        "poetry"
+        "tmuxp"
+        "bpytop"
+        "python-lsp-server"
+        "tldr"
+        "nodeenv"
+        "ipython"
+        "archey4"
+        "bandit"
+        "dool"
+        "csvkit"
+    )
+
     if which pipx > /dev/null 2>&1; then
-        for pypkg in "${_PIPX_PACKAGE_LIST[@]}";
+        for pypkg in "${pipx_pkgs[@]}";
         do
             if [[ ! -d ${HOME}/.local/pipx/venvs/${pypkg} ]] \
                 && [[ ! -d ${HOME}/.local/share/pipx/venvs/${pypkg} ]]; then
