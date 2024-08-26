@@ -571,9 +571,11 @@ fn_local_install_distrobox() {
 
     latest_release="$(curl -s 'https://api.github.com/repos/89luca89/distrobox/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(distrobox version | awk -F: '/^distrobox/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}" "${install_path}-*")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(distrobox version | awk -F: '/^distrobox/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}" "${install_path}-*")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -591,9 +593,11 @@ fn_local_install_opa() {
 
     latest_release="$(curl -s 'https://api.github.com/repos/open-policy-agent/opa/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -618,9 +622,11 @@ fn_local_install_minikube() {
 
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes/minikube/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     # minikube install
@@ -646,9 +652,11 @@ fn_local_install_kind() {
     # kind tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[] | select(.name | contains("alpha") | not ).name' | head -1)"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     kind_numerical_version="${latest_release#v*}"
@@ -676,9 +684,11 @@ fn_local_install_kubectl() {
 
     latest_release=$(curl -L -s https://dl.k8s.io/release/stable.txt)
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     # kubectl install
@@ -705,9 +715,11 @@ fn_local_install_rosa() {
     latest_release=$(curl -s 'https://api.github.com/repos/openshift/rosa/tags' | jq -r '.[] | select(.name | contains("-rc") | not).name' | head -1)
     latest_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(rosa version 2>/dev/null | grep "${latest_numerical_version}" | td -d 'INFO: ')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(rosa version 2>/dev/null | grep "${latest_numerical_version}" | td -d 'INFO: ')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     # rosa install
@@ -747,9 +759,11 @@ fn_local_install_terraform() {
     )"
 
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     local terraform_version="${latest_release#v*}"
@@ -777,9 +791,11 @@ fn_local_install_rustup() {
 
     latest_release="$(curl -s 'https://api.github.com/repos/rust-lang/rustup/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -799,9 +815,11 @@ fn_local_install_gh() {
 
     latest_release="$(curl -s 'https://api.github.com/repos/cli/cli/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     local gh_numerical_version="${latest_release#v*}"
@@ -825,9 +843,11 @@ fn_local_install_neovim() {
 
     latest_release="$(curl -s 'https://api.github.com/repos/neovim/neovim/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     local neovim_numerical_version="${latest_release#v*}"
@@ -857,9 +877,11 @@ fn_local_install_task() {
     local latest_release
     latest_release="$(curl -s 'https://api.github.com/repos/go-task/task/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-        local uninstall_paths=("${install_path}" "${completions_install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -894,9 +916,11 @@ fn_local_install_yq() {
             | head -1
     )"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(yq --version | awk '{ print $4 }')
-        local uninstall_paths=("${install_path}" "${completions_install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(yq --version | awk '{ print $4 }')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -924,9 +948,11 @@ fn_local_install_ollama() {
             | head -1
     )"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(ollama --version | grep "client version" | awk '{ print $5 }')
-        local uninstall_paths=("${install_path}" "${completions_install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(ollama --version | grep "client version" | awk '{ print $5 }')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -971,9 +997,11 @@ fn_local_install_mods() {
     latest_release="$(curl -s 'https://api.github.com/repos/charmbracelet/mods/tags' | jq '.[0].name' | tr -d '"')"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(mods --version | grep "client version" | awk '{ print $5 }')
-        local uninstall_paths=("${install_path}" "${completions_install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(mods --version | grep "client version" | awk '{ print $5 }')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -1010,9 +1038,11 @@ fn_local_install_k9s() {
     latest_release="$(curl -s 'https://api.github.com/repos/derailed/k9s/tags' | jq '.[0].name' | tr -d '"')"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
-        currently_installed_version=$(k9s version | grep "Version" | awk '{ print $2 }')
-        local uninstall_paths=("${install_path}" "${completions_install_path}")
-        fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(k9s version | grep "Version" | awk '{ print $2 }')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -1038,7 +1068,9 @@ fn_local_install_syft() {
     local install_path="${HOME}/.local/bin/syft"
     local completions_install_path="${HOME}/.local/share/bash-completion/completions/syft"
     if [[ ${1} == "update" ]]; then
-        rm ${install_path} ${completions_install_path}
+        if [[ -f ${install_path} ]]; then
+            rm ${install_path} ${completions_install_path}
+        fi
     fi
     if [[ ! -f ${install_path} ]]; then
         curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ~/.local/bin/
@@ -1132,5 +1164,7 @@ fn_update_local_installs() {
     fn_local_install_task update
     fn_local_install_yq update
     fn_local_install_ollama update
+    fn_local_install_syft update
+    fn_local_install_cosign update
     pipx upgrade-all
 }
