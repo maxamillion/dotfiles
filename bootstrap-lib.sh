@@ -350,6 +350,8 @@ fn_system_setup_crostini() {
         "shellcheck"
         "ripgrep"
         "git-crypt"
+        "wl-clipboard"
+        "rlwrap"
     )
     fn_system_install_packages "${pkglist[@]}"
 
@@ -498,6 +500,8 @@ fn_system_setup_fedora_el() {
         "centpkg-sig"
         "subscription-manager"
         "git-crypt"
+        "wl-clipboard"
+        "rlwrap"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
