@@ -58,6 +58,9 @@ fn_local_install_ollama
 # syft
 fn_local_install_syft
 
+# cosign
+fn_local_install_cosign
+
 # print errors if there are any
 fn_print_errors
 

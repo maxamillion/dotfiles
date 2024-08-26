@@ -1040,11 +1040,42 @@ fn_local_install_syft() {
     if [[ ${1} == "update" ]]; then
         rm ${install_path} ${completions_install_path}
     fi
-    curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ~/.local/bin/
+    if [[ ! -f ${install_path} ]]; then
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ~/.local/bin/
+    fi
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     else
         "${install_path}" completion bash > "${completions_install_path}"
+    fi
+}
+
+fn_local_install_cosign() {
+    local install_path="${HOME}/.local/bin/cosign"
+    local latest_release
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/cosign"
+    latest_release="$(
+        curl -s 'https://api.github.com/repos/sigstore/cosign/tags' | 
+            jq '.[] | select(.name | contains("rc") | not).name' | head -1 | tr -d '"'
+    )"
+    latest_release_numerical_version="${latest_release#v*}"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version="$(cosign version | awk '/GitVersion/{print$2}')"
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing cosign...\n"
+
+        wget -O "${install_path}" "https://github.com/sigstore/cosign/releases/download/${latest_release}/cosign-linux-${_GOLANG_ARCH}"
+        chmod +x "${install_path}"
+        "${install_path}" completion bash > "${completions_install_path}"
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
