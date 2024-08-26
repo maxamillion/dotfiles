@@ -61,6 +61,9 @@ fn_local_install_syft
 # cosign
 fn_local_install_cosign
 
+# cheat.sh
+fn_local_install_chtsh
+
 # print errors if there are any
 fn_print_errors
 

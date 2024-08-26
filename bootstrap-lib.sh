@@ -1111,6 +1111,22 @@ fn_local_install_cosign() {
     fi
 }
 
+fn_local_install_chtsh() {
+    local install_path="${HOME}/.local/bin/chtsh"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/chtsh"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            rm ${install_path} ${completions_install_path}
+        fi
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        curl https://cht.sh/:cht.sh > "${install_path}"
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_pipx_packages_install() {
     # pipx install pypkglist 
     local pipx_pkgs=(
@@ -1166,5 +1182,6 @@ fn_update_local_installs() {
     fn_local_install_ollama update
     fn_local_install_syft update
     fn_local_install_cosign update
+    fn_local_install_chtsh update
     pipx upgrade-all
 }
