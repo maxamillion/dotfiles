@@ -1120,11 +1120,32 @@ fn_local_install_chtsh() {
     local completions_install_path="${HOME}/.local/share/bash-completion/completions/chtsh"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
-            rm ${install_path} ${completions_install_path}
+            rm "${install_path}" "${completions_install_path}"
         fi
     fi
     if [[ ! -f ${install_path} ]]; then
         curl https://cht.sh/:cht.sh > "${install_path}"
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
+fn_local_install_aws() {
+    local install_path="${HOME}/.local/bin/aws"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            rm "${install_path}"
+        fi
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        pushd /tmp/ || return
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-${_MACHINE_ARCH}.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install --bin-dir "${HOME}/.local/bin/" --install-dir "${HOME}/.local/aws-cli/"
+            rm -fr ./aws
+            rm -fr awscliv2.zip
+        popd || return
     fi
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"

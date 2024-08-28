@@ -64,6 +64,9 @@ fn_local_install_cosign
 # cheat.sh
 fn_local_install_chtsh
 
+# aws cli
+fn_local_install_aws
+
 # print errors if there are any
 fn_print_errors
 
