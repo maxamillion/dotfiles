@@ -352,6 +352,7 @@ fn_system_setup_crostini() {
         "git-crypt"
         "wl-clipboard"
         "rlwrap"
+        "mosh"
     )
     fn_system_install_packages "${pkglist[@]}"
 
@@ -502,6 +503,7 @@ fn_system_setup_fedora_el() {
         "git-crypt"
         "wl-clipboard"
         "rlwrap"
+        "mosh"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
