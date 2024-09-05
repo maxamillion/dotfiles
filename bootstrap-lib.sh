@@ -220,7 +220,7 @@ fn_system_install_packages() {
     if [[ -n "${pending_install_pkgs[*]}" ]]; then
         printf "Installing packages... %s\n" "${pending_install_pkgs[@]}"
         if [[ "${ID}" == "debian" ]]; then 
-            sudo apt install "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
+            sudo apt install -y "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
         fi
         if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
             # intentionally want word splitting so don't quote
