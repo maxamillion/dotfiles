@@ -1177,6 +1177,7 @@ fn_local_pipx_packages_install() {
         "bandit"
         "dool"
         "csvkit"
+        "kfp"
     )
 
     if which pipx > /dev/null 2>&1; then
