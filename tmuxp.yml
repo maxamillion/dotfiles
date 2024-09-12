@@ -1,14 +1,14 @@
 session_name: wm
 windows:
-- window_name: ansible.posix
+- window_name: ilab
   shell_command_before:
-    - cd ~/src/dev/ansible_collections/ansible/posix/
-- window_name: infra.osbuild
+    - cd ~/src/dev/instructlab/
+- window_name: taxonomy
   shell_command_before:
-    - cd ~/src/dev/ansible_collections/infra/osbuild/
+    - cd ~/src/dev/taxonomy/
 - window_name: dev
   shell_command_before:
-    - cd ~/src/dev/ansible
+    - cd ~/src/dev/
 - window_name: hack
   shell_command_before:
     - cd ~/
