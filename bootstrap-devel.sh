@@ -49,6 +49,7 @@ git_repos=(
     "${dev_dir}/rebuilding-the-wheel git@gitlab.com:maxamillion/rebuilding-the-wheel.git https://gitlab.com/fedora/sigs/ai-ml/rebuilding-the-wheel.git"
     "${dev_dir}/requirements-pipeline git@gitlab.com:maxamillion/requirements-pipeline.git git@gitlab.com:redhat/rhel-ai/wheels/requirements-pipeline.git"
     "${dev_dir}/builder git@gitlab.com:maxamillion/builder.git git@gitlab.com:redhat/rhel-ai/wheels/builder.git"
+    "${dev_dir}/fromager git@gitlab.com:maxamillion/fromager.git https://github.com/python-wheel-build/fromager.git"
     "${dev_dir}/ansible git@github.com:maxamillion/ansible.git https://github.com/ansible/ansible.git"
     "${dev_dir}/ara git@github.com:maxamillion/ara.git https://github.com/ansible-community/ara.git"
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
