@@ -62,6 +62,13 @@ if [ -f ~/.local/bin/podman-compose ]; then
     alias docker-compose='podman-compose'
 fi
 
+# Only use docker in crostini
+if [ -f /usr/bin/dpkg ] && dpkg -l cros-logging > /dev/null 2>&1; then
+    export container_runtime='docker'
+else
+    export container_runtime='podman' # default
+fi
+
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/.local/bin/oc ]; then
     if ! [ -f "${HOME}/.local/share/bash-completion/completions/oc" ]; then
@@ -171,6 +178,9 @@ fi
 # "Bash aliases you can't live without"
 # https://opensource.com/article/19/7/bash-aliases
 
+# Fucking docker ....
+alias cruntime="${container_runtime}"
+
 # Fedora aliases
 alias fedpkg="fedpkg --user=maxamillion"
 alias fedpkg-stage="fedpkg-stage --user=maxamillion"
@@ -199,7 +209,7 @@ alias ksf='kswitch -p maxamillion@FEDORAPROJECT.ORG'
 alias ksfs='kswitch -p maxamillion@STG.FEDORAPROJECT.ORG'
 
 # ansible dev/test aliases
-alias alintc='podman run --rm -t --workdir $(pwd) -v $(pwd):$(pwd) quay.io/ansible/creator-ee ansible-lint --exclude changelogs/ --profile=production'
+alias alintc='cruntime run --rm -t --workdir $(pwd) -v $(pwd):$(pwd) quay.io/ansible/creator-ee ansible-lint --exclude changelogs/ --profile=production'
 
 # ssh into cloud instances ignoring warnings and such
 alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
@@ -219,8 +229,8 @@ alias zegrep='zegrep --color=auto'
 alias zfgrep='zfgrep --color=auto'
 alias zgrep='zgrep --color=auto'
 
-# containers .... podman
-alias pr='podman run --rm -ti'
+# containers .... 
+alias pr='cruntime run --rm -ti'
 alias mk='minikube kubectl --'
 
 # toolbox enter
@@ -261,15 +271,15 @@ yaml2json() {
 
 cleancontainers() {
     # Clean exited containers
-    for container in $(podman ps -a | awk '/Exited/{ print $1}')
+    for container in $(cruntime ps -a | awk '/Exited/{ print $1}')
     do
-        podman rm "${container}"
+        cruntime rm "${container}"
     done
 
     # Clean dangling images
-    for i in $(podman images -f 'dangling=true' -q)
+    for i in $(cruntime images -f 'dangling=true' -q)
     do
-        podman rmi "${i}"
+        cruntime rmi "${i}"
     done
 }
 

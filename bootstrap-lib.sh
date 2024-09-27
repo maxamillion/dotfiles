@@ -284,6 +284,35 @@ fn_system_gnome_settings() {
 
 }
 
+fn_system_docker_crostini() {
+    # https://docs.docker.com/engine/install/debian/
+    # fucking docker ...
+    if ! dpkg -l docker-ce | grep "${_GOLANG_ARCH}" > /dev/null 2>&1; then
+        for pkg in docker.io docker-doc docker-compose podman-docker containerd runc
+        do
+            sudo apt remove "${pkg}" || fn_log_error "${FUNCNAME[0]}: failed to remove package ${pkg}"
+        done
+        sudo apt install -y ca-certificates curl gnupg || fn_log_error "${FUNCNAME[0]}: failed to install packages ca-certificates curl gnupg"
+        sudo install -m 0755 -d /etc/apt/keyrings || fn_log_error "${FUNCNAME[0]}: failed to create /etc/apt/keyrings"
+        curl -fsSL https://download.docker.com/linux/debian/gpg | \
+            sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || fn_log_error "${FUNCNAME[0]}: failed to download docker gpg key"
+        sudo chmod a+r /etc/apt/keyrings/docker.gpg || fn_log_error "${FUNCNAME[0]}: failed to set docker gpg key permission"
+        echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+            "$(. /etc/os-release && echo "${VERSION_CODENAME}")" stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt update
+        sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+            || fn_log_error "${FUNCNAME[0]}: failed to install packages: docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
+        if ! grep docker /etc/group >/dev/null; then
+            sudo groupadd docker || fn_log_error "${FUNCNAME[0]}: failed to add group docker"
+        fi
+        if ! id -nG admiller | grep docker >/dev/null; then
+            sudo usermod -aG docker "${USER}" || fn_log_error "${FUNCNAME[0]}: failed to add user ${USER} to group docker"
+        fi
+    fi
+}
+
 fn_system_setup_crostini() {
     fn_system_install_tailscale
 
@@ -307,6 +336,8 @@ fn_system_setup_crostini() {
         sudo apt update
         sudo apt install -y nodejs || fn_log_error "${FUNCNAME[0]}: failed to install nodejs"
     fi
+
+    fn_system_docker_crostini
 
     # random dev stuff
     local pkglist
