@@ -1209,6 +1209,8 @@ fn_local_pipx_packages_install() {
         "dool"
         "csvkit"
         "kfp"
+        "jupyterlab"
+        "nbconvert"
     )
 
     if which pipx > /dev/null 2>&1; then
