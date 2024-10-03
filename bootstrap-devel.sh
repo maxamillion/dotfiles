@@ -51,6 +51,7 @@ git_repos=(
     "${dev_dir}/fromager git@github.com:maxamillion/fromager.git https://github.com/python-wheel-build/fromager.git"
     "${dev_dir}/triton git@github.com:maxamillion/triton.git https://github.com/triton-lang/triton.git"
     "${dev_dir}/modelmesh-serving git@github.com:maxamillion/modelmesh-serving.git https://github.com/opendatahub-io/modelmesh-serving.git"
+    "${dev_dir}/codeflare git@github.com:maxamillion/codeflare.git https://github.com/project-codeflare/codeflare.git"
     "${dev_dir}/llama-stack git@github.com:maxamillion/llama-stack.git https://github.com/meta-llama/llama-stack.git"
     "${dev_dir}/data-science-pipelines-operator git@github.com:maxamillion/data-science-pipelines-operator.git https://github.com/opendatahub-io/data-science-pipelines-operator.git"
     "${dev_dir}/odh-dashboard git@github.com:maxamillion/odh-dashboard.git https://github.com/opendatahub-io/odh-dashboard.git"
