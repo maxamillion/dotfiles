@@ -63,6 +63,7 @@ git_repos=(
     "${dev_dir}/elyra-pipeline-editor git@github.com:maxamillion/elyra-pipeline-editor.git https://github.com/opendatahub-io/elyra-pipeline-editor.git"
     "${dev_dir}/model-registry git@github.com:maxamillion/model-registry.git https://github.com/opendatahub-io/model-registry.git"
     "${dev_dir}/model-registry-operator git@github.com:maxamillion/model-registry-operator.git https://github.com/opendatahub-io/model-registry-operator.git"
+    "${dev_dir}/ods-ci git@github.com:maxamillion/ods-ci.git git@github.com:red-hat-data-services/ods-ci.git"
     "${dev_dir}/distributed-workloads git@github.com:maxamillion/distributed-workloads.git https://github.com/opendatahub-io/distributed-workloads.git"
     "${dev_dir}/notebooks git@github.com:maxamillion/notebooks.git https://github.com/opendatahub-io/notebooks.git"
     "${dev_dir}/kserve git@github.com:maxamillion/kserve.git https://github.com/opendatahub-io/kserve.git"
