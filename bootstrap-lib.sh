@@ -1101,6 +1101,41 @@ fn_local_install_k9s() {
     fi
 }
 
+fn_local_install_kubebuilder() {
+    local install_path="${HOME}/.local/bin/kubebuilder"
+    local latest_release
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kubebuilder"
+    latest_release="$(
+        curl -s 'https://api.github.com/repos/kubernetes-sigs/kubebuilder/tags'  \
+            | jq -r '.[] | select(.name | contains("alpha") | not )| select(.name | contains("beta") | not ) | select(.name | contains("rc") | not).name' \
+            | head -1 | tr -d '"'
+    )"
+    latest_release_numerical_version="${latest_release#v*}"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(kubebuilder version | sed 's/.*KubeBuilderVersion:"\([^"]*\)".*/\1/')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release#v*}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing kubebuilder...\n"
+
+        pushd /tmp/ || return
+            wget -c "https://github.com/kubernetes-sigs/kubebuilder/releases/download/${latest_release}/kubebuilder_linux_${_GOLANG_ARCH}"
+            mv "kubebuilder_linux_${_GOLANG_ARCH}" "kubebuilder"
+            cp "kubebuilder" "${install_path}"
+            chmod +x "${install_path}"
+            "${install_path}" completion bash > "${completions_install_path}"
+            rm "kubebuilder"
+        popd || return
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_install_syft() {
     local install_path="${HOME}/.local/bin/syft"
     local completions_install_path="${HOME}/.local/share/bash-completion/completions/syft"
@@ -1235,6 +1270,7 @@ fn_update_local_installs() {
     fn_local_install_minikube update
     fn_local_install_kind update
     fn_local_install_kubectl update
+    fn_local_install_kubebuilder update
     fn_local_install_terraform update
     fn_local_install_gh update
     fn_local_install_neovim update
