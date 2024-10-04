@@ -661,7 +661,7 @@ fn_local_install_minikube() {
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-            local uninstall_paths=("${install_path}")
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
@@ -691,7 +691,7 @@ fn_local_install_kind() {
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-            local uninstall_paths=("${install_path}")
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
@@ -723,7 +723,7 @@ fn_local_install_kubectl() {
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-            local uninstall_paths=("${install_path}")
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
@@ -754,7 +754,7 @@ fn_local_install_rosa() {
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(rosa version 2>/dev/null | grep "${latest_numerical_version}" | td -d 'INFO: ')
-            local uninstall_paths=("${install_path}")
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
@@ -854,7 +854,7 @@ fn_local_install_gh() {
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
-            local uninstall_paths=("${install_path}")
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
