@@ -344,6 +344,7 @@ fn_system_setup_crostini() {
     pkglist=(
         "vim-nox"
         "apt-file"
+        "debsums"
         "python3"
         "python3-pip"
         "python3-venv"
