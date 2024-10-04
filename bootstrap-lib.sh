@@ -1136,6 +1136,37 @@ fn_local_install_kubebuilder() {
     fi
 }
 
+fn_local_install_operator_sdk() {
+    local install_path="${HOME}/.local/bin/operator-sdk"
+    local latest_release
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/operator-sdk"
+    latest_release="$(curl -s 'https://api.github.com/repos/operator-framework/operator-sdk/tags' | jq '.[0].name' | tr -d '"')"
+    latest_release_numerical_version="${latest_release#v*}"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(operator-sdk version | grep "Version" | awk '{ print $2 }')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing operator-sdk...\n"
+
+
+        pushd /tmp/ || return
+            wget -c "https://github.com/operator-framework/operator-sdk/releases/download/${latest_release}/operator-sdk_linux_${_GOLANG_ARCH}"
+            cp "operator-sdk_linux_${_GOLANG_ARCH}" "${install_path}"
+            chmod +x "${install_path}"
+            "${install_path}" completion bash > "${completions_install_path}"
+            rm "operator-sdk_linux_${_GOLANG_ARCH}" 
+        popd || return
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_install_syft() {
     local install_path="${HOME}/.local/bin/syft"
     local completions_install_path="${HOME}/.local/share/bash-completion/completions/syft"

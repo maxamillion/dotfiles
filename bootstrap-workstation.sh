@@ -25,6 +25,7 @@ fn_local_install_kind
 fn_local_install_kubectl
 fn_local_install_k9s
 fn_local_install_kubebuilder
+fn_local_install_operator_sdk
 
 # rosa
 fn_local_install_rosa
