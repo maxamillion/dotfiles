@@ -280,6 +280,9 @@ fn_system_gnome_settings() {
             || fn_log_error "${FUNCNAME[0]}: failed to set gsettings switch-windows"
         gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']" \
             || fn_log_error "${FUNCNAME[0]}: failed to set gsettings switch-windows-backward"
+        # enable GNOME Fractional Scaling
+        # gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']" \
+        #     || fn_log_error "${FUNCNAME[0]}: failed to set gsettings scale-monitor-framebuffer for fractional scaling"
     fi
 
 }
