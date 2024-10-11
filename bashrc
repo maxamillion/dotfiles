@@ -62,6 +62,14 @@ if [ -f ~/.local/bin/podman-compose ]; then
     alias docker-compose='podman-compose'
 fi
 
+if ! [ -f "/usr/share/bash-completion/completions/pipx.bash" ] && ! [ -f "${HOME}/.local/share/bash-completion/completions/pipx" ]; then
+    if [ -f /usr/bin/pipx ]; then
+        if [ -f /usr/bin/register-python-argcomplete ]; then
+            register-python-argcomplete pipx > "${HOME}/.local/share/bash-completion/completions/pipx"
+        fi
+    fi
+fi
+
 # Only use docker in crostini
 if [ -f /usr/bin/dpkg ] && dpkg -l cros-logging > /dev/null 2>&1; then
     export container_runtime='docker'
