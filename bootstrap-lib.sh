@@ -1281,6 +1281,8 @@ fn_local_pipx_packages_install() {
         "kfp"
         "jupyterlab"
         "nbconvert"
+        "frogmouth"
+        "harlequin"
     )
 
     if which pipx > /dev/null 2>&1; then
