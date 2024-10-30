@@ -22,6 +22,7 @@ fi
 # k8s stuff
 fn_local_install_minikube
 fn_local_install_kind
+fn_local_install_kustomize
 fn_local_install_kubectl
 fn_local_install_k9s
 fn_local_install_kubebuilder

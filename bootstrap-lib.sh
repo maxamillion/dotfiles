@@ -1255,6 +1255,40 @@ fn_local_install_aws() {
     fi
 }
 
+fn_local_install_kustomize() {
+    local install_path="${HOME}/.local/bin/kustomize"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kustomize"
+    local latest_release
+    local currently_installed_version
+    # kustomize tags alpha and stable, if it's alpha, use the latest stable - query with jq
+    latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kustomize/releases' |
+        jq -r '.[] | select(.name | contains("kustomize") ).name' | head -1 | awk -F/ '{ print $2 }')"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(kustomize version)
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+    # kustomize_numerical_version="${latest_release#v*}"
+
+    # kustomize install
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing kustomize...\n"
+        wget -c "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${latest_release}/kustomize_${latest_release}_linux_${_GOLANG_ARCH}.tar.gz"
+        tar -zxvf "kustomize_${latest_release}_linux_${_GOLANG_ARCH}.tar.gz"
+        cp ./kustomize "${install_path}"
+        rm ./kustomize 
+        rm "./kustomize_${latest_release}_linux_${_GOLANG_ARCH}.tar.gz"
+        ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_pipx_packages_install() {
     # pipx install pypkglist 
     local pipx_pkgs=(
