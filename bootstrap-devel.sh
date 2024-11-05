@@ -44,7 +44,7 @@ fn_git_clone_with_upstream() {
 # local_clone_destination_dir my_fork_or_repo [upstream_repo]
 git_repos=(
     "${dev_dir}/pytorch git@github.com:maxamillion/pytorch.git https://github.com/pytorch/pytorch.git"
-    "${dev_dir}/vllm git@github.com:maxamillion/vllm.git https://github.com/vllm-project/vllm.git"
+    "${dev_dir}/vllm git@github.com:maxamillion/vllm.git https://github.com/opendatahub-io/vllm.git"
     "${dev_dir}/archey4 git@github.com:maxamillion/archey4.git https://github.com/HorlogeSkynet/archey4.git"
     "${dev_dir}/rebuilding-the-wheel git@gitlab.com:maxamillion/rebuilding-the-wheel.git https://gitlab.com/fedora/sigs/ai-ml/rebuilding-the-wheel.git"
     "${dev_dir}/requirements-pipeline git@gitlab.com:maxamillion/requirements-pipeline.git git@gitlab.com:redhat/rhel-ai/wheels/requirements-pipeline.git"
