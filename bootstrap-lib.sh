@@ -237,6 +237,7 @@ fn_flathub_install() {
         "im.riot.Riot"
         "org.onlyoffice.desktopeditors"
         "io.podman_desktop.PodmanDesktop"
+        "com.google.Chrome"
     )
     if ! flatpak remotes --user | grep flathub &>/dev/null; then
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
@@ -561,8 +562,6 @@ fn_system_setup_fedora_el() {
     sudo usermod "${USER}" -a -G mock
 
     fn_system_install_packages "${fedora_el_pkglist[@]}"
-
-    fn_system_install_chrome
 
     fn_system_polkit_libvirt_nonroot_user
 
