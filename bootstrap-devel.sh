@@ -55,6 +55,7 @@ git_repos=(
     "${dev_dir}/codeflare git@github.com:maxamillion/codeflare.git https://github.com/project-codeflare/codeflare.git"
     "${dev_dir}/llama-stack git@github.com:maxamillion/llama-stack.git https://github.com/meta-llama/llama-stack.git"
     "${dev_dir}/odh-dashboard git@github.com:maxamillion/odh-dashboard.git https://github.com/opendatahub-io/odh-dashboard.git"
+    "${dev_dir}/architecture-decision-records git@github.com:maxamillion/architecture-decision-records.git https://github.com/opendatahub-io/architecture-decision-records.git"
     "${dev_dir}/odh-model-controller git@github.com:maxamillion/odh-model-controller.git https://github.com/opendatahub-io/odh-model-controller.git"
     "${dev_dir}/rhods-devops-infra git@github.com:maxamillion/rhods-devops-infra.git https://github.com/red-hat-data-services/rhods-devops-infra.git"
     "${dev_dir}/opendatahub-documentation git@github.com:maxamillion/opendatahub-documentation.git https://github.com/opendatahub-io/opendatahub-documentation.git"
