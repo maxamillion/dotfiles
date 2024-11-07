@@ -70,6 +70,9 @@ fn_local_install_chtsh
 # aws cli
 fn_local_install_aws
 
+# go-blueprint
+fn_local_install_go_blueprint
+
 # print errors if there are any
 fn_print_errors
 

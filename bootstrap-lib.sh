@@ -1288,6 +1288,36 @@ fn_local_install_kustomize() {
     fi
 }
 
+fn_local_install_go_blueprint() {
+    local install_path="${HOME}/go/bin/go-blueprint"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/go-blueprint"
+    local latest_release
+    local currently_installed_version
+    latest_release="$(curl -s 'https://api.github.com/repos/Melkeydev/go-blueprint/releases' | jq -r '.[].name' | head -1 )"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(go-blueprint version)
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+    # go-blueprint_numerical_version="${latest_release#v*}"
+
+    # go-blueprint install
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing go-blueprint...\n"
+        go install github.com/melkeydev/go-blueprint@latest
+        ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
+
+
 fn_local_pipx_packages_install() {
     # pipx install pypkglist 
     local pipx_pkgs=(
