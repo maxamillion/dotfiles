@@ -66,7 +66,6 @@ fn_system_install_chrome() {
     # fi
 }
 
-
 fn_setup_rhel_csb() {
     source /etc/os-release
     local repofile="/etc/yum.repos.d/billings-csb.repo"
@@ -1030,45 +1029,77 @@ EOF
     fi
 }
 
-fn_local_install_mods() {
-    local install_path="${HOME}/.local/bin/mods"
+fn_local_install_charm() {
+    if [[ "${1}" == "soft-serve" ]]; then
+        # special case because soft-serve binary is called "soft"
+        local install_path="${HOME}/.local/bin/soft"
+    else
+        local install_path="${HOME}/.local/bin/${1}"
+    fi
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/mods"
-    latest_release="$(curl -s 'https://api.github.com/repos/charmbracelet/mods/tags' | jq '.[0].name' | tr -d '"')"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/${1}"
+    local manpage_install_path="${HOME}/.local/share/man/man1/${1}.1.gz"
+    latest_release="$(curl -s "https://api.github.com/repos/charmbracelet/${1}/tags" | jq '.[0].name' | tr -d '"')"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(mods --version | grep "client version" | awk '{ print $5 }')
+            currently_installed_version=$(${1} --version | grep "client version" | awk '{ print $5 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
-        printf "Installing mods...\n"
+        printf "Installing ${1}...\n"
 
 
         pushd /tmp/ || return
             if [[ ${_GOLANG_ARCH} == "amd64" ]]; then
-                mods_tarname="mods_${latest_release_numerical_version}_Linux_x86_64.tar.gz"
+                charm_tarname="${1}_${latest_release_numerical_version}_Linux_x86_64.tar.gz"
             else
-                mods_tarname="mods_${latest_release_numerical_version}_Linux_${_GOLANG_ARCH}.tar.gz"
+                charm_tarname="${1}_${latest_release_numerical_version}_Linux_${_GOLANG_ARCH}.tar.gz"
             fi
-            wget -c "https://github.com/charmbracelet/mods/releases/download/${latest_release}/${mods_tarname}"
-            tar zxvf "${mods_tarname}"
-            pushd "${mods_tarname%.tar.gz}" || return
-                cp "mods" "${install_path}"
+            wget -c "https://github.com/charmbracelet/${1}/releases/download/${latest_release}/${charm_tarname}"
+            tar zxvf "${charm_tarname}"
+            pushd "${charm_tarname%.tar.gz}" || return
+                if [[ "${1}" == "soft-serve" ]]; then
+                    # special case because soft-serve binary is called "soft"
+                    cp "soft" "${install_path}"
+                else
+                    cp "${1}" "${install_path}"
+                fi
                 chmod +x "${install_path}"
 
-                cp "completions/mods.bash" "${completions_install_path}"
+                cp "completions/${1}.bash" "${completions_install_path}"
+                cp "manpages/${1}.1.gz" "${manpage_install_path}"
             popd || return
-            rm -fr "${mods_tarname%.tar.gz}"
-            rm "${mods_tarname}"
+            rm -fr "${charm_tarname%.tar.gz}"
+            rm "${charm_tarname}"
         popd || return
     fi
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
+    if [[ ! -f ${completions_install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${completions_install_path}"
+    fi
+    if [[ ! -f ${manpage_install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${manpage_install_path}"
+    fi
+}
+
+fn_local_install_charm_apps() {
+    # charm apps
+    local charm_pkglist
+    charm_pkglist=(
+        "glow"
+        "soft-serve"
+        "vhs"
+        "wishlist"
+    )
+    for charm in "${charm_pkglist[@]}"; do
+        fn_local_install_charm "${charm}"
+    done
 }
 
 fn_local_install_k9s() {
