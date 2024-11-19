@@ -392,7 +392,7 @@ fn_system_setup_crostini() {
     fn_system_install_packages "${pkglist[@]}"
 
     # golang
-    golang_version="1.22.0"
+    golang_version="1.23.3"
     if dpkg -l golang > /dev/null 2>&1; then
         sudo apt remove -y golang 
     fi
@@ -1211,6 +1211,24 @@ fn_local_install_syft() {
     fi
     if [[ ! -f ${install_path} ]]; then
         curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ~/.local/bin/
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    else
+        "${install_path}" completion bash > "${completions_install_path}"
+    fi
+}
+
+fn_local_install_grype() {
+    local install_path="${HOME}/.local/bin/grype"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/grype"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            rm ${install_path} ${completions_install_path}
+        fi
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b ~/.local/bin/
     fi
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"

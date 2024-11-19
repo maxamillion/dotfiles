@@ -61,6 +61,9 @@ fn_local_install_ollama
 # syft
 fn_local_install_syft
 
+# grype
+fn_local_install_grype
+
 # cosign
 fn_local_install_cosign
 
