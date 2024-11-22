@@ -1394,7 +1394,7 @@ fn_local_pipx_packages_install() {
         "jupyterlab"
         "nbconvert"
         "frogmouth"
-        "harlequin"
+        #"harlequin" # this fails on Fedora 41 because it depends on too old a vesion of python
     )
 
     if which pipx > /dev/null 2>&1; then
