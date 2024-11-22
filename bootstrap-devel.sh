@@ -72,6 +72,7 @@ git_repos=(
     "${dev_dir}/ods-ci git@github.com:maxamillion/ods-ci.git git@github.com:red-hat-data-services/ods-ci.git"
     "${dev_dir}/distributed-workloads git@github.com:maxamillion/distributed-workloads.git https://github.com/opendatahub-io/distributed-workloads.git"
     "${dev_dir}/notebooks git@github.com:maxamillion/notebooks.git https://github.com/opendatahub-io/notebooks.git"
+    "${dev_dir}/rhoai-disconnected-install-helper git@github.com:maxamillion/rhoai-disconnected-install-helper.git https://github.com/red-hat-data-services/rhoai-disconnected-install-helper.git"
     "${dev_dir}/kserve git@github.com:maxamillion/kserve.git https://github.com/opendatahub-io/kserve.git"
     "${dev_dir}/ei-edge git@github.com:maxamillion/ai-edge.git https://github.com/opendatahub-io/ai-edge.git"
     "${dev_dir}/kuberay git@github.com:maxamillion/kuberay.git https://github.com/opendatahub-io/kuberay.git"
