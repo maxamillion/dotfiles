@@ -63,6 +63,7 @@ git_repos=(
     "${dev_dir}/model-registry-operator git@github.com:maxamillion/model-registry-operator.git https://github.com/opendatahub-io/model-registry-operator.git"
     "${dev_dir}/training-operator git@github.com:maxamillion/training-operator.git https://github.com/opendatahub-io/training-operator.git"
     "${dev_dir}/data-science-pipelines-operator git@github.com:maxamillion/data-science-pipelines-operator.git https://github.com/opendatahub-io/data-science-pipelines-operator.git"
+    "${dev_dir}/data-science-pipelines git@github.com:maxamillion/data-science-pipelines.git https://github.com/opendatahub-io/data-science-pipelines.git"
     "${dev_dir}/codeflare-operator git@github.com:maxamillion/codeflare-operator.git https://github.com/opendatahub-io/codeflare-operator.git"
     "${dev_dir}/kubeflow git@github.com:maxamillion/kubeflow.git https://github.com/opendatahub-io/kubeflow.git"
     "${dev_dir}/elyra git@github.com:maxamillion/elyra.git https://github.com/opendatahub-io/elyra.git"
