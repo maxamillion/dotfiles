@@ -228,7 +228,19 @@ fn_system_install_packages() {
     fi
 }
 
+fn_flatpak_overrides() {
+    # Chrome
+    fn_mkdir_if_needed "${HOME}/.local/share/flatpak/overrides/"
+    cat > "${HOME}/.local/share/flatpak/overrides/com.google.Chrome" << "EOF"
+[Context]
+filesystems=~/.local/share/icons/;~/.local/share/applications/
+EOF
+
+}
+
 fn_flathub_install() {
+    fn_flatpak_overrides
+
     local flatpak_pkgs
     flatpak_pkgs=(
         "hu.irl.cameractrls"
