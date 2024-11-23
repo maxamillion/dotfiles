@@ -230,12 +230,16 @@ fn_system_install_packages() {
 
 fn_flatpak_overrides() {
     # Chrome
-    fn_mkdir_if_needed "${HOME}/.local/share/flatpak/overrides/"
+    local chrome_override_file="${HOME}/.local/share/flatpak/overrides/com.google.Chrome"
+    fn_mkdir_if_needed "$(dirname "${chrome_override_file}")"
     cat > "${HOME}/.local/share/flatpak/overrides/com.google.Chrome" << "EOF"
 [Context]
 filesystems=~/.local/share/icons/;~/.local/share/applications/
 EOF
 
+    if ! [[ -f "${chrome_override_file}" ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to create flatpak override file: ${chrome_override_file}"
+    fi
 }
 
 fn_flathub_install() {
