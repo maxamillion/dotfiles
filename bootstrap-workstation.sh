@@ -9,6 +9,8 @@ if [[ "${ID}" == "debian" ]]; then
     fn_system_setup_crostini
     # rustup
     fn_local_install_rustup
+
+    fn_local_install_neovim
 fi
 
 if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
@@ -16,6 +18,10 @@ if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} =
 
     # virtualenvwrapper
     fn_local_install_virtualenvwrapper
+
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        fn_local_install_neovim
+    fi
 
 fi
 
@@ -46,17 +52,11 @@ fn_local_install_opa
 # GH cli
 fn_local_install_gh
 
-# Neovim
-fn_local_install_neovim
-
 # Task
 fn_local_install_task
 
 # yq
 fn_local_install_yq
-
-# ollama
-fn_local_install_ollama
 
 # syft
 fn_local_install_syft

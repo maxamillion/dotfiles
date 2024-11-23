@@ -568,6 +568,7 @@ fn_system_setup_fedora_el() {
             "python3-devel"
             "fedpkg"
             "ninja-build"
+            "neovim"
         )
     fi
     sudo usermod "${USER}" -a -G mock
@@ -1406,6 +1407,7 @@ fn_local_pipx_packages_install() {
         "jupyterlab"
         "nbconvert"
         "frogmouth"
+        "ramalama"
         #"harlequin" # this fails on Fedora 41 because it depends on too old a vesion of python
     )
 
@@ -1424,6 +1426,11 @@ fn_update_local_installs() {
 
     if [[ "${ID}" == "debian" ]]; then
         fn_local_install_rustup update
+        fn_local_install_neovim update
+        fn_local_install_ollama update
+    fi
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        fn_local_install_neovim update
     fi
 
     fn_local_install_distrobox update
@@ -1434,10 +1441,8 @@ fn_update_local_installs() {
     fn_local_install_kubebuilder update
     fn_local_install_terraform update
     fn_local_install_gh update
-    fn_local_install_neovim update
     fn_local_install_task update
     fn_local_install_yq update
-    fn_local_install_ollama update
     fn_local_install_syft update
     fn_local_install_cosign update
     fn_local_install_chtsh update
