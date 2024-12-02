@@ -232,13 +232,24 @@ fn_flatpak_overrides() {
     # Chrome
     local chrome_override_file="${HOME}/.local/share/flatpak/overrides/com.google.Chrome"
     fn_mkdir_if_needed "$(dirname "${chrome_override_file}")"
-    cat > "${HOME}/.local/share/flatpak/overrides/com.google.Chrome" << "EOF"
+    cat > "${chrome_override_file}" << "EOF"
 [Context]
 filesystems=~/.local/share/icons/;~/.local/share/applications/
 EOF
-
     if ! [[ -f "${chrome_override_file}" ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to create flatpak override file: ${chrome_override_file}"
+    fi
+
+
+    # Slack
+    local slack_override_file="${HOME}/.local/share/flatpak/overrides/com.slack.Slack"
+    fn_mkdir_if_needed "$(dirname "${slack_override_file}")"
+    cat > "${slack_override_file}" << "EOF"
+[Context]
+filesystems=~/Pictures/Screenshots/
+EOF
+    if ! [[ -f "${slack_override_file}" ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to create flatpak override file: ${slack_override_file}"
     fi
 }
 
