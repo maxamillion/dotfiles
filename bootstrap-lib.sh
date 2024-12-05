@@ -1398,6 +1398,7 @@ fn_local_install_go_blueprint() {
 fn_local_pipx_packages_install() {
     # pipx install pypkglist 
     local pipx_pkgs=(
+        'glances[all]'
         "ptpython"
         "tox"
         "httpie"

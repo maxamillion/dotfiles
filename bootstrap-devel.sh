@@ -76,6 +76,7 @@ git_repos=(
     "${dev_dir}/kserve git@github.com:maxamillion/kserve.git https://github.com/opendatahub-io/kserve.git"
     "${dev_dir}/ei-edge git@github.com:maxamillion/ai-edge.git https://github.com/opendatahub-io/ai-edge.git"
     "${dev_dir}/kuberay git@github.com:maxamillion/kuberay.git https://github.com/opendatahub-io/kuberay.git"
+    "${dev_dir}/glances git@github.com:maxamillion/glances.git https://github.com/nicolargo/glances.git"
     "${dev_dir}/ansible git@github.com:maxamillion/ansible.git https://github.com/ansible/ansible.git"
     "${dev_dir}/ara git@github.com:maxamillion/ara.git https://github.com/ansible-community/ara.git"
     "${dev_dir}/ansible-examples git@github.com:maxamillion/ansible-examples.git https://github.com/ansible/ansible-examples.git"
