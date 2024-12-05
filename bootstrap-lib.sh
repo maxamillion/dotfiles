@@ -1409,7 +1409,6 @@ fn_local_pipx_packages_install() {
         "pipenv"
         "poetry"
         "tmuxp"
-        "bpytop"
         "python-lsp-server"
         "tldr"
         "nodeenv"
