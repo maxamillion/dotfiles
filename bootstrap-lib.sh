@@ -584,6 +584,7 @@ fn_system_setup_fedora_el() {
             "fedpkg"
             "ninja-build"
             "neovim"
+            "fedora-review"
         )
     fi
     sudo usermod "${USER}" -a -G mock
