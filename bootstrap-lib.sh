@@ -586,6 +586,11 @@ fn_system_setup_fedora_el() {
             "neovim"
             "fedora-review"
         )
+        if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
+            fedora_el_pkglist+=(
+            "rocminfo"
+            "rocm-runtime"
+        )
     fi
     sudo usermod "${USER}" -a -G mock
 
