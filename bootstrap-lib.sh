@@ -591,6 +591,7 @@ fn_system_setup_fedora_el() {
             "rocminfo"
             "rocm-runtime"
         )
+        fi
     fi
     sudo usermod "${USER}" -a -G mock
 
