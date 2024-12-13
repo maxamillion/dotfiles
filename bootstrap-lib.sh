@@ -582,7 +582,7 @@ fn_system_setup_fedora_el() {
             "nodejs-npm"
             "python3-devel"
             "python3-torch"
-            "ramalama"
+            "python3-ramalama"
             "fedpkg"
             "ninja-build"
             "neovim"
