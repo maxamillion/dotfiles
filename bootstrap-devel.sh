@@ -111,6 +111,7 @@ git_repos=(
     "${dev_dir}/taxonomy git@github.com:maxamillion/taxonomy.git https://github.com/instructlab/taxonomy.git"
     "${dev_dir}/ai-lab-recipes git@github.com:maxamillion/ai-lab-recipes.git https://github.com/containers/ai-lab-recipes.git"
     "${dev_dir}/dool git@github.com:maxamillion/dool.git https://github.com/scottchiefbaker/dool.git"
+    "${dev_dir}/tuned git@github.com:maxamillion/tuned.git https://github.com/redhat-performance/tuned.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/maxamillion.github.io git@github.com:maxamillion/maxamillion.github.io.git"
     "${src_dir}/yum https://github.com/rpm-software-management/yum.git"
