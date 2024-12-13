@@ -581,6 +581,8 @@ fn_system_setup_fedora_el() {
             "iotop-c"
             "nodejs-npm"
             "python3-devel"
+            "python3-torch"
+            "ramalama"
             "fedpkg"
             "ninja-build"
             "neovim"
@@ -1429,7 +1431,6 @@ fn_local_pipx_packages_install() {
         "jupyterlab"
         "nbconvert"
         "frogmouth"
-        "ramalama"
         #"harlequin" # this fails on Fedora 41 because it depends on too old a vesion of python
     )
 
