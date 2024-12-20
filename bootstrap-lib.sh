@@ -566,6 +566,7 @@ fn_system_setup_fedora_el() {
         "wl-clipboard"
         "rlwrap"
         "mosh"
+        "lm_sensors"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
@@ -592,6 +593,7 @@ fn_system_setup_fedora_el() {
             fedora_el_pkglist+=(
             "rocminfo"
             "rocm-runtime"
+            "nvtop"
         )
         fi
     fi
