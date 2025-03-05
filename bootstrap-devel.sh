@@ -115,6 +115,7 @@ git_repos=(
     "${dev_dir}/tuned git@github.com:maxamillion/tuned.git https://github.com/redhat-performance/tuned.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/maxamillion.github.io git@github.com:maxamillion/maxamillion.github.io.git"
+    "${src_dir}/maxamillion git@github.com:maxamillion/maxamillion.git"
     "${src_dir}/yum https://github.com/rpm-software-management/yum.git"
     "${src_dir}/yum-utils https://github.com/rpm-software-management/yum-utils.git"
     "${src_dir}/firewalld https://github.com/firewalld/firewalld.git"
