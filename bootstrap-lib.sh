@@ -527,6 +527,7 @@ fn_system_setup_fedora_el() {
         "vim-enhanced"
         "python3"
         "python3-pip"
+        "uv"
         "nodejs"
         "git"
         "tig"
@@ -576,10 +577,6 @@ fn_system_setup_fedora_el() {
             "iotop"
             "npm"
         )
-        if [[ $(( "{VERSION_ID}" > "9" )) ]]; then
-            # EPEL packages only available in EPEL10+
-            "uv"
-        fi
     fi
     if [[ "${ID}" == "fedora" ]]; then
         fedora_el_pkglist+=(
@@ -592,7 +589,6 @@ fn_system_setup_fedora_el() {
             "ninja-build"
             "neovim"
             "fedora-review"
-            "uv"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
