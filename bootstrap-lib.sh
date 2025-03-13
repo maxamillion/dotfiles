@@ -527,7 +527,6 @@ fn_system_setup_fedora_el() {
         "vim-enhanced"
         "python3"
         "python3-pip"
-        "uv"
         "nodejs"
         "git"
         "tig"
