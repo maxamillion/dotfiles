@@ -1433,6 +1433,7 @@ fn_local_pipx_packages_install() {
         "jupyterlab"
         "nbconvert"
         "frogmouth"
+        "uv"
         # "posting" # not supported in python 3.13+ yet
         #"harlequin" # this fails on Fedora 41 because it depends on too old a vesion of python
     )
