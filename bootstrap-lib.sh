@@ -595,6 +595,7 @@ fn_system_setup_fedora_el() {
             fedora_el_pkglist+=(
             "rocminfo"
             "rocm-runtime"
+            "rocm-smi"
             "nvtop"
         )
         fi
