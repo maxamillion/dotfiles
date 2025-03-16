@@ -618,6 +618,10 @@ fn_local_install_virtualenvwrapper(){
     fi
 }
 
+fn_local_install_claude_code() {
+    npm install --prefix ~/.local/ @anthropic-ai/claude-code
+}
+
 fn_local_user_ssh_agent() {
     # ssh-agent systemd user unit
     local ssh_agent_unit="${HOME}/.config/systemd/user/ssh-agent.service"
