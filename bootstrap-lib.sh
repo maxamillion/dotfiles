@@ -764,6 +764,40 @@ fn_local_install_kind() {
     fi
 }
 
+fn_local_install_helm() {
+    local install_path="${HOME}/.local/bin/helm"
+    local completions_install_path="${HOME}/.local/share/bash-completion/completions/helm"
+    local latest_release
+    local currently_installed_version
+    # helm tags alpha and stable, if it's alpha, use the latest stable - query with jq
+    latest_release="$(curl -s 'https://api.github.com/repos/helm/helm/tags' | jq -r '.[] | select(.name | contains("rc") | not ).name' | head -1)"
+    if [[ ${1} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(helm version |awk -F, '/^version/ { print $1 }' | awk -F\" '{print $2}')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+    helm_numerical_version="${latest_release#v*}"
+
+    # helm install
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing helm...\n"
+        curl -Lo ./helm.tar.gz "https://get.helm.sh/helm-${latest_release}-linux-${_GOLANG_ARCH}.tar.gz"
+        tar -zxvf ./helm.tar.gz
+        chmod +x "./linux-${_GOLANG_ARCH}/helm"
+        cp "./linux-${_GOLANG_ARCH}/helm" "${install_path}"
+        rm -fr "./linux-${_GOLANG_ARCH}"
+        rm ./helm.tar.gz
+        ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_install_kubectl() {
     local install_path="${HOME}/.local/bin/kubectl"
     local completions_install_path="${HOME}/.local/share/bash-completion/completions/kubectl"
