@@ -1,11 +1,11 @@
 session_name: wm
 windows:
-- window_name: ilab
+- window_name: ramalama
   shell_command_before:
-    - cd ~/src/dev/instructlab/
-- window_name: taxonomy
+    - cd ~/src/dev/ramalama/
+- window_name: home
   shell_command_before:
-    - cd ~/src/dev/taxonomy/
+    - cd ~/
 - window_name: dev
   shell_command_before:
     - cd ~/src/dev/
