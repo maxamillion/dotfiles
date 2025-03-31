@@ -1448,6 +1448,13 @@ fn_local_install_go_blueprint() {
     fi
 }
 
+fn_local_install_goose() {
+    local install_path="${HOME}/.local/bin/goose"
+    curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
 
 
 fn_local_pipx_packages_install() {

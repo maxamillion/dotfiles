@@ -77,8 +77,8 @@ fn_local_install_aws
 # go-blueprint
 fn_local_install_go_blueprint
 
-# claude code
-fn_local_install_claude_code
+# goose
+fn_local_install_goose
 
 # charms
 fn_local_install_charm_apps
