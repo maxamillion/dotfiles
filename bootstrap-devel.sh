@@ -43,6 +43,7 @@ fn_git_clone_with_upstream() {
 
 # local_clone_destination_dir my_fork_or_repo [upstream_repo]
 git_repos=(
+    "${dev_dir}/goose git@github.com:maxamillion/goose.git https://github.com/block/goose.git"
     "${dev_dir}/pytorch git@github.com:maxamillion/pytorch.git https://github.com/pytorch/pytorch.git"
     "${dev_dir}/vllm git@github.com:maxamillion/vllm.git https://github.com/opendatahub-io/vllm.git"
     "${dev_dir}/llama.cpp git@github.com:maxamillion/llama.cpp.git https://github.com/ggerganov/llama.cpp.git"
