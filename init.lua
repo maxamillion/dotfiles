@@ -171,7 +171,7 @@ require('lazy').setup({
   },
   {
     -- codeium code assistant 
-    "Exafunction/codeium.nvim",
+    "Exafunction/windsurf.nvim",
     dependencies = {
         "nvim-lua/plenary.nvim",
         "hrsh7th/nvim-cmp",
