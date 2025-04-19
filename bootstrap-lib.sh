@@ -569,6 +569,7 @@ fn_system_setup_fedora_el() {
         "rlwrap"
         "mosh"
         "lm_sensors"
+        "rpmconf"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
