@@ -559,8 +559,6 @@ fn_system_setup_fedora_el() {
         "dconf"
         "xsel"
         "ripgrep"
-        "epson-inkjet-printer-escpr"
-        "epson-inkjet-printer-escpr2"
         "centpkg"
         "centpkg-sig"
         "subscription-manager"
