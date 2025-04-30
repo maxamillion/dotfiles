@@ -260,7 +260,6 @@ fn_flathub_install() {
     flatpak_pkgs=(
         "hu.irl.cameractrls"
         "com.slack.Slack"
-        "im.riot.Riot"
         "org.onlyoffice.desktopeditors"
         "io.podman_desktop.PodmanDesktop"
         "com.google.Chrome"
