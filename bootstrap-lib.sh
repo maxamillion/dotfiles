@@ -198,6 +198,20 @@ fn_system_install_tailscale() {
 
 }
 
+fn_system_install_command_line_assistant() {
+    source /etc/os-release
+    local pkg_name="command-line-assistant"
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
+        if ! rpm -q "${pkg_name}" &>/dev/null; then
+            if [[ "${ID}" == "fedora" ]]; then
+                sudo dnf copr enable @rhel-lightspeed/command-line-assistant
+            fi
+            sudo dnf install -y "${pkg_name}" || fn_log_error "${FUNCNAME[0]}: failed to install ${pkg_name}"
+        fi
+    fi
+
+}
+
 fn_system_install_packages() {
     # accept a list of packages and install them
     
@@ -520,6 +534,9 @@ fn_system_setup_fedora_el() {
 
     # Tailscale
     fn_system_install_tailscale
+
+    # RHEL Lightspeed / command-line-assistant
+    fn_system_install_command_line_assistant
 
     # random dev stuff
     local fedora_el_pkglist
