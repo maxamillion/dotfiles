@@ -397,6 +397,7 @@ fn_system_setup_crostini() {
         "python3-pylsp"
         "python3-virtualenvwrapper"
         "python-is-python3"
+        "uv"
         "git"
         "tig"
         "tmux"
@@ -1476,9 +1477,9 @@ fn_local_install_goose() {
 }
 
 
-fn_local_pipx_packages_install() {
-    # pipx install pypkglist 
-    local pipx_pkgs=(
+fn_local_uv_tool_install() {
+    # uv install package list
+    local uv_pkgs=(
         'glances[all]'
         "ptpython"
         "tox"
@@ -1503,23 +1504,23 @@ fn_local_pipx_packages_install() {
         "jupyterlab"
         "nbconvert"
         "frogmouth"
-        "uv"
         "llm"
+        "aider-chat"
         # "posting" # not supported in python 3.13+ yet
         #"harlequin" # this fails on Fedora 41 because it depends on too old a vesion of python
     )
 
-    if which pipx > /dev/null 2>&1; then
-        for pypkg in "${pipx_pkgs[@]}";
+    if which uv > /dev/null 2>&1; then
+        for pypkg in "${uv_pkgs[@]}";
         do
             # add special case for glances
             if [[ "${pypkg}" =~ glances* ]]; then
-                if [[ ! -d ${HOME}/.local/share/pipx/venvs/glances ]]; then
-                    pipx install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to pipx install ${pypkg}"
+                if [[ ! -d ${HOME}/.local/share/uv/tools/glances ]]; then
+                    uv tool install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to uv install ${pypkg}"
                 fi
             else
-                if [[ ! -d ${HOME}/.local/share/pipx/venvs/${pypkg} ]]; then
-                    pipx install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to pipx install ${pypkg}"
+                if [[ ! -d ${HOME}/.local/share/uv/tools/${pypkg} ]]; then
+                    uv tool install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to uv install ${pypkg}"
                 fi
             fi
         done

@@ -17,7 +17,7 @@ if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} =
     fn_system_setup_fedora_el
 
     # virtualenvwrapper
-    fn_local_install_virtualenvwrapper
+    # fn_local_install_virtualenvwrapper
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         fn_local_install_neovim
@@ -41,8 +41,8 @@ fn_local_install_rosa
 # terraform
 fn_local_install_terraform
 
-# pipx
-fn_local_pipx_packages_install
+# uv tool install
+fn_local_uv_tool_install
 
 # rootless distrobox
 fn_local_install_distrobox
