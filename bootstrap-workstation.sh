@@ -80,6 +80,9 @@ fn_local_install_go_blueprint
 # goose
 fn_local_install_goose
 
+# claude code
+fn_local_install_claude_code
+
 # charms
 fn_local_install_charm_apps
 
