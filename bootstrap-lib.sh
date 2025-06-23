@@ -1506,8 +1506,9 @@ fn_local_uv_tool_install() {
         "frogmouth"
         "llm"
         "aider-chat"
-        # "posting" # not supported in python 3.13+ yet
-        #"harlequin" # this fails on Fedora 41 because it depends on too old a vesion of python
+        "pdm"
+        "posting"
+        "harlequin"
     )
 
     if which uv > /dev/null 2>&1; then
