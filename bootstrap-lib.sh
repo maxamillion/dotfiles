@@ -358,6 +358,43 @@ fn_system_docker_crostini() {
     fi
 }
 
+fn_system_setup_termux() {
+
+    # random dev stuff
+    local pkglist
+    pkglist=(
+        "apt-file"
+        "python"
+        "python-pip"
+        "python-venv"
+        "python-pylsp"
+        "uv"
+        "git"
+        "tig"
+        "tmux"
+        "htop"
+        "strace"
+        "tree"
+        "nmap"
+        "jq"
+        "luarocks"
+        "cmake"
+        "ninja"
+        "gettext"
+        "unzip"
+        "curl"
+        "fd"
+        "shellcheck"
+        "ripgrep"
+        "git-crypt"
+        "rlwrap"
+        "mosh"
+        "golang"
+    )
+    fn_system_install_packages "${pkglist[@]}"
+
+}
+
 fn_system_setup_crostini() {
     fn_system_install_tailscale
 
