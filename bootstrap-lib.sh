@@ -378,6 +378,8 @@ fn_system_setup_termux() {
         "nmap"
         "jq"
         "luarocks"
+        "clang"
+        "make"
         "cmake"
         "ninja"
         "gettext"
