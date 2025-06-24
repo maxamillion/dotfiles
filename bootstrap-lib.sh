@@ -365,7 +365,7 @@ fn_system_setup_crostini() {
     local nodejs_aptfile="/etc/apt/sources.list.d/nodesource.list"
 
     # nodejs LTS
-    NODE_MAJOR=20
+    NODE_MAJOR=22
     if ! dpkg -l nodejs | grep ${NODE_MAJOR}\. > /dev/null 2>&1; then
         sudo apt-get update
         sudo apt-get install -y ca-certificates curl gnupg || fn_log_error "${FUNCNAME[0]}: failed to install ca-certificates curl gnupg"
