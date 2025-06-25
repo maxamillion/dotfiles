@@ -696,15 +696,25 @@ fn_local_install_virtualenvwrapper(){
     fi
 }
 
+fn_ensure_npm_prefix() {
+    local npm_prefix
+    npm_prefix=$(npm get prefix)
+    if ! [[ "${npm_prefix}" == "${HOME}/.local" ]]; then
+        npm config set prefix "${HOME}/.local/"
+    fi
+}
+
 fn_local_install_claude_code() {
-    npm install --prefix ${HOME}/.local/ @anthropic-ai/claude-code
+    fn_ensure_npm_prefix
+    npm install -g @anthropic-ai/claude-code
     if ! [[ -f "${HOME}/.local/node_modules/.bin/claude" ]]; then
         fn_log_error "Claude Code npm install failed"
     fi
 }
 
 fn_local_install_gemini() {
-    npm install --prefix ${HOME}/.local/ @google/gemini-cli
+    fn_ensure_npm_prefix
+    npm install -g @google/gemini-cli
     if ! [[ -f "${HOME}/.local/node_modules/.bin/gemini" ]]; then
         fn_log_error "Gemini CLI npm install failed"
     fi
