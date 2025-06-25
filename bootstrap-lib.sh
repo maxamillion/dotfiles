@@ -22,7 +22,7 @@ fn_check_distro() {
         source /etc/os-release
     fi
 
-    if [[ -z "${TERMUX_VERSION}" ]]; then
+    if [[ -n "${TERMUX_VERSION}" ]]; then
         export ID="Termux"
     fi
 
@@ -410,6 +410,7 @@ fn_system_setup_termux() {
         "mosh"
         "golang"
         "openssh"
+        "mandoc"
         "krb5"
     )
     fn_system_install_packages "${pkglist[@]}"
@@ -699,6 +700,13 @@ fn_local_install_claude_code() {
     npm install --prefix ${HOME}/.local/ @anthropic-ai/claude-code
     if ! [[ -f "${HOME}/.local/node_modules/.bin/claude" ]]; then
         fn_log_error "Claude Code npm install failed"
+    fi
+}
+
+fn_local_install_gemini() {
+    npm install --prefix ${HOME}/.local/ @google/gemini-cli
+    if ! [[ -f "${HOME}/.local/node_modules/.bin/gemini" ]]; then
+        fn_log_error "Gemini CLI npm install failed"
     fi
 }
 

@@ -87,6 +87,9 @@ fn_local_install_goose
 # claude code
 fn_local_install_claude_code
 
+# gemini cli
+fn_local_install_gemini
+
 # charms
 fn_local_install_charm_apps
 
