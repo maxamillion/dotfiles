@@ -7,6 +7,8 @@ _ERRORS=()
 
 _MACHINE_ARCH=$(uname -m)
 
+_COMPLETIONS_BASE_DIR="${HOME}/.local/share/bash-completion/completions"
+
 if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
     _GOLANG_ARCH="amd64"
 fi
@@ -582,7 +584,7 @@ fn_system_setup_fedora_el() {
     # Setup for Fedora/RHEL/CentOS-Stream
     #
     fn_mkdir_if_needed ~/.local/bin/
-    fn_mkdir_if_needed ~/.local/share/bash-completion/completions/
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         fn_system_install_epel
@@ -776,9 +778,10 @@ fn_local_install_opa() {
 
 fn_local_install_minikube() {
     local install_path="${HOME}/.local/bin/minikube"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/minikube"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/minikube"
     local latest_release
     local currently_installed_version
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
 
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes/minikube/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
@@ -806,9 +809,10 @@ fn_local_install_minikube() {
 
 fn_local_install_kind() {
     local install_path="${HOME}/.local/bin/kind"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kind"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/kind"
     local latest_release
     local currently_installed_version
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     # kind tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[] | select(.name | contains("alpha") | not ).name' | head -1)"
     if [[ ${1} == "update" ]]; then
@@ -838,9 +842,10 @@ fn_local_install_kind() {
 
 fn_local_install_helm() {
     local install_path="${HOME}/.local/bin/helm"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/helm"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/helm"
     local latest_release
     local currently_installed_version
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     # helm tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/helm/helm/tags' | jq -r '.[] | select(.name | contains("rc") | not ).name' | head -1)"
     if [[ ${1} == "update" ]]; then
@@ -872,9 +877,10 @@ fn_local_install_helm() {
 
 fn_local_install_kubectl() {
     local install_path="${HOME}/.local/bin/kubectl"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kubectl"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/kubectl"
     local latest_release
     local currently_installed_version
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
 
     latest_release=$(curl -L -s https://dl.k8s.io/release/stable.txt)
     if [[ ${1} == "update" ]]; then
@@ -902,9 +908,10 @@ fn_local_install_kubectl() {
 
 fn_local_install_rosa() {
     local install_path="${HOME}/.local/bin/rosa"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/rosa"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/rosa"
     local latest_release
     local currently_installed_version
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
 
     latest_release=$(curl -s 'https://api.github.com/repos/openshift/rosa/tags' | jq -r '.[] | select(.name | contains("-rc") | not).name' | head -1)
     latest_numerical_version="${latest_release#v*}"
@@ -1005,7 +1012,8 @@ fn_local_install_gh() {
     local install_path="${HOME}/.local/bin/gh"
     local latest_release
     local currently_installed_version
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/gh"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/gh"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
 
     latest_release="$(curl -s 'https://api.github.com/repos/cli/cli/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
@@ -1067,8 +1075,9 @@ fn_local_install_neovim() {
 
 fn_local_install_task() {
     local install_path="${HOME}/.local/bin/task"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/task"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/task"
     local latest_release
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/go-task/task/tags' | jq -r '.[0].name')"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
@@ -1103,7 +1112,8 @@ fn_local_install_task() {
 fn_local_install_yq() {
     local install_path="${HOME}/.local/bin/yq"
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/yq"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/yq"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(
         curl -s 'https://api.github.com/repos/mikefarah/yq/tags' \
             | jq -r '.[] | select(.name | contains("Test") | not).name' \
@@ -1135,7 +1145,8 @@ fn_local_install_yq() {
 fn_local_install_ollama() {
     local install_path="${HOME}/.local/bin/ollama"
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/ollama"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/ollama"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(
         curl -s 'https://api.github.com/repos/ollama/ollama/tags' \
             | jq -r '.[] | select(.name | contains("rc") | not).name' \
@@ -1192,8 +1203,9 @@ fn_local_install_charm() {
         local install_path="${HOME}/.local/bin/${1}"
     fi
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/${1}"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/${1}"
     local manpage_install_path="${HOME}/.local/share/man/man1/${1}.1.gz"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(curl -s "https://api.github.com/repos/charmbracelet/${1}/tags" | jq '.[0].name' | tr -d '"')"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
@@ -1260,7 +1272,8 @@ fn_local_install_charm_apps() {
 fn_local_install_k9s() {
     local install_path="${HOME}/.local/bin/k9s"
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/k9s"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/k9s"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/derailed/k9s/tags' | jq '.[0].name' | tr -d '"')"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
@@ -1293,7 +1306,8 @@ fn_local_install_k9s() {
 fn_local_install_kubebuilder() {
     local install_path="${HOME}/.local/bin/kubebuilder"
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kubebuilder"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/kubebuilder"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(
         curl -s 'https://api.github.com/repos/kubernetes-sigs/kubebuilder/tags'  \
             | jq -r '.[] | select(.name | contains("alpha") | not )| select(.name | contains("beta") | not ) | select(.name | contains("rc") | not).name' \
@@ -1328,7 +1342,8 @@ fn_local_install_kubebuilder() {
 fn_local_install_operator_sdk() {
     local install_path="${HOME}/.local/bin/operator-sdk"
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/operator-sdk"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/operator-sdk"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/operator-framework/operator-sdk/tags' | jq '.[0].name' | tr -d '"')"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
@@ -1358,7 +1373,8 @@ fn_local_install_operator_sdk() {
 
 fn_local_install_syft() {
     local install_path="${HOME}/.local/bin/syft"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/syft"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/syft"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             rm ${install_path} ${completions_install_path}
@@ -1376,7 +1392,8 @@ fn_local_install_syft() {
 
 fn_local_install_grype() {
     local install_path="${HOME}/.local/bin/grype"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/grype"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/grype"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             rm ${install_path} ${completions_install_path}
@@ -1395,7 +1412,8 @@ fn_local_install_grype() {
 fn_local_install_cosign() {
     local install_path="${HOME}/.local/bin/cosign"
     local latest_release
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/cosign"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/cosign"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(
         curl -s 'https://api.github.com/repos/sigstore/cosign/tags' | 
             jq '.[] | select(.name | contains("rc") | not).name' | head -1 | tr -d '"'
@@ -1423,7 +1441,8 @@ fn_local_install_cosign() {
 
 fn_local_install_chtsh() {
     local install_path="${HOME}/.local/bin/chtsh"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/chtsh"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/chtsh"
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             rm "${install_path}" "${completions_install_path}"
@@ -1460,9 +1479,10 @@ fn_local_install_aws() {
 
 fn_local_install_kustomize() {
     local install_path="${HOME}/.local/bin/kustomize"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/kustomize"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/kustomize"
     local latest_release
     local currently_installed_version
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     # kustomize tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kustomize/releases' |
         jq -r '.[] | select(.name | contains("kustomize") ).name' | head -1 | awk -F/ '{ print $2 }')"
@@ -1494,9 +1514,10 @@ fn_local_install_kustomize() {
 
 fn_local_install_go_blueprint() {
     local install_path="${HOME}/go/bin/go-blueprint"
-    local completions_install_path="${HOME}/.local/share/bash-completion/completions/go-blueprint"
+    local completions_install_path="${_COMPLETIONS_BASE_DIR}/go-blueprint"
     local latest_release
     local currently_installed_version
+    fn_mkdir_if_needed "${_COMPLETIONS_BASE_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/Melkeydev/go-blueprint/releases' | jq -r '.[].name' | head -1 )"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
