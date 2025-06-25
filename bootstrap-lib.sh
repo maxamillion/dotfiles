@@ -667,6 +667,7 @@ fn_system_setup_fedora_el() {
             "fedpkg"
             "ninja-build"
             "neovim"
+            "python3-neovim"
             "fedora-review"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
@@ -706,8 +707,12 @@ fn_ensure_npm_prefix() {
 
 fn_local_install_claude_code() {
     fn_ensure_npm_prefix
-    npm install -g @anthropic-ai/claude-code
-    if ! [[ -f "${HOME}/.local/node_modules/.bin/claude" ]]; then
+    local bin_path
+    bin_path="${HOME}/.claude/local/claude"
+    if ! [[ -f "${bin_path}" ]]; then
+        npm install -g @anthropic-ai/claude-code
+    fi
+    if ! [[ -f "${bin_path}" ]]; then
         fn_log_error "Claude Code npm install failed"
     fi
 }
