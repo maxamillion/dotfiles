@@ -248,7 +248,7 @@ fn_system_install_packages() {
         if [[ "${ID}" == "debian" ]]; then 
             sudo apt install -y "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
         fi
-        if [[ "${ID}" == "pkg" ]]; then 
+        if [[ "${ID}" == "Termux" ]]; then 
             pkg install -y "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
         fi
         if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
@@ -407,6 +407,7 @@ fn_system_setup_termux() {
         "mosh"
         "golang"
         "openssh"
+        "krb5"
     )
     fn_system_install_packages "${pkglist[@]}"
 
