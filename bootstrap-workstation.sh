@@ -17,7 +17,7 @@ if [[ "${ID}" == "Termux" ]]; then
     # local user ssh agent
     fn_local_user_ssh_agent
 
-    fn_system_setup_crostini
+    fn_system_setup_termux
 fi
 
 if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
