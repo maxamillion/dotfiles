@@ -696,8 +696,8 @@ fn_local_install_virtualenvwrapper(){
 }
 
 fn_local_install_claude_code() {
-    npm install --prefix ~/.local/ @anthropic-ai/claude-code
-    if ! [[ -f ~/.local/node_modules/.bin/claude ]]; then
+    npm install --prefix ${HOME}/.local/ @anthropic-ai/claude-code
+    if ! [[ -f "${HOME}/.local/node_modules/.bin/claude" ]]; then
         fn_log_error "Claude Code npm install failed"
     fi
 }
