@@ -380,8 +380,6 @@ fn_system_setup_termux() {
         "apt-file"
         "python"
         "python-pip"
-        "python-venv"
-        "python-pylsp"
         "uv"
         "git"
         "tig"

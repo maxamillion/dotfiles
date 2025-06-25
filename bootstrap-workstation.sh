@@ -14,9 +14,6 @@ if [[ "${ID}" == "debian" ]]; then
 fi
 
 if [[ "${ID}" == "Termux" ]]; then
-    # local user ssh agent
-    fn_local_user_ssh_agent
-
     fn_system_setup_termux
 fi
 
