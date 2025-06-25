@@ -1,6 +1,6 @@
 #!/bin/bash
 source ./bootstrap-lib.sh
-source /etc/os-release
+fn_check_distro
 
 if [[ "${ID}" == "debian" ]]; then
     # local user ssh agent
@@ -11,6 +11,13 @@ if [[ "${ID}" == "debian" ]]; then
     fn_local_install_rustup
 
     fn_local_install_neovim
+fi
+
+if [[ "${ID}" == "Termux" ]]; then
+    # local user ssh agent
+    fn_local_user_ssh_agent
+
+    fn_system_setup_crostini
 fi
 
 if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then

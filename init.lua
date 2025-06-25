@@ -568,11 +568,6 @@ local on_attach = function(_, bufnr)
 end
 
 
--- mason-lspconfig requires that these setup functions are called in this order
--- before setting up the servers.
-require('mason').setup()
-require('mason-lspconfig').setup()
-
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
@@ -614,6 +609,10 @@ require('neodev').setup()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+-- mason-lspconfig requires that these setup functions are called in this order
+-- before setting up the servers.
+require('mason').setup()
+
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
 
@@ -631,6 +630,7 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
+
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`

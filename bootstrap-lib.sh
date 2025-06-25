@@ -14,6 +14,17 @@ if [[ ${_MACHINE_ARCH} == "aarch64" ]]; then
     _GOLANG_ARCH="arm64"
 fi
 
+fn_check_distro() {
+    if [[ -f /etc/os-release ]]; then
+        source /etc/os-release
+    fi
+
+    if [[ -z "${TERMUX_VERSION}" ]]; then
+        export ID="Termux"
+    fi
+
+}
+
 fn_log_error() {
     _ERRORS+=("${@}")
 }
@@ -67,7 +78,7 @@ fn_system_install_chrome() {
 }
 
 fn_setup_rhel_csb() {
-    source /etc/os-release
+    fn_check_distro
     local repofile="/etc/yum.repos.d/billings-csb.repo"
     # Use Billings' COPR
     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
@@ -159,7 +170,7 @@ fi
 }
 
 fn_system_install_tailscale() {
-    source /etc/os-release
+    fn_check_distro
     if [[ "${ID}" == "debian" ]]; then 
         # tailscale
         local tailscale_keyring="/usr/share/keyrings/tailscale-archive-keyring.gpg"
@@ -201,7 +212,7 @@ fn_system_install_tailscale() {
 }
 
 fn_system_install_command_line_assistant() {
-    source /etc/os-release
+    fn_check_distro
     local pkg_name="command-line-assistant"
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
         if ! rpm -q "${pkg_name}" &>/dev/null; then
@@ -217,16 +228,16 @@ fn_system_install_command_line_assistant() {
 fn_system_install_packages() {
     # accept a list of packages and install them
     
-    source /etc/os-release
+    fn_check_distro
 
     local pending_install_pkgs=()
     for pkg in "${@}"; do
-        if [[ "${ID}" == "debian" ]]; then 
+        if [[ "${ID}" == "debian" || "${ID}" == "Termux" ]]; then 
             if ! dpkg -s "${pkg}" | grep "Status: install ok installed" > /dev/null 2>&1; then
                 pending_install_pkgs+=("${pkg}")
             fi
         fi
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
+        if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
             if ! rpm -q "${pkg}" &>/dev/null; then
                 pending_install_pkgs+=("${pkg}")
             fi
@@ -236,6 +247,9 @@ fn_system_install_packages() {
         printf "Installing packages... %s\n" "${pending_install_pkgs[@]}"
         if [[ "${ID}" == "debian" ]]; then 
             sudo apt install -y "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
+        fi
+        if [[ "${ID}" == "pkg" ]]; then 
+            pkg install -y "${pending_install_pkgs[@]}" || fn_log_error "${FUNCNAME[0]}: failed to install packages: ${pending_install_pkgs[*]}"
         fi
         if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
             # intentionally want word splitting so don't quote
@@ -392,6 +406,7 @@ fn_system_setup_termux() {
         "rlwrap"
         "mosh"
         "golang"
+        "openssh"
     )
     fn_system_install_packages "${pkglist[@]}"
 
