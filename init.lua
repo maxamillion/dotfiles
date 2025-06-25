@@ -596,7 +596,7 @@ local servers = {
   },
 }
 
-local arch = jit and jit.arch-- Safely check for LuaJIT
+local arch = jit and jit.arch -- Safely check for LuaJIT
 if arch == "x64" then
   -- clangd doesn't work on aarch64
   servers['clangd'] = {}
@@ -614,22 +614,21 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 require('mason').setup()
 
 -- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
+local mason_lspconfig = require('mason-lspconfig')
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
 }
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
-    }
-  end,
-}
+-- Set up each server
+for server_name, _ in pairs(servers) do
+  require('lspconfig')[server_name].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = servers[server_name],
+    filetypes = (servers[server_name] or {}).filetypes,
+  }
+end
 
 
 -- [[ Configure nvim-cmp ]]
