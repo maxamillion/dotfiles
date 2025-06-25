@@ -384,6 +384,7 @@ fn_system_setup_termux() {
         "python"
         "python-pip"
         "uv"
+        "nodejs"
         "git"
         "tig"
         "tmux"
