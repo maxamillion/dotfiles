@@ -399,6 +399,7 @@ fn_system_setup_termux() {
         "gettext"
         "unzip"
         "curl"
+        "wget"
         "fd"
         "shellcheck"
         "ripgrep"
