@@ -585,20 +585,14 @@ fn_system_install_epel(){
 }
 
 fn_system_setup_fedora_el() {
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        local el_major_version
+        el_major_version=$(rpm -E %rhel)
+    fi
     # Setup for Fedora/RHEL/CentOS-Stream
     #
     fn_mkdir_if_needed ~/.local/bin/
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        fn_system_install_epel
-    fi
-
-    # Tailscale
-    fn_system_install_tailscale
-
-    # RHEL Lightspeed / command-line-assistant
-    fn_system_install_command_line_assistant
 
     # random dev stuff
     local fedora_el_pkglist
@@ -606,8 +600,10 @@ fn_system_setup_fedora_el() {
         "vim-enhanced"
         "python3"
         "python3-pip"
+        "python3-devel"
         "uv"
         "nodejs"
+        "nodejs-npm"
         "git"
         "tig"
         "tmux"
@@ -647,25 +643,32 @@ fn_system_setup_fedora_el() {
         "mosh"
         "lm_sensors"
         "rpmconf"
+        "python3-ramalama"
+        "iotop-c"
+        "ninja-build"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        fedora_el_pkglist+=(
-            "python3.12"
-            "python3.12-pip"
-            "iotop"
-            "npm"
-        )
+        if [[ "${el_major_version}" -lt 10 ]]; then
+            fedora_el_pkglist+=(
+                "python3.12"
+                "python3.12-pip"
+            )
+        fi
+        if [[ "${el_major_version}" -lt 10 ]]; then
+            fn_local_install_neovim update
+        fi
+        if [[ "${el_major_version}" -ge 10 ]]; then
+            fedora_el_pkglist+=(
+                "neovim"
+                "python3-neovim"
+            )
+        fi
     fi
     if [[ "${ID}" == "fedora" ]]; then
         fedora_el_pkglist+=(
-            "iotop-c"
-            "nodejs-npm"
-            "python3-devel"
             "python3-torch"
-            "python3-ramalama"
             "fedpkg"
-            "ninja-build"
             "neovim"
             "python3-neovim"
             "fedora-review"
@@ -681,7 +684,23 @@ fn_system_setup_fedora_el() {
     fi
     sudo usermod "${USER}" -a -G mock
 
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        fn_system_install_epel
+    fi
+
     fn_system_install_packages "${fedora_el_pkglist[@]}"
+
+    # Tailscale
+    fn_system_install_tailscale
+
+    # RHEL Lightspeed / command-line-assistant
+    fn_system_install_command_line_assistant
+
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        if [[ "${el_major_version}" -lt 10 ]]; then
+            fn_local_install_neovim
+        fi
+    fi
 
     fn_system_polkit_libvirt_nonroot_user
 
@@ -1662,7 +1681,11 @@ fn_update_local_installs() {
         fn_local_install_ollama update
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        fn_local_install_neovim update
+        local el_major_version
+        el_major_version=$(rpm -E %rhel)
+        if [[ "${el_major_version}" -lt 10 ]]; then
+            fn_local_install_neovim update
+        fi
     fi
 
     fn_local_install_distrobox update
