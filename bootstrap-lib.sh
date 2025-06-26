@@ -629,7 +629,6 @@ fn_system_setup_fedora_el() {
         "gettext"
         "unzip"
         "curl"
-        "fd-find"
         "ShellCheck"
         "dconf"
         "xsel"
@@ -656,12 +655,11 @@ fn_system_setup_fedora_el() {
             )
         fi
         if [[ "${el_major_version}" -lt 10 ]]; then
-            fn_local_install_neovim update
+            fn_local_install_neovim
         fi
         if [[ "${el_major_version}" -ge 10 ]]; then
             fedora_el_pkglist+=(
                 "neovim"
-                "python3-neovim"
             )
         fi
     fi
@@ -672,6 +670,7 @@ fn_system_setup_fedora_el() {
             "neovim"
             "python3-neovim"
             "fedora-review"
+            "fd-find"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
@@ -682,13 +681,19 @@ fn_system_setup_fedora_el() {
         )
         fi
     fi
-    sudo usermod "${USER}" -a -G mock
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         fn_system_install_epel
     fi
 
     fn_system_install_packages "${fedora_el_pkglist[@]}"
+    sudo usermod "${USER}" -a -G mock
+
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        if [[ "${el_major_version}" -lt 10 ]]; then
+            fn_local_install_neovim
+        fi
+    fi
 
     # Tailscale
     fn_system_install_tailscale

@@ -23,10 +23,6 @@ if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} =
     # virtualenvwrapper
     # fn_local_install_virtualenvwrapper
 
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        fn_local_install_neovim
-    fi
-
 fi
 
 # k8s stuff
