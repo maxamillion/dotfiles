@@ -197,8 +197,8 @@ fn_system_install_tailscale() {
         if ! rpm -q tailscale &>/dev/null; then
             local el_major_version
             el_major_version=$(rpm -E %rhel)
-            # sudo dnf config-manager --add-repo "https://pkgs.tailscale.com/stable/rhel/${el_major_version}/tailscale.repo"
-            sudo dnf config-manager addrepo "https://pkgs.tailscale.com/stable/rhel/${el_major_version}/tailscale.repo"
+            sudo dnf config-manager --add-repo "https://pkgs.tailscale.com/stable/rhel/${el_major_version}/tailscale.repo"
+            #sudo dnf config-manager addrepo "https://pkgs.tailscale.com/stable/rhel/${el_major_version}/tailscale.repo"
             sudo dnf install -y tailscale || fn_log_error "${FUNCNAME[0]}: failed to install tailscale"
             sudo systemctl enable --now tailscaled || fn_log_error "${FUNCNAME[0]}: failed to enable tailscale.service"
         fi
