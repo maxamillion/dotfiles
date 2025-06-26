@@ -732,7 +732,7 @@ fn_ensure_npm_prefix() {
 fn_local_install_claude_code() {
     fn_ensure_npm_prefix
     local bin_path
-    bin_path="${HOME}/.claude/local/claude"
+    bin_path="${HOME}/.local/bin/claude"
     if ! [[ -f "${bin_path}" ]]; then
         npm install -g @anthropic-ai/claude-code
     fi
@@ -744,7 +744,7 @@ fn_local_install_claude_code() {
 fn_local_install_gemini() {
     fn_ensure_npm_prefix
     npm install -g @google/gemini-cli
-    if ! [[ -f "${HOME}/.local/node_modules/.bin/gemini" ]]; then
+    if ! [[ -f "${HOME}/.local/bin/gemini" ]]; then
         fn_log_error "Gemini CLI npm install failed"
     fi
 }
