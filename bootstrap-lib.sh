@@ -1033,6 +1033,7 @@ fn_ensure_npm_prefix() {
 }
 
 fn_local_install_claude_code() {
+    printf "Installing Claude Code...\n"
     fn_ensure_npm_prefix
     local bin_path
     bin_path="${HOME}/.local/bin/claude"
@@ -1045,10 +1046,20 @@ fn_local_install_claude_code() {
 }
 
 fn_local_install_gemini() {
+    printf "Installing Gemini CLI...\n"
     fn_ensure_npm_prefix
     npm install -g @google/gemini-cli
     if ! [[ -f "${HOME}/.local/bin/gemini" ]]; then
         fn_log_error "Gemini CLI npm install failed"
+    fi
+}
+
+fn_local_bash_language_server() {
+    printf "Installing bash language server...\n"
+    fn_ensure_npm_prefix
+    npm install -g bash-language-server
+    if ! [[ -f "${HOME}/.local/bin/bash-language-server" ]]; then
+        fn_log_error "Bash language server npm install failed"
     fi
 }
 
@@ -2019,6 +2030,7 @@ fn_local_uv_tool_install() {
         "pdm"
         "posting"
         "harlequin"
+        "pyright"
     )
 
     if which uv > /dev/null 2>&1; then
