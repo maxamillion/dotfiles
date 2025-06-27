@@ -1048,8 +1048,12 @@ fn_local_install_claude_code() {
 fn_local_install_gemini() {
     printf "Installing Gemini CLI...\n"
     fn_ensure_npm_prefix
-    npm install -g @google/gemini-cli
-    if ! [[ -f "${HOME}/.local/bin/gemini" ]]; then
+    local bin_path
+    bin_path="${HOME}/.local/bin/gemini"
+    if ! [[ -f "${bin_path}" ]]; then
+        npm install -g @google/gemini-cli
+    fi
+    if ! [[ -f ${bin_path} ]]; then
         fn_log_error "Gemini CLI npm install failed"
     fi
 }
@@ -1057,8 +1061,12 @@ fn_local_install_gemini() {
 fn_local_bash_language_server() {
     printf "Installing bash language server...\n"
     fn_ensure_npm_prefix
-    npm install -g bash-language-server
-    if ! [[ -f "${HOME}/.local/bin/bash-language-server" ]]; then
+    local bin_path
+    bin_path="${HOME}/.local/bin/bash-language-servere"
+    if ! [[ -f "${bin_path}" ]]; then
+        npm install -g bash-language-server
+    fi
+    if ! [[ -f ${bin_path} ]]; then
         fn_log_error "Bash language server npm install failed"
     fi
 }
