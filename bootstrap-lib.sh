@@ -1269,7 +1269,7 @@ fn_local_install_charm() {
     local manpage_install_path="${HOME}/.local/share/man/man1/${1}.1.gz"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s "https://api.github.com/repos/charmbracelet/${1}/tags" | jq '.[0].name' | tr -d '"')"
+    latest_release="$(curl -s "https://api.github.com/repos/charmbracelet/${1}/tags" | jq '.[0].name' | tr -d \")"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
@@ -1338,7 +1338,7 @@ fn_local_install_k9s() {
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/k9s"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/derailed/k9s/tags' | jq '.[0].name' | tr -d '"')"
+    latest_release="$(curl -s 'https://api.github.com/repos/derailed/k9s/tags' | jq '.[0].name' | tr -d \")"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
@@ -1376,7 +1376,7 @@ fn_local_install_kubebuilder() {
     latest_release="$(
         curl -s 'https://api.github.com/repos/kubernetes-sigs/kubebuilder/tags'  \
             | jq -r '.[] | select(.name | contains("alpha") | not )| select(.name | contains("beta") | not ) | select(.name | contains("rc") | not).name' \
-            | head -1 | tr -d '"'
+            | head -1 | tr -d \"
     )"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
@@ -1410,7 +1410,7 @@ fn_local_install_operator_sdk() {
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/operator-sdk"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/operator-framework/operator-sdk/tags' | jq '.[0].name' | tr -d '"')"
+    latest_release="$(curl -s 'https://api.github.com/repos/operator-framework/operator-sdk/tags' | jq '.[0].name' | tr -d \")"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
@@ -1485,7 +1485,7 @@ fn_local_install_cosign() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     latest_release="$(
         curl -s 'https://api.github.com/repos/sigstore/cosign/tags' | 
-            jq '.[] | select(.name | contains("rc") | not).name' | head -1 | tr -d '"'
+            jq '.[] | select(.name | contains("rc") | not).name' | head -1 | tr -d \"
     )"
     latest_release_numerical_version="${latest_release#v*}"
     if [[ ${1} == "update" ]]; then
