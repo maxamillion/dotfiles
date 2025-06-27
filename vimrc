@@ -147,6 +147,7 @@ au FileType toml setlocal expandtab sw=4 sts=4 ts=8
 au FileType sh setlocal expandtab sw=4 sts=4 ts=8
 au FileType yaml setlocal expandtab sw=2 sts=2 ts=4
 au FileType ruby setlocal expandtab sw=2 sts=2 ts=4
+au FileType vim setlocal expandtab sw=2 sts=2 ts=4
 au FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
 
 " Trailing whitespace override
@@ -176,13 +177,8 @@ set completeopt=menu,menuone,noinsert
 " Auto-trigger completion as you type
 augroup ALECompletion
   autocmd!
-  autocmd TextChangedI * if pumvisible() == 0|pclose|call feedkeys("\<C-x>\<C-o>", "n")|endif
+  autocmd TextChangedI * if pumvisible() == 0|pclose|call feedkeys("\<C-n>", "n")|endif
 augroup END
-
-" " Tab navigation for completion menu
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Sync clipboard with system clipboard for Wayland
 if executable('wl-copy')
