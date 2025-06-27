@@ -7,7 +7,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'fatih/vim-go'
 Plug 'rust-lang/rust.vim'
 Plug 'sjl/badwolf'
-Plug 'jacoborus/tender.vim'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
@@ -116,7 +115,7 @@ command! Q :q
 
 " colors
 set t_Co=256
-colorscheme tender
+colorscheme badwolf
 let &colorcolumn="80,".join(range(400,999),",")
 
 """ Airline settings
@@ -161,5 +160,26 @@ nmap gd :ALEGoToDefinition<cr>
 nmap ge :ALEDetail<cr>
 nmap gr :ALEFindReferences<cr>
 nmap gk :ALEDocumentation<cr>
+
+" ALE completion settings
+let g:ale_completion_enabled = 1
+let g:ale_completion_autoimport = 1
+let g:ale_completion_delay = 0
+let g:ale_completion_max_suggestions = 50
+
+" Enable omni completion
+set omnifunc=ale#completion#OmniFunc
+set completeopt=menu,menuone,noinsert
+
+" Auto-trigger completion as you type
+augroup ALECompletion
+  autocmd!
+  autocmd TextChangedI * if pumvisible() == 0|pclose|call feedkeys("\<C-x>\<C-o>", "n")|endif
+augroup END
+
+" " Tab navigation for completion menu
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 syntax on
