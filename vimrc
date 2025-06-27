@@ -160,10 +160,10 @@ augroup trailing
 augroup END
 
 " ALE
-nmap gd :ALEGoToDefinition<cr>
-nmap ge :ALEDetail<cr>
-nmap gr :ALEFindReferences<cr>
-nmap gk :ALEDocumentation<cr>
+nmap gd <Plug>ALEGoToDefinition<cr>
+nmap ge <Plug>ALEDetail<cr>
+nmap gr <Plug>ALEFindReferences<cr>
+nmap gk <Plug>ALEDocumentation<cr>
 
 " ALE completion settings
 let g:ale_completion_enabled = 1
