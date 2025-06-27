@@ -25,6 +25,10 @@ if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} =
 
 fi
 
+if ! [[ -f "${HOME}/.vim/autoload/plug.vim" ]]; then
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
+
 # k8s stuff
 fn_local_install_minikube
 fn_local_install_kind
