@@ -360,8 +360,8 @@ fn_system_docker_crostini() {
             sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || fn_log_error "${FUNCNAME[0]}: failed to download docker gpg key"
         sudo chmod a+r /etc/apt/keyrings/docker.gpg || fn_log_error "${FUNCNAME[0]}: failed to set docker gpg key permission"
         echo \
-            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
-            "$(. /etc/os-release && echo "${VERSION_CODENAME}")" stable" | \
+            "deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+            \"$(. /etc/os-release && echo "${VERSION_CODENAME}")\" stable" | \
             sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo apt update
         sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
@@ -1444,7 +1444,7 @@ fn_local_install_syft() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
-            rm ${install_path} ${completions_install_path}
+            rm "${install_path}" "${completions_install_path}"
         fi
     fi
     if [[ ! -f ${install_path} ]]; then
@@ -1464,7 +1464,7 @@ fn_local_install_grype() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     if [[ ${1} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
-            rm ${install_path} ${completions_install_path}
+            rm "${install_path}" "${completions_install_path}"
         fi
     fi
     if [[ ! -f ${install_path} ]]; then
