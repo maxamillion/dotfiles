@@ -55,11 +55,16 @@ fn_cleanup() {
 trap 'fn_cleanup' EXIT ERR INT TERM
 
 fn_check_distro() {
+    # Set defaults for os-release variables
+    ID="${ID:-unknown}"
+    VERSION_CODENAME="${VERSION_CODENAME:-}"
+    
     if [[ -f /etc/os-release ]]; then
+        # shellcheck source=/etc/os-release
         source /etc/os-release
     fi
 
-    if [[ -n "${TERMUX_VERSION}" ]]; then
+    if [[ -n "${TERMUX_VERSION:-}" ]]; then
         export ID="Termux"
     fi
 
@@ -423,9 +428,9 @@ fn_rm_on_update_if_needed() {
     unset "uninstall_paths[1]"
     unset "uninstall_paths[2]"
 
-    if [[ -f ${1} ]]; then
-        if [[ ${2} != "${3}" ]]; then
-            rm -f "${uninstall_paths[@]}" || fn_log_error "${FUNCNAME[0]}: failed to rm ${1}"
+    if [[ -f ${1:-} ]]; then
+        if [[ ${2:-} != "${3:-}" ]]; then
+            rm -f "${uninstall_paths[@]}" || fn_log_error "${FUNCNAME[0]}: failed to rm ${1:-}"
         fi
     fi
 }
@@ -506,7 +511,7 @@ fn_system_install_tailscale() {
 fn_system_install_command_line_assistant() {
     fn_check_distro
     local pkg_name="command-line-assistant"
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
         if ! rpm -q "${pkg_name}" &>/dev/null; then
             if [[ "${ID}" == "fedora" ]]; then
                 sudo dnf copr enable @rhel-lightspeed/command-line-assistant
@@ -1060,7 +1065,7 @@ Description=SSH key agent
 [Service]
 Type=simple
 Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+ExecStart=/usr/bin/ssh-agent -D -a ${SSH_AUTH_SOCK}
 
 [Install]
 WantedBy=default.target
@@ -1081,7 +1086,7 @@ fn_local_install_distrobox() {
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
 
     latest_release="$(curl -s 'https://api.github.com/repos/89luca89/distrobox/tags' | jq -r '.[0].name')"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(distrobox version | awk -F: '/^distrobox/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}" "${install_path}-*")
@@ -1104,7 +1109,7 @@ fn_local_install_opa() {
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
 
     latest_release="$(curl -s 'https://api.github.com/repos/open-policy-agent/opa/tags' | jq -r '.[0].name')"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
@@ -1135,7 +1140,7 @@ fn_local_install_minikube() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
 
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes/minikube/tags' | jq -r '.[0].name')"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1167,7 +1172,7 @@ fn_local_install_kind() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     # kind tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[] | select(.name | contains("alpha") | not ).name' | head -1)"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1201,7 +1206,7 @@ fn_local_install_helm() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     # helm tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/helm/helm/tags' | jq -r '.[] | select(.name | contains("rc") | not ).name' | head -1)"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(helm version |awk -F, '/^version/ { print $1 }' | awk -F\" '{print $2}')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1298,7 +1303,7 @@ fn_local_install_rosa() {
     latest_release=$(curl -s 'https://api.github.com/repos/openshift/rosa/tags' \
         | jq -r '.[] | select(.name | contains("-rc") | not) | select(.name | contains("-testing") | not).name' | head -1)
     latest_numerical_version="${latest_release#v*}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(rosa version 2>/dev/null | grep "${latest_numerical_version}" | td -d 'INFO: ')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1343,7 +1348,7 @@ fn_local_install_terraform() {
             | head -1 \
     )"
 
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
@@ -1431,7 +1436,7 @@ fn_local_install_gh() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
 
     latest_release="$(curl -s 'https://api.github.com/repos/cli/cli/tags' | jq -r '.[0].name')"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1460,7 +1465,7 @@ fn_local_install_neovim() {
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
 
     latest_release="$(curl -s 'https://api.github.com/repos/neovim/neovim/tags' | jq -r '.[0].name')"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}")
@@ -1496,7 +1501,7 @@ fn_local_install_task() {
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/go-task/task/tags' | jq -r '.[0].name')"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1537,7 +1542,7 @@ fn_local_install_yq() {
             | jq -r '.[] | select(.name | contains("Test") | not).name' \
             | head -1
     )"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(yq --version | awk '{ print $4 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1571,7 +1576,7 @@ fn_local_install_ollama() {
             | jq -r '.[] | select(.name | contains("rc") | not).name' \
             | head -1
     )"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(ollama --version | grep "client version" | awk '{ print $5 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1615,50 +1620,50 @@ EOF
 }
 
 fn_local_install_charm() {
-    if [[ "${1}" == "soft-serve" ]]; then
+    if [[ "${1:-}" == "soft-serve" ]]; then
         # special case because soft-serve binary is called "soft"
         local install_path="${_LOCAL_BIN_DIR}/soft"
     else
-        local install_path="${_LOCAL_BIN_DIR}/${1}"
+        local install_path="${_LOCAL_BIN_DIR}/${1:-}"
     fi
     local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/${1}"
-    local manpage_install_path="${HOME}/.local/share/man/man1/${1}.1.gz"
+    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/${1:-}"
+    local manpage_install_path="${HOME}/.local/share/man/man1/${1:-}.1.gz"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s "https://api.github.com/repos/charmbracelet/${1}/tags" | jq '.[0].name' | tr -d \")"
+    latest_release="$(curl -s "https://api.github.com/repos/charmbracelet/${1:-}/tags" | jq '.[0].name' | tr -d \")"
     latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(${1} --version | grep "client version" | awk '{ print $5 }')
+            currently_installed_version=$(${1:-} --version | grep "client version" | awk '{ print $5 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
     if [[ ! -f ${install_path} ]]; then
-        printf "Installing ${1}...\n"
+        printf "Installing ${1:-}...\n"
 
 
         pushd /tmp/ || return
             if [[ ${_GOLANG_ARCH} == "amd64" ]]; then
-                charm_tarname="${1}_${latest_release_numerical_version}_Linux_x86_64.tar.gz"
+                charm_tarname="${1:-}_${latest_release_numerical_version}_Linux_x86_64.tar.gz"
             else
-                charm_tarname="${1}_${latest_release_numerical_version}_Linux_${_GOLANG_ARCH}.tar.gz"
+                charm_tarname="${1:-}_${latest_release_numerical_version}_Linux_${_GOLANG_ARCH}.tar.gz"
             fi
-            wget -c "https://github.com/charmbracelet/${1}/releases/download/${latest_release}/${charm_tarname}"
+            wget -c "https://github.com/charmbracelet/${1:-}/releases/download/${latest_release}/${charm_tarname}"
             tar zxvf "${charm_tarname}"
             pushd "${charm_tarname%.tar.gz}" || return
-                if [[ "${1}" == "soft-serve" ]]; then
+                if [[ "${1:-}" == "soft-serve" ]]; then
                     # special case because soft-serve binary is called "soft"
                     cp "soft" "${install_path}"
                 else
-                    cp "${1}" "${install_path}"
+                    cp "${1:-}" "${install_path}"
                 fi
                 chmod +x "${install_path}"
 
-                cp "completions/${1}.bash" "${completions_install_path}"
-                cp "manpages/${1}.1.gz" "${manpage_install_path}"
+                cp "completions/${1:-}.bash" "${completions_install_path}"
+                cp "manpages/${1:-}.1.gz" "${manpage_install_path}"
             popd || return
             rm -fr "${charm_tarname%.tar.gz}"
             rm "${charm_tarname}"
@@ -1697,7 +1702,7 @@ fn_local_install_k9s() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/derailed/k9s/tags' | jq '.[0].name' | tr -d \")"
     latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(k9s version | grep "Version" | awk '{ print $2 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1736,7 +1741,7 @@ fn_local_install_kubebuilder() {
             | head -1 | tr -d \"
     )"
     latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(kubebuilder version | sed 's/.*KubeBuilderVersion:"\([^"]*\)".*/\1/')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1769,7 +1774,7 @@ fn_local_install_operator_sdk() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/operator-framework/operator-sdk/tags' | jq '.[0].name' | tr -d \")"
     latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(operator-sdk version | grep "Version" | awk '{ print $2 }')
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1799,7 +1804,7 @@ fn_local_install_syft() {
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/syft"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             rm "${install_path}" "${completions_install_path}"
         fi
@@ -1819,7 +1824,7 @@ fn_local_install_grype() {
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/grype"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             rm "${install_path}" "${completions_install_path}"
         fi
@@ -1845,7 +1850,7 @@ fn_local_install_cosign() {
             jq '.[] | select(.name | contains("rc") | not).name' | head -1 | tr -d \"
     )"
     latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version="$(cosign version | awk '/GitVersion/{print$2}')"
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1870,7 +1875,7 @@ fn_local_install_chtsh() {
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/chtsh"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             rm "${install_path}" "${completions_install_path}"
         fi
@@ -1886,7 +1891,7 @@ fn_local_install_chtsh() {
 fn_local_install_aws() {
     local install_path="${_LOCAL_BIN_DIR}/aws"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             rm "${install_path}"
         fi
@@ -1915,7 +1920,7 @@ fn_local_install_kustomize() {
     # kustomize tags alpha and stable, if it's alpha, use the latest stable - query with jq
     latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kustomize/releases' |
         jq -r '.[] | select(.name | contains("kustomize") ).name' | head -1 | awk -F/ '{ print $2 }')"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(kustomize version)
             local uninstall_paths=("${install_path}" "${completions_install_path}")
@@ -1948,7 +1953,7 @@ fn_local_install_go_blueprint() {
     local currently_installed_version
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
     latest_release="$(curl -s 'https://api.github.com/repos/Melkeydev/go-blueprint/releases' | jq -r '.[].name' | head -1 )"
-    if [[ ${1} == "update" ]]; then
+    if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
             currently_installed_version=$(go-blueprint version)
             local uninstall_paths=("${install_path}" "${completions_install_path}")

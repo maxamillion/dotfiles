@@ -34,7 +34,7 @@ if [[ "${ID}" == "Termux" ]]; then
     fn_system_setup_termux
 fi
 
-if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || ${ID} == "fedora" ]]; then
+if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
     fn_system_setup_fedora_el
 
     # virtualenvwrapper
