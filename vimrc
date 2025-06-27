@@ -4,9 +4,11 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'dense-analysis/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'fatih/vim-go'
 Plug 'rust-lang/rust.vim'
 Plug 'sjl/badwolf'
+Plug 'crusoexia/vim-monokai'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
@@ -115,7 +117,7 @@ command! Q :q
 
 " colors
 set t_Co=256
-colorscheme badwolf
+colorscheme monokai
 let &colorcolumn="80,".join(range(400,999),",")
 
 """ Airline settings
@@ -181,5 +183,13 @@ augroup END
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+
+" Sync clipboard with system clipboard for Wayland
+if executable('wl-copy')
+  augroup WaylandClipboard
+    autocmd!
+    autocmd TextYankPost * if v:event.operator ==# 'y' | call system('wl-copy', @") | endif
+  augroup END
+endif
 
 syntax on
