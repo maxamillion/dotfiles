@@ -4,7 +4,7 @@ source ./bootstrap-lib.sh
 
 fn_mkdir_if_needed ~/.config/{dunst,i3,i3status,fontconfig}
 fn_mkdir_if_needed ~/.config/fontconfig/conf.d
-fn_mkdir_if_needed ~/.config/nvim/lua/
+#fn_mkdir_if_needed ~/.config/nvim/lua/
 fn_mkdir_if_needed ~/.tmuxinator
 fn_mkdir_if_needed ~/.ptpython
 fn_mkdir_if_needed ~/.fonts
@@ -31,9 +31,9 @@ fn_symlink_if_needed ~/dotfiles/Xresources         ~/.Xresources
 fn_symlink_if_needed ~/dotfiles/bashrc             ~/.bashrc
 fn_symlink_if_needed ~/dotfiles/bash_profile       ~/.bash_profile
 fn_symlink_if_needed ~/dotfiles/profile            ~/.profile
-#fn_symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
-fn_symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
-fn_symlink_if_needed ~/dotfiles/init.lua           ~/.config/nvim/init.lua
+fn_symlink_if_needed ~/dotfiles/vimrc              ~/.vimrc
+#fn_symlink_if_needed ~/dotfiles/coc-settings.json  ~/.vim/coc-settings.json
+#fn_symlink_if_needed ~/dotfiles/init.lua           ~/.config/nvim/init.lua
 fn_symlink_if_needed ~/dotfiles/ipython_config.py  ~/ipython/profile_default/ipython_config.py
 fn_symlink_if_needed ~/dotfiles/myhosts            ~/.myhosts
 fn_symlink_if_needed ~/dotfiles/shelloracle-config.toml ~/.shelloracle/config.toml

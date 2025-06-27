@@ -1,8 +1,7 @@
 call plug#begin('~/.vim/plugged')
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'davidhalter/jedi-vim'
-" Plug 'ajh17/VimCompletesMe' " This stopped working for some reason
+Plug 'dense-analysis/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
 Plug 'fatih/vim-go'
@@ -12,8 +11,7 @@ Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-" Plug 'Exafunction/codeium.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'Exafunction/windsurf.vim', { 'branch': 'main' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 call plug#end()
@@ -39,10 +37,6 @@ set encoding=utf-8
 " Some servers have issues with backup files, see #649
 set nobackup
 set nowritebackup
-
-" Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
-" delays and poor user experience for coc.nvim
-set updatetime=300
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved
@@ -102,10 +96,12 @@ noremap <right> <nop>
 
 " fzf
 noremap <Leader>ff :Files<CR>
+noremap <Leader>fg :GFiles<CR>
+noremap <Leader>fl :Lines<CR>
 
-" codeium suggestion cycling
-" imap <C-j>   <Cmd>call codeium#CycleCompletions(1)<CR>
-" imap <C-k>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+" windsurf suggestion cycling
+imap <C-j>   <Cmd>call codeium#CycleCompletions(1)<CR>
+imap <C-k>   <Cmd>call codeium#CycleCompletions(-1)<CR>
 
 " the F1 help menu can kick rocks
 nmap <F1> <nop>
@@ -159,25 +155,10 @@ augroup trailing
     au InsertLeave * :set listchars+=trail:_
 augroup END
 
-""" coc.nvim settings
-let g:coc_filetype_map = {
-	\ 'yaml.ansible': 'ansible',
-	\}
-
-" GoTo code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
+" ALE
+nmap gd :ALEGoToDefinition<cr>
+nmap ge :ALEDetail<cr>
+nmap gr :ALEFindReferences<cr>
+nmap gk :ALEDocumentation<cr>
 
 syntax on

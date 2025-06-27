@@ -10,7 +10,7 @@ if [[ "${ID}" == "debian" ]]; then
     # rustup
     fn_local_install_rustup
 
-    fn_local_install_neovim
+    # fn_local_install_neovim
 fi
 
 if [[ "${ID}" == "Termux" ]]; then

@@ -645,6 +645,7 @@ fn_system_setup_fedora_el() {
         "python3-ramalama"
         "iotop-c"
         "ninja-build"
+        "fedpkg"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
@@ -654,21 +655,22 @@ fn_system_setup_fedora_el() {
                 "python3.12-pip"
             )
         fi
-        if [[ "${el_major_version}" -lt 10 ]]; then
-            fn_local_install_neovim
-        fi
-        if [[ "${el_major_version}" -ge 10 ]]; then
-            fedora_el_pkglist+=(
-                "neovim"
-            )
-        fi
+        # NEOVIM STUB
+        # if [[ "${el_major_version}" -lt 10 ]]; then
+        #     fn_local_install_neovim
+        # fi
+        # if [[ "${el_major_version}" -ge 10 ]]; then
+        #     fedora_el_pkglist+=(
+        #         "neovim"
+        #     )
+        # fi
     fi
     if [[ "${ID}" == "fedora" ]]; then
         fedora_el_pkglist+=(
+            # NEOVIM STUB
+            # "neovim"
+            # "python3-neovim"
             "python3-torch"
-            "fedpkg"
-            "neovim"
-            "python3-neovim"
             "fedora-review"
             "fd-find"
         )
@@ -689,11 +691,6 @@ fn_system_setup_fedora_el() {
     fn_system_install_packages "${fedora_el_pkglist[@]}"
     sudo usermod "${USER}" -a -G mock
 
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        if [[ "${el_major_version}" -lt 10 ]]; then
-            fn_local_install_neovim
-        fi
-    fi
 
     # Tailscale
     fn_system_install_tailscale
@@ -701,11 +698,12 @@ fn_system_setup_fedora_el() {
     # RHEL Lightspeed / command-line-assistant
     fn_system_install_command_line_assistant
 
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        if [[ "${el_major_version}" -lt 10 ]]; then
-            fn_local_install_neovim
-        fi
-    fi
+    # NEOVIM STUB
+    # if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+    #     if [[ "${el_major_version}" -lt 10 ]]; then
+    #         fn_local_install_neovim
+    #     fi
+    # fi
 
     fn_system_polkit_libvirt_nonroot_user
 
@@ -1682,15 +1680,17 @@ fn_update_local_installs() {
 
     if [[ "${ID}" == "debian" ]]; then
         fn_local_install_rustup update
-        fn_local_install_neovim update
+        # NEOVIM STUB
+        # fn_local_install_neovim update
         fn_local_install_ollama update
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         local el_major_version
         el_major_version=$(rpm -E %rhel)
-        if [[ "${el_major_version}" -lt 10 ]]; then
-            fn_local_install_neovim update
-        fi
+        # NEOVIM STUB
+        # if [[ "${el_major_version}" -lt 10 ]]; then
+        #     fn_local_install_neovim update
+        # fi
     fi
 
     fn_local_install_distrobox update

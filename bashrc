@@ -176,12 +176,13 @@ export EDITOR=vim
 #FIXME - F19+ PROMPT_COMMAND does stupid shit with escape sequences
 unset PROMPT_COMMAND
 
-# neovim 
-if [[ -f /usr/bin/nvim ]] || [[ -f ~/.local/bin/nvim ]]; then
-    alias nv=nvim
-    alias vim=nvim
-    export EDITOR=nvim
-fi
+# NEOVIM STUB
+# # neovim 
+# if [[ -f /usr/bin/nvim ]] || [[ -f ~/.local/bin/nvim ]]; then
+#     alias nv=nvim
+#     alias vim=nvim
+#     export EDITOR=nvim
+# fi
 
 # "Bash aliases you can't live without"
 # https://opensource.com/article/19/7/bash-aliases
