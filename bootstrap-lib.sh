@@ -1033,11 +1033,11 @@ fn_ensure_npm_prefix() {
 }
 
 fn_local_install_claude_code() {
-    printf "Installing Claude Code...\n"
     fn_ensure_npm_prefix
     local bin_path
     bin_path="${HOME}/.local/bin/claude"
     if ! [[ -f "${bin_path}" ]]; then
+        printf "Installing Claude Code...\n"
         npm install -g @anthropic-ai/claude-code
     fi
     if ! [[ -f "${bin_path}" ]]; then
@@ -1046,11 +1046,11 @@ fn_local_install_claude_code() {
 }
 
 fn_local_install_gemini() {
-    printf "Installing Gemini CLI...\n"
     fn_ensure_npm_prefix
     local bin_path
     bin_path="${HOME}/.local/bin/gemini"
     if ! [[ -f "${bin_path}" ]]; then
+        printf "Installing Gemini CLI...\n"
         npm install -g @google/gemini-cli
     fi
     if ! [[ -f ${bin_path} ]]; then
@@ -1064,6 +1064,7 @@ fn_local_bash_language_server() {
     local bin_path
     bin_path="${HOME}/.local/bin/bash-language-servere"
     if ! [[ -f "${bin_path}" ]]; then
+        printf "Installing bash language server...\n"
         npm install -g bash-language-server
     fi
     if ! [[ -f ${bin_path} ]]; then
