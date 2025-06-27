@@ -3,19 +3,56 @@
 # Basic library functions for my dotfiles
 #
 
-_ERRORS=()
+# Strict error handling
+set -euo pipefail
 
-_MACHINE_ARCH=$(uname -m)
+# Global variables
+declare -a _ERRORS=()
+declare -a _INSTALLED_PACKAGES=()
+declare -a _CREATED_DIRECTORIES=()
+declare -a _CREATED_SYMLINKS=()
 
-_LOCAL_COMPLETIONS_DIR="${HOME}/.local/share/bash-completion/completions"
-_LOCAL_BIN_DIR="${HOME}/.local/bin"
+readonly _MACHINE_ARCH=$(uname -m)
 
-if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
-    _GOLANG_ARCH="amd64"
+readonly _LOCAL_COMPLETIONS_DIR="${HOME}/.local/share/bash-completion/completions"
+readonly _LOCAL_BIN_DIR="${HOME}/.local/bin"
+
+# Architecture mapping for Go downloads
+readonly _GOLANG_ARCH=$(case "${_MACHINE_ARCH}" in
+    x86_64) echo "amd64" ;;
+    aarch64) echo "arm64" ;;
+    *) echo "unsupported" ;;
+esac)
+
+if [[ "${_GOLANG_ARCH}" == "unsupported" ]]; then
+    echo "ERROR: Unsupported architecture: ${_MACHINE_ARCH}" >&2
+    exit 1
 fi
-if [[ ${_MACHINE_ARCH} == "aarch64" ]]; then
-    _GOLANG_ARCH="arm64"
-fi
+
+# Security and networking configuration
+readonly CURL_TIMEOUT=30
+readonly CURL_MAX_TIME=300
+readonly MAX_RETRIES=3
+readonly RETRY_DELAY=2
+
+# Cleanup function for trap
+fn_cleanup() {
+    local exit_code=$?
+    
+    # Clean up temporary files
+    find /tmp -name "*.$$" -user "$(id -u)" -delete 2>/dev/null || true
+    
+    # If script failed and we have changes to rollback
+    if [[ ${exit_code} -ne 0 ]] && [[ ${#_CREATED_SYMLINKS[@]} -gt 0 || ${#_CREATED_DIRECTORIES[@]} -gt 0 ]]; then
+        echo "Script failed. Rolling back changes..." >&2
+        fn_rollback_changes
+    fi
+    
+    exit ${exit_code}
+}
+
+# Set up signal handlers
+trap 'fn_cleanup' EXIT ERR INT TERM
 
 fn_check_distro() {
     if [[ -f /etc/os-release ]]; then
@@ -33,7 +70,7 @@ fn_log_error() {
 }
 
 fn_print_errors() {
-    if [[ -n "${_ERRORS[*]}" ]]; then
+    if [[ ${#_ERRORS[@]} -gt 0 ]]; then
         printf "\n\nERRORS:\n"
         for error in "${_ERRORS[@]}"; do
             printf "%s\n" "${error}"
@@ -41,10 +78,222 @@ fn_print_errors() {
     fi
 }
 
+# Security functions
+fn_validate_url() {
+    local url="$1"
+    
+    # Check if URL starts with https
+    if [[ ! "${url}" =~ ^https:// ]]; then
+        echo "ERROR: URL must use HTTPS: ${url}" >&2
+        return 1
+    fi
+    
+    # Basic URL format validation
+    if [[ ! "${url}" =~ ^https://[a-zA-Z0-9.-]+/.*$ ]]; then
+        echo "ERROR: Invalid URL format: ${url}" >&2
+        return 1
+    fi
+    
+    return 0
+}
+
+fn_verify_checksum() {
+    local file="$1"
+    local expected_checksum="$2"
+    local hash_type="${3:-sha256}"
+    
+    if [[ ! -f "${file}" ]]; then
+        echo "ERROR: File not found for checksum verification: ${file}" >&2
+        return 1
+    fi
+    
+    local actual_checksum
+    case "${hash_type}" in
+        sha256)
+            actual_checksum=$(sha256sum "${file}" | cut -d' ' -f1)
+            ;;
+        sha512)
+            actual_checksum=$(sha512sum "${file}" | cut -d' ' -f1)
+            ;;
+        *)
+            echo "ERROR: Unsupported hash type: ${hash_type}" >&2
+            return 1
+            ;;
+    esac
+    
+    if [[ "${actual_checksum}" != "${expected_checksum}" ]]; then
+        echo "ERROR: Checksum mismatch for ${file}" >&2
+        echo "Expected: ${expected_checksum}" >&2
+        echo "Actual:   ${actual_checksum}" >&2
+        return 1
+    fi
+    
+    return 0
+}
+
+fn_secure_download() {
+    local url="$1"
+    local output_file="$2"
+    local expected_checksum="${3:-}"
+    local hash_type="${4:-sha256}"
+    local retries=0
+    
+    # Validate URL
+    fn_validate_url "${url}" || return 1
+    
+    # Create output directory if needed
+    local output_dir
+    output_dir="$(dirname "${output_file}")"
+    if [[ ! -d "${output_dir}" ]]; then
+        mkdir -p "${output_dir}" || {
+            echo "ERROR: Failed to create directory: ${output_dir}" >&2
+            return 1
+        }
+    fi
+    
+    # Download with retries
+    while [[ ${retries} -lt ${MAX_RETRIES} ]]; do
+        if curl --fail --silent --show-error --location \
+                --tlsv1.2 --proto '=https' \
+                --connect-timeout "${CURL_TIMEOUT}" \
+                --max-time "${CURL_MAX_TIME}" \
+                --output "${output_file}" \
+                "${url}"; then
+            
+            # Verify checksum if provided
+            if [[ -n "${expected_checksum}" ]]; then
+                if fn_verify_checksum "${output_file}" "${expected_checksum}" "${hash_type}"; then
+                    return 0
+                else
+                    rm -f "${output_file}"
+                    return 1
+                fi
+            fi
+            
+            return 0
+        fi
+        
+        ((retries++))
+        if [[ ${retries} -lt ${MAX_RETRIES} ]]; then
+            echo "Download failed, retrying in ${RETRY_DELAY} seconds... (${retries}/${MAX_RETRIES})" >&2
+            sleep "${RETRY_DELAY}"
+        fi
+    done
+    
+    echo "ERROR: Failed to download after ${MAX_RETRIES} attempts: ${url}" >&2
+    return 1
+}
+
+fn_validate_path() {
+    local path="$1"
+    
+    # Resolve path and check for directory traversal
+    local resolved_path
+    resolved_path="$(realpath -m "${path}" 2>/dev/null)" || {
+        echo "ERROR: Invalid path: ${path}" >&2
+        return 1
+    }
+    
+    # Ensure path is within HOME directory for user files
+    if [[ "${path}" =~ ^${HOME}/ ]] && [[ ! "${resolved_path}" =~ ^${HOME}/ ]]; then
+        echo "ERROR: Path traversal detected: ${path} -> ${resolved_path}" >&2
+        return 1
+    fi
+    
+    return 0
+}
+
+fn_rollback_changes() {
+    echo "Rolling back changes..."
+    
+    # Remove created symlinks
+    if [[ ${#_CREATED_SYMLINKS[@]} -gt 0 ]]; then
+        echo "Removing created symlinks..."
+        for symlink in "${_CREATED_SYMLINKS[@]}"; do
+            if [[ -L "${symlink}" ]]; then
+                rm "${symlink}" && echo "Removed symlink: ${symlink}"
+            fi
+        done
+    fi
+    
+    # Remove created directories (in reverse order)
+    if [[ ${#_CREATED_DIRECTORIES[@]} -gt 0 ]]; then
+        echo "Removing created directories..."
+        local i
+        for ((i=${#_CREATED_DIRECTORIES[@]}-1; i>=0; i--)); do
+            local dir="${_CREATED_DIRECTORIES[i]}"
+            if [[ -d "${dir}" ]] && [[ -z "$(ls -A "${dir}" 2>/dev/null)" ]]; then
+                rmdir "${dir}" && echo "Removed directory: ${dir}"
+            fi
+        done
+    fi
+    
+    echo "Rollback completed."
+}
+
+# Common function for GitHub API releases
+fn_get_github_latest_release() {
+    local repo="$1"
+    local filter="${2:-.*}"  # Optional filter for release names
+    local temp_file="/tmp/github-releases.$$"
+    
+    if fn_secure_download "https://api.github.com/repos/${repo}/tags" "${temp_file}"; then
+        if command -v jq >/dev/null 2>&1; then
+            local release
+            release=$(jq -r ".[] | select(.name | test(\"${filter}\")).name" "${temp_file}" 2>/dev/null | head -1)
+            rm -f "${temp_file}"
+            
+            if [[ -n "${release}" && "${release}" != "null" ]]; then
+                echo "${release}"
+                return 0
+            fi
+        fi
+        rm -f "${temp_file}"
+    fi
+    
+    echo "ERROR: Failed to get latest release for ${repo}" >&2
+    return 1
+}
+
+# Validate input parameters for install functions
+fn_validate_install_params() {
+    local tool_name="$1"
+    local install_path="$2"
+    
+    if [[ -z "${tool_name}" ]]; then
+        echo "ERROR: Tool name cannot be empty" >&2
+        return 1
+    fi
+    
+    if [[ -z "${install_path}" ]]; then
+        echo "ERROR: Install path cannot be empty" >&2
+        return 1
+    fi
+    
+    # Validate install path is within expected directories
+    if [[ ! "${install_path}" =~ ^(${_LOCAL_BIN_DIR}|${HOME}/.cargo/bin|${HOME}/go/bin)/ ]]; then
+        echo "ERROR: Install path outside allowed directories: ${install_path}" >&2
+        return 1
+    fi
+    
+    return 0
+}
+
 # Ensure the needed dirs exist
 fn_mkdir_if_needed() {
-    if [[ ! -d "${1}" ]]; then
-        mkdir -p "${1}"
+    local dir="$1"
+    
+    # Validate path
+    fn_validate_path "${dir}" || return 1
+    
+    if [[ ! -d "${dir}" ]]; then
+        if mkdir -p "${dir}"; then
+            _CREATED_DIRECTORIES+=("${dir}")
+            echo "Created directory: ${dir}"
+        else
+            fn_log_error "Failed to create directory: ${dir}"
+            return 1
+        fi
     fi
 }
 
@@ -117,17 +366,46 @@ EOF
 
 # Symlink the conf files
 fn_symlink_if_needed() {
-    if [[ -f ${2} ]] && [[ ! -L ${2} ]]; then
-        printf "File found: %s ... backing up\n" "$2"
-        # if the destination file exists and isn't a symlink, back it up
-        mv "${2}" "${2}.old$(date +%Y%m%d)" || fn_log_error "${FUNCNAME[0]}: failed to back up ${2}"
+    local source="$1"
+    local target="$2"
+    local backup_file
+    
+    # Validate paths
+    fn_validate_path "${source}" || return 1
+    fn_validate_path "${target}" || return 1
+    
+    # Check if source exists
+    if [[ ! -e "${source}" ]]; then
+        fn_log_error "Source file does not exist: ${source}"
+        return 1
     fi
-    if [[ ! -f ${2} ]] && [[ ! -L ${2} ]]; then
-        printf "Symlinking: %s -> %s\n" "$1" "$2"
-        if [[ ! -d "$(dirname "${2}")" ]]; then
-            mkdir -p "$(dirname "${2}")" || fn_log_error "${FUNCNAME[0]}: failed to mkdir $(dirname "${2}")"
+    
+    # Create atomic operation for file backup and symlinking
+    if [[ -f "${target}" ]] && [[ ! -L "${target}" ]]; then
+        backup_file="${target}.old$(date +%Y%m%d_%H%M%S)"
+        printf "File found: %s ... backing up to %s\n" "${target}" "${backup_file}"
+        
+        if ! mv "${target}" "${backup_file}"; then
+            fn_log_error "Failed to back up ${target}"
+            return 1
         fi
-        ln -s "${1}" "${2}"
+    fi
+    
+    if [[ ! -f "${target}" ]] && [[ ! -L "${target}" ]]; then
+        printf "Symlinking: %s -> %s\n" "${source}" "${target}"
+        
+        local target_dir
+        target_dir="$(dirname "${target}")"
+        if [[ ! -d "${target_dir}" ]]; then
+            fn_mkdir_if_needed "${target_dir}" || return 1
+        fi
+        
+        if ln -s "${source}" "${target}"; then
+            _CREATED_SYMLINKS+=("${target}")
+        else
+            fn_log_error "Failed to create symlink: ${source} -> ${target}"
+            return 1
+        fi
     fi
 }
 
@@ -178,18 +456,29 @@ fn_system_install_tailscale() {
         # tailscale
         local tailscale_keyring="/usr/share/keyrings/tailscale-archive-keyring.gpg"
         local tailscale_aptlist="/etc/apt/sources.list.d/tailscale.list"
+        local temp_keyring="/tmp/tailscale-keyring.gpg"
+        local temp_aptlist="/tmp/tailscale.list"
+        
         if ! dpkg -l tailscale > /dev/null 2>&1; then
-            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg" | sudo tee ${tailscale_keyring} >/dev/null
-            if ! [[ -f ${tailscale_keyring} ]]; then
-                fn_log_error "${FUNCNAME[0]}: failed to download ${tailscale_keyring}"
+            echo "Installing Tailscale for Debian..."
+            
+            # Download keyring securely
+            if fn_secure_download "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg" "${temp_keyring}"; then
+                sudo mv "${temp_keyring}" "${tailscale_keyring}" || fn_log_error "${FUNCNAME[0]}: failed to install keyring"
+            else
+                fn_log_error "${FUNCNAME[0]}: failed to download keyring"
+                return 1
             fi
 
-            curl -fsSL "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.tailscale-keyring.list" | sudo tee ${tailscale_aptlist}
-            if ! [[ -f ${tailscale_aptlist} ]]; then
-                fn_log_error "${FUNCNAME[0]}: failed to download ${tailscale_aptlist}"
+            # Download apt list securely
+            if fn_secure_download "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.tailscale-keyring.list" "${temp_aptlist}"; then
+                sudo mv "${temp_aptlist}" "${tailscale_aptlist}" || fn_log_error "${FUNCNAME[0]}: failed to install apt list"
+            else
+                fn_log_error "${FUNCNAME[0]}: failed to download apt list"
+                return 1
             fi
 
-            sudo apt update
+            sudo apt update || fn_log_error "${FUNCNAME[0]}: failed to update package list"
             sudo apt install -y tailscale || fn_log_error "${FUNCNAME[0]}: failed to install tailscale"
         fi
     fi
@@ -233,8 +522,19 @@ fn_system_install_packages() {
     
     fn_check_distro
 
+    # Input validation
+    if [[ $# -eq 0 ]]; then
+        fn_log_error "${FUNCNAME[0]}: No packages specified"
+        return 1
+    fi
+
     local pending_install_pkgs=()
     for pkg in "${@}"; do
+        # Validate package name (basic alphanumeric + common chars)
+        if [[ ! "${pkg}" =~ ^[a-zA-Z0-9._+-]+$ ]]; then
+            fn_log_error "${FUNCNAME[0]}: Invalid package name: ${pkg}"
+            continue
+        fi
         if [[ "${ID}" == "debian" || "${ID}" == "Termux" ]]; then 
             if ! dpkg -s "${pkg}" | grep "Status: install ok installed" > /dev/null 2>&1; then
                 pending_install_pkgs+=("${pkg}")
@@ -933,30 +1233,57 @@ fn_local_install_kubectl() {
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/kubectl"
     local latest_release
     local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+    local temp_file="/tmp/kubectl.$$"
+    
+    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}" || return 1
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}" || return 1
 
-    latest_release=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-    if [[ ${1} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+    # Get latest release version securely
+    if ! latest_release=$(fn_secure_download "https://dl.k8s.io/release/stable.txt" "/tmp/kubectl-version.$$" && cat "/tmp/kubectl-version.$$" && rm "/tmp/kubectl-version.$$"); then
+        fn_log_error "${FUNCNAME[0]}: failed to get latest kubectl version"
+        return 1
+    fi
+    
+    # Validate version format
+    if [[ ! "${latest_release}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        fn_log_error "${FUNCNAME[0]}: invalid version format: ${latest_release}"
+        return 1
+    fi
+    
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }' || echo "unknown")
             local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
     # kubectl install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing kubectl...\n"
-        curl -LO "https://dl.k8s.io/release/${latest_release}/bin/linux/${_GOLANG_ARCH}/kubectl"
-        chmod +x ./kubectl
-        cp ./kubectl "${install_path}"
-        rm ./kubectl
-        ${install_path} completion bash > "${completions_install_path}"
+    if [[ ! -f "${install_path}" ]]; then
+        printf "Installing kubectl %s...\n" "${latest_release}"
+        
+        local kubectl_url="https://dl.k8s.io/release/${latest_release}/bin/linux/${_GOLANG_ARCH}/kubectl"
+        if fn_secure_download "${kubectl_url}" "${temp_file}"; then
+            chmod +x "${temp_file}"
+            mv "${temp_file}" "${install_path}" || {
+                fn_log_error "${FUNCNAME[0]}: failed to install kubectl binary"
+                rm -f "${temp_file}"
+                return 1
+            }
+            
+            # Generate completions
+            if ! "${install_path}" completion bash > "${completions_install_path}"; then
+                fn_log_error "${FUNCNAME[0]}: failed to generate kubectl completions"
+            fi
+        else
+            fn_log_error "${FUNCNAME[0]}: failed to download kubectl"
+            return 1
+        fi
     fi
 
-    if [[ ! -f ${install_path} ]]; then
+    if [[ ! -f "${install_path}" ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+        return 1
     fi
 }
 
@@ -1046,22 +1373,52 @@ fn_local_install_rustup() {
     local install_path="${HOME}/.cargo/bin/rustup"
     local latest_release
     local currently_installed_version
+    local rustup_script="/tmp/rustup-init.$$"
 
-    latest_release="$(curl -s 'https://api.github.com/repos/rust-lang/rustup/tags' | jq -r '.[0].name')"
-    if [[ ${1} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+    # Get latest release info securely
+    local temp_releases="/tmp/rustup-releases.$$"
+    if fn_secure_download "https://api.github.com/repos/rust-lang/rustup/tags" "${temp_releases}"; then
+        latest_release="$(jq -r '.[0].name' "${temp_releases}" 2>/dev/null || echo "unknown")"
+        rm -f "${temp_releases}"
+    else
+        fn_log_error "${FUNCNAME[0]}: failed to get rustup release info"
+        return 1
+    fi
+    
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f "${install_path}" ]]; then
+            currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }' || echo "unknown")
             local uninstall_paths=("${install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
-    if [[ ! -f ${install_path} ]]; then
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    if [[ ! -f "${install_path}" ]]; then
+        echo "Installing rustup..."
+
+        # Download rustup installer securely
+        if fn_secure_download "https://sh.rustup.rs" "${rustup_script}"; then
+            chmod +x "${rustup_script}"
+
+            # Run installer with strict settings
+            if "${rustup_script}" -y --no-modify-path --profile minimal; then
+                echo "Rustup installed successfully"
+            else
+                fn_log_error "${FUNCNAME[0]}: rustup installation failed"
+                rm -f "${rustup_script}"
+                return 1
+            fi
+
+            rm -f "${rustup_script}"
+        else
+            fn_log_error "${FUNCNAME[0]}: failed to download rustup installer"
+            return 1
+        fi
     fi
 
-    if [[ ! -f ${install_path} ]]; then
+    if [[ ! -f "${install_path}" ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+        return 1
     fi
 }
 
