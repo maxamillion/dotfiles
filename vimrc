@@ -7,6 +7,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'fatih/vim-go'
 Plug 'rust-lang/rust.vim'
 Plug 'sjl/badwolf'
+Plug 'jacoborus/tender.vim'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
@@ -115,7 +116,7 @@ command! Q :q
 
 " colors
 set t_Co=256
-colorscheme badwolf
+colorscheme tender
 let &colorcolumn="80,".join(range(400,999),",")
 
 """ Airline settings
