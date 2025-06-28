@@ -1045,6 +1045,19 @@ fn_local_install_claude_code() {
     fi
 }
 
+fn_local_install_amp_code() {
+    fn_ensure_npm_prefix
+    local bin_path
+    bin_path="${HOME}/.local/bin/amp"
+    if ! [[ -f "${bin_path}" ]]; then
+        printf "Installing amp...\n"
+        npm install -g @sourcegraph/amp
+    fi
+    if ! [[ -f "${bin_path}" ]]; then
+        fn_log_error "Amp npm install failed"
+    fi
+}
+
 fn_local_install_gemini() {
     fn_ensure_npm_prefix
     local bin_path
@@ -1062,7 +1075,7 @@ fn_local_bash_language_server() {
     printf "Installing bash language server...\n"
     fn_ensure_npm_prefix
     local bin_path
-    bin_path="${HOME}/.local/bin/bash-language-servere"
+    bin_path="${HOME}/.local/bin/bash-language-server"
     if ! [[ -f "${bin_path}" ]]; then
         printf "Installing bash language server...\n"
         npm install -g bash-language-server
