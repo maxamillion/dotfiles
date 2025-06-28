@@ -102,9 +102,11 @@ noremap <Leader>ff :Files<CR>
 noremap <Leader>fg :GFiles<CR>
 noremap <Leader>fl :Lines<CR>
 
-" windsurf suggestion cycling
+" windsurf suggestion cycling - only accept with Ctrl-g
+imap <script><silent><nowait><expr> <C-g> codeium#Accept()
 imap <C-j>   <Cmd>call codeium#CycleCompletions(1)<CR>
 imap <C-k>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+let g:codeium_disable_bindings = 1
 
 " the F1 help menu can kick rocks
 nmap <F1> <nop>
@@ -165,21 +167,31 @@ nmap ge <Plug>ALEDetail<cr>
 nmap gr <Plug>ALEFindReferences<cr>
 nmap gk <Plug>ALEDocumentation<cr>
 
-" ALE completion settings
 let g:ale_completion_enabled = 1
 let g:ale_completion_autoimport = 1
 let g:ale_completion_delay = 0
 let g:ale_completion_max_suggestions = 50
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = 'WW'
+let g:ale_linters = {
+\   'bash': ['bash-language-server'],
+\}
+
 
 " Enable omni completion
 set omnifunc=ale#completion#OmniFunc
-set completeopt=menu,menuone,noinsert
+set completeopt=menu,menuone,noselect
 
 " Auto-trigger completion as you type
 augroup ALECompletion
   autocmd!
   autocmd TextChangedI * if pumvisible() == 0|pclose|call feedkeys("\<C-n>", "n")|endif
 augroup END
+
+" Use Ctrl-y to accept completion, disable Tab from cycling
+inoremap <expr> <C-y> pumvisible() ? "\<C-y>" : "\<C-y>"
+inoremap <expr> <Tab> pumvisible() ? "\<Tab>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<S-Tab>" : "\<S-Tab>"
 
 " Sync clipboard with system clipboard for Wayland
 if executable('wl-copy')
