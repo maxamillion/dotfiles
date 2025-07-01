@@ -1072,7 +1072,6 @@ fn_local_install_gemini() {
 }
 
 fn_local_bash_language_server() {
-    printf "Installing bash language server...\n"
     fn_ensure_npm_prefix
     local bin_path
     bin_path="${HOME}/.local/bin/bash-language-server"

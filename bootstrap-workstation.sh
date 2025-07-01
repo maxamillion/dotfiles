@@ -38,7 +38,7 @@ if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}"
     fn_system_setup_fedora_el
 
     # virtualenvwrapper
-    # fn_local_install_virtualenvwrapper
+    fn_local_install_virtualenvwrapper
 
 fi
 
