@@ -8,7 +8,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'fatih/vim-go'
 Plug 'rust-lang/rust.vim'
 Plug 'rhysd/vim-healthcheck'
-Plug 'crusoexia/vim-monokai'
+Plug 'sainnhe/sonokai'
 Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
@@ -119,13 +119,14 @@ command! Q :q
 
 " colors
 set t_Co=256
-colorscheme monokai
+colorscheme sonokai
+
+" colorcolumn
 let &colorcolumn="80,".join(range(400,999),",")
 
 """ Airline settings
 " Set airline to use not use powerline fancy font symbols
 let g:airline_symbols_ascii = 1
-let g:airline_theme = 'distinguished'
 
 """ Autoswap
 set title titlestring=
