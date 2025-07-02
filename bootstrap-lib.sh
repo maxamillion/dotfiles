@@ -1535,7 +1535,7 @@ fn_local_install_task() {
     latest_release="$(curl -s 'https://api.github.com/repos/go-task/task/tags' | jq -r '.[0].name')"
     if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(nvim --version| awk '/^NVIM/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
+            currently_installed_version=$(task --version)
             local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
