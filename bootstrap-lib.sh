@@ -18,7 +18,8 @@ readonly _LOCAL_COMPLETIONS_DIR="${HOME}/.local/share/bash-completion/completion
 readonly _LOCAL_BIN_DIR="${HOME}/.local/bin"
 
 # Architecture mapping for Go downloads
-readonly _GOLANG_ARCH=$(case "${_MACHINE_ARCH}" in
+readonly _GOLANG_ARCH=$(
+    case "${_MACHINE_ARCH}" in
     x86_64) echo "amd64" ;;
     aarch64) echo "arm64" ;;
     *) echo "unsupported" ;;
