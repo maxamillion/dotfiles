@@ -113,6 +113,7 @@ fn_local_install_goose
 
 # claude code
 fn_local_install_claude_code
+fn_local_install_claude_code_requirements_builder
 
 # gemini cli
 fn_local_install_gemini

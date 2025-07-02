@@ -1045,6 +1045,15 @@ fn_local_install_claude_code() {
     fi
 }
 
+fn_local_install_claude_code_requirements_builder() {
+    fn_mkdir_if_needed "${HOME}/src/"
+    fn_mkdir_if_needed "${HOME}/.claude/commands"
+    if ! [[ -d "${HOME}/src/claude-code-requirements-builder" ]]; then
+        git clone https://github.com/rizethereum/claude-code-requirements-builder.git "${HOME}/src/claude-code-requirements-builder"
+        fn_symlink_if_needed "${HOME}/src/claude-code-requirements-builder" "${HOME}/.claude/commands"
+    fi
+}
+
 fn_local_install_amp_code() {
     fn_ensure_npm_prefix
     local bin_path
