@@ -1012,11 +1012,14 @@ fn_system_setup_fedora_el() {
     #     fi
     # fi
 
-    fn_system_polkit_libvirt_nonroot_user
+    # Only install the GUI stuff if we're on a real system and not in a toolbox container
+    if [[ -z "${TOOLBOX_PATH}" ]]; then
+        fn_system_polkit_libvirt_nonroot_user
 
-    fn_flathub_install
+        fn_flathub_install
 
-    fn_system_gnome_settings
+        fn_system_gnome_settings
+    fi
 }
 
 fn_local_install_virtualenvwrapper(){
