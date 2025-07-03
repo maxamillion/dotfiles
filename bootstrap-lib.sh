@@ -952,6 +952,7 @@ fn_system_setup_fedora_el() {
         "iotop-c"
         "ninja-build"
         "fedpkg"
+        "toolbox"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
