@@ -961,6 +961,7 @@ fn_system_setup_fedora_el() {
         "ninja-build"
         "fedpkg"
         "toolbox"
+        "pcp-system-tools"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
