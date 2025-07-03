@@ -335,39 +335,47 @@ fn_system_install_chrome() {
     # fi
 }
 
-fn_setup_rhel_csb() {
+fn_system_setup_rht_copr() {
     fn_check_distro
-    local repofile="/etc/yum.repos.d/billings-csb.repo"
+    local repofile='/etc/yum.repos.d/_copr:copr.devel.redhat.com:group_endpoint-systems-sysadmins:unsupported-fedora-packages.repo'
     # Use Billings' COPR
-    if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
-        sudo tee ${repofile} &>/dev/null << "EOF"
-[copr:copr.devel.redhat.com:jbilling:unoffical-rhel9]
-name=Copr repo for unoffical-rhel9 owned by jbilling
-baseurl=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/rhel-9-$basearch/
+    
+    if ! [[ -f ${repofile} ]]; then
+        printf "Installing rht-copr repo...\n"
+        if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]] || [[ "${ID}" == "centos" ]]; then
+            sudo tee ${repofile} &>/dev/null << "EOF"
+[copr:copr.devel.redhat.com:group_endpoint-systems-sysadmins:unsupported-fedora-packages]
+name=Copr repo for unsupported-fedora-packages owned by @endpoint-systems-sysadmins
+baseurl=https://coprbe.devel.redhat.com/results/@endpoint-systems-sysadmins/unsupported-fedora-packages/epel-$releasever-$basearch/
 type=rpm-md
 skip_if_unavailable=True
-gpgcheck=0
-gpgkey=https://coprbe.devel.redhat.com/results/jbilling/unoffical-rhel9/pubkey.gpg
+gpgcheck=1
+gpgkey=https://coprbe.devel.redhat.com/results/@endpoint-systems-sysadmins/unsupported-fedora-packages/pubkey.gpg
 repo_gpgcheck=0
 enabled=1
 enabled_metadata=1
 EOF
+        fi
+        
+        if [[ "${ID}" == "fedora" ]]; then
+            sudo tee ${repofile} &>/dev/null << "EOF"
+[copr:copr.devel.redhat.com:group_endpoint-systems-sysadmins:unsupported-fedora-packages]
+name=Copr repo for unsupported-fedora-packages owned by @endpoint-systems-sysadmins
+baseurl=https://coprbe.devel.redhat.com/results/@endpoint-systems-sysadmins/unsupported-fedora-packages/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://coprbe.devel.redhat.com/results/@endpoint-systems-sysadmins/unsupported-fedora-packages/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+EOF
+        fi
     fi
+    
     if ! [[ -f ${repofile} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to setup copr"
+        fn_log_error "${FUNCNAME[0]}: Failed to setup rht copr"
     fi
-#     if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]]; then
-#       sudo tee /etc/yum.repos.d/redhat-csb.repo &>/dev/null << EOF
-# [rhel-csb]
-# name=RHEL CSB packages
-# baseurl=http://hdn.corp.redhat.com/rhel8-csb
-# enabled=1
-# gpgcheck=1
-# gpgkey=http://hdn.corp.redhat.com/rhel8-csb/RPM-GPG-KEY-helpdesk
-# skip_if_unavailable=yes
-# includepkgs=redhat-internal-*,oneplay-gstreamer-codecs-pack,zoom,ffmpeg-libs,xvidcore
-# EOF
-    # fi
 }
 
 # Symlink the conf files
@@ -994,6 +1002,7 @@ fn_system_setup_fedora_el() {
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         fn_system_install_epel
     fi
+    fn_system_setup_rht_copr
 
     fn_system_install_packages "${fedora_el_pkglist[@]}"
     sudo usermod "${USER}" -a -G mock
@@ -1014,7 +1023,6 @@ fn_system_setup_fedora_el() {
 
     # Only install the GUI stuff if we're on a real system and not in a toolbox container
     if [[ -z "${TOOLBOX_PATH:-}" ]]; then
-        echo "Installing GUI stuff..."
         fn_system_polkit_libvirt_nonroot_user
 
         fn_flathub_install
