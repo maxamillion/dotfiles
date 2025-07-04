@@ -42,20 +42,6 @@ if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}"
 
 fi
 
-# Install vim-plug with secure download
-readonly VIM_PLUG_DIR="${HOME}/.vim/autoload"
-readonly VIM_PLUG_FILE="${VIM_PLUG_DIR}/plug.vim"
-readonly VIM_PLUG_URL="https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-
-if [[ ! -f "${VIM_PLUG_FILE}" ]]; then
-    echo "Installing vim-plug..."
-    mkdir -p "${VIM_PLUG_DIR}" || fn_log_error "Failed to create vim autoload directory"
-    
-    if ! fn_secure_download "${VIM_PLUG_URL}" "${VIM_PLUG_FILE}"; then
-        fn_log_error "Failed to download vim-plug"
-    fi
-fi
-
 # k8s stuff
 fn_local_install_minikube
 fn_local_install_kind

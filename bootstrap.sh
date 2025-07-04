@@ -4,8 +4,8 @@
 set -euo pipefail
 
 # Validate environment
-readonly _SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-readonly _LIB_FILE="${_SCRIPT_DIR}/bootstrap-lib.sh"
+_DOTFILES_DIR="${HOME}/dotfiles"
+_LIB_FILE="${_DOTFILES_DIR}/bootstrap-lib.sh"
 
 # Source library with error handling
 if [[ ! -f "${_LIB_FILE}" ]]; then
@@ -17,63 +17,61 @@ fi
 source "${_LIB_FILE}"
 
 # Create necessary directories with absolute paths
-readonly _HOME_DIR="${HOME}"
-fn_mkdir_if_needed "${_HOME_DIR}/.config/dunst"
-fn_mkdir_if_needed "${_HOME_DIR}/.config/i3"
-fn_mkdir_if_needed "${_HOME_DIR}/.config/i3status"
-fn_mkdir_if_needed "${_HOME_DIR}/.config/fontconfig"
-fn_mkdir_if_needed "${_HOME_DIR}/.config/fontconfig/conf.d"
-#fn_mkdir_if_needed "${_HOME_DIR}/.config/nvim/lua/"
-fn_mkdir_if_needed "${_HOME_DIR}/.tmuxinator"
-fn_mkdir_if_needed "${_HOME_DIR}/.ptpython"
-fn_mkdir_if_needed "${_HOME_DIR}/.fonts"
-fn_mkdir_if_needed "${_HOME_DIR}/.ssh"
-fn_mkdir_if_needed "${_HOME_DIR}/.vimundo"
-fn_mkdir_if_needed "${_HOME_DIR}/.vim"
-fn_mkdir_if_needed "${_HOME_DIR}/.ipython/profile_default/"
-fn_mkdir_if_needed "${_HOME_DIR}/.shelloracle/"
+fn_mkdir_if_needed "${HOME}/.config/dunst"
+fn_mkdir_if_needed "${HOME}/.config/i3"
+fn_mkdir_if_needed "${HOME}/.config/i3status"
+fn_mkdir_if_needed "${HOME}/.config/fontconfig"
+fn_mkdir_if_needed "${HOME}/.config/fontconfig/conf.d"
+#fn_mkdir_if_needed "${HOME}/.config/nvim/lua/"
+fn_mkdir_if_needed "${HOME}/.tmuxinator"
+fn_mkdir_if_needed "${HOME}/.ptpython"
+fn_mkdir_if_needed "${HOME}/.fonts"
+fn_mkdir_if_needed "${HOME}/.ssh"
+fn_mkdir_if_needed "${HOME}/.vimundo"
+fn_mkdir_if_needed "${HOME}/.vim"
+fn_mkdir_if_needed "${HOME}/.ipython/profile_default/"
+fn_mkdir_if_needed "${HOME}/.shelloracle/"
 
 # Create symlinks with absolute paths
-readonly _DOTFILES_DIR="${_SCRIPT_DIR}"
-fn_symlink_if_needed "${_DOTFILES_DIR}/snclirc"            "${_HOME_DIR}/.snclirc"
-fn_symlink_if_needed "${_DOTFILES_DIR}/dunstrc"            "${_HOME_DIR}/.config/dunst/dunstrc"
-fn_symlink_if_needed "${_DOTFILES_DIR}/i3-config"          "${_HOME_DIR}/.config/i3/config"
-fn_symlink_if_needed "${_DOTFILES_DIR}/i3status-config"    "${_HOME_DIR}/.config/i3status/config"
-fn_symlink_if_needed "${_DOTFILES_DIR}/redshift.conf"      "${_HOME_DIR}/.config/redshift.conf"
-fn_symlink_if_needed "${_DOTFILES_DIR}/tmux.conf"          "${_HOME_DIR}/.tmux.conf"
-fn_symlink_if_needed "${_DOTFILES_DIR}/tmuxp.yml"          "${_HOME_DIR}/.tmuxp.yml"
-fn_symlink_if_needed "${_DOTFILES_DIR}/tmuxinator-wm.yml"  "${_HOME_DIR}/.tmuxinator/wm.yml"
-fn_symlink_if_needed "${_DOTFILES_DIR}/screenrc"           "${_HOME_DIR}/.screenrc"
-fn_symlink_if_needed "${_DOTFILES_DIR}/gitconfig"          "${_HOME_DIR}/.gitconfig"
-fn_symlink_if_needed "${_DOTFILES_DIR}/inputrc"            "${_HOME_DIR}/.inputrc"
-fn_symlink_if_needed "${_DOTFILES_DIR}/ptpython_config.py" "${_HOME_DIR}/.ptpython/config.py"
-fn_symlink_if_needed "${_DOTFILES_DIR}/ssh_config"         "${_HOME_DIR}/.ssh/config"
-fn_symlink_if_needed "${_DOTFILES_DIR}/Xresources"         "${_HOME_DIR}/.Xresources"
-fn_symlink_if_needed "${_DOTFILES_DIR}/bashrc"             "${_HOME_DIR}/.bashrc"
-fn_symlink_if_needed "${_DOTFILES_DIR}/bash_profile"       "${_HOME_DIR}/.bash_profile"
-fn_symlink_if_needed "${_DOTFILES_DIR}/profile"            "${_HOME_DIR}/.profile"
-fn_symlink_if_needed "${_DOTFILES_DIR}/vimrc"              "${_HOME_DIR}/.vimrc"
-#fn_symlink_if_needed "${_DOTFILES_DIR}/coc-settings.json"  "${_HOME_DIR}/.vim/coc-settings.json"
-#fn_symlink_if_needed "${_DOTFILES_DIR}/init.lua"           "${_HOME_DIR}/.config/nvim/init.lua"
-fn_symlink_if_needed "${_DOTFILES_DIR}/ipython_config.py"  "${_HOME_DIR}/ipython/profile_default/ipython_config.py"
-fn_symlink_if_needed "${_DOTFILES_DIR}/myhosts"            "${_HOME_DIR}/.myhosts"
-fn_symlink_if_needed "${_DOTFILES_DIR}/shelloracle-config.toml" "${_HOME_DIR}/.shelloracle/config.toml"
+fn_symlink_if_needed "${_DOTFILES_DIR}/snclirc"            "${HOME}/.snclirc"
+fn_symlink_if_needed "${_DOTFILES_DIR}/dunstrc"            "${HOME}/.config/dunst/dunstrc"
+fn_symlink_if_needed "${_DOTFILES_DIR}/i3-config"          "${HOME}/.config/i3/config"
+fn_symlink_if_needed "${_DOTFILES_DIR}/i3status-config"    "${HOME}/.config/i3status/config"
+fn_symlink_if_needed "${_DOTFILES_DIR}/redshift.conf"      "${HOME}/.config/redshift.conf"
+fn_symlink_if_needed "${_DOTFILES_DIR}/tmux.conf"          "${HOME}/.tmux.conf"
+fn_symlink_if_needed "${_DOTFILES_DIR}/tmuxp.yml"          "${HOME}/.tmuxp.yml"
+fn_symlink_if_needed "${_DOTFILES_DIR}/tmuxinator-wm.yml"  "${HOME}/.tmuxinator/wm.yml"
+fn_symlink_if_needed "${_DOTFILES_DIR}/screenrc"           "${HOME}/.screenrc"
+fn_symlink_if_needed "${_DOTFILES_DIR}/gitconfig"          "${HOME}/.gitconfig"
+fn_symlink_if_needed "${_DOTFILES_DIR}/inputrc"            "${HOME}/.inputrc"
+fn_symlink_if_needed "${_DOTFILES_DIR}/ptpython_config.py" "${HOME}/.ptpython/config.py"
+fn_symlink_if_needed "${_DOTFILES_DIR}/ssh_config"         "${HOME}/.ssh/config"
+fn_symlink_if_needed "${_DOTFILES_DIR}/Xresources"         "${HOME}/.Xresources"
+fn_symlink_if_needed "${_DOTFILES_DIR}/bashrc"             "${HOME}/.bashrc"
+fn_symlink_if_needed "${_DOTFILES_DIR}/bash_profile"       "${HOME}/.bash_profile"
+fn_symlink_if_needed "${_DOTFILES_DIR}/profile"            "${HOME}/.profile"
+fn_symlink_if_needed "${_DOTFILES_DIR}/vimrc"              "${HOME}/.vimrc"
+#fn_symlink_if_needed "${_DOTFILES_DIR}/coc-settings.json"  "${HOME}/.vim/coc-settings.json"
+#fn_symlink_if_needed "${_DOTFILES_DIR}/init.lua"           "${HOME}/.config/nvim/init.lua"
+fn_symlink_if_needed "${_DOTFILES_DIR}/ipython_config.py"  "${HOME}/ipython/profile_default/ipython_config.py"
+fn_symlink_if_needed "${_DOTFILES_DIR}/myhosts"            "${HOME}/.myhosts"
+fn_symlink_if_needed "${_DOTFILES_DIR}/shelloracle-config.toml" "${HOME}/.shelloracle/config.toml"
 
 # Run workstation-specific bootstrap
-readonly WORKSTATION_SCRIPT="${_SCRIPT_DIR}/bootstrap-workstation.sh"
-if [[ -f "${WORKSTATION_SCRIPT}" ]]; then
-    "${WORKSTATION_SCRIPT}" || fn_log_error "bootstrap-workstation.sh failed"
+_WORKSTATION_SCRIPT="${_DOTFILES_DIR}/bootstrap-workstation.sh"
+if [[ -f "${_WORKSTATION_SCRIPT}" ]]; then
+    "${_WORKSTATION_SCRIPT}" || fn_log_error "bootstrap-workstation.sh failed"
 else
-    fn_log_error "bootstrap-workstation.sh not found: ${WORKSTATION_SCRIPT}"
+    fn_log_error "bootstrap-workstation.sh not found: ${_WORKSTATION_SCRIPT}"
 fi
 
 # This doesn't appear to be necessary, but keep it around just in case
-#link_if_needed "${_DOTFILES_DIR}/sshrc" "${_HOME_DIR}/.ssh/rc"
+#link_if_needed "${_DOTFILES_DIR}/sshrc" "${HOME}/.ssh/rc"
 
 # Set secure permissions on SSH config
-readonly SSH_CONFIG="${_DOTFILES_DIR}/ssh_config"
-if [[ -f "${SSH_CONFIG}" ]]; then
-    chmod 0600 "${SSH_CONFIG}" || fn_log_error "Failed to set permissions on ${SSH_CONFIG}"
+_SSH_CONFIG="${_DOTFILES_DIR}/ssh_config"
+if [[ -f "${_SSH_CONFIG}" ]]; then
+    chmod 0600 "${_SSH_CONFIG}" || fn_log_error "Failed to set permissions on ${_SSH_CONFIG}"
 else
-    fn_log_error "SSH config file not found: ${SSH_CONFIG}"
+    fn_log_error "SSH config file not found: ${_SSH_CONFIG}"
 fi

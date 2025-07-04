@@ -12,21 +12,21 @@ declare -a _INSTALLED_PACKAGES=()
 declare -a _CREATED_DIRECTORIES=()
 declare -a _CREATED_SYMLINKS=()
 
-readonly _MACHINE_ARCH=$(uname -m)
+_MACHINE_ARCH=$(uname -m)
 
-readonly _LOCAL_COMPLETIONS_DIR="${HOME}/.local/share/bash-completion/completions"
-readonly _LOCAL_BIN_DIR="${HOME}/.local/bin"
+_LOCAL_COMPLETIONS_DIR="${HOME}/.local/share/bash-completion/completions"
+_LOCAL_BIN_DIR="${HOME}/.local/bin"
 
 # Architecture mapping for Go downloads
-readonly _GOLANG_ARCH=$(
+_GOLANG_ARCH=$(
     case "${_MACHINE_ARCH}" in
-    x86_64) echo "amd64" ;;
-    aarch64) echo "arm64" ;;
-    *) echo "unsupported" ;;
+    x86_64) printf "amd64" ;;
+    aarch64) printf "arm64" ;;
+    *) printf "unsupported" ;;
 esac)
 
 if [[ "${_GOLANG_ARCH}" == "unsupported" ]]; then
-    echo "ERROR: Unsupported architecture: ${_MACHINE_ARCH}" >&2
+    printf "ERROR: Unsupported architecture: %s\n" "${_MACHINE_ARCH}" >&2
     exit 1
 fi
 
@@ -45,7 +45,7 @@ fn_cleanup() {
     
     # If script failed and we have changes to rollback
     if [[ ${exit_code} -ne 0 ]] && [[ ${#_CREATED_SYMLINKS[@]} -gt 0 || ${#_CREATED_DIRECTORIES[@]} -gt 0 ]]; then
-        echo "Script failed. Rolling back changes..." >&2
+        printf "Script failed. Rolling back changes...\n" >&2
         fn_rollback_changes
     fi
     
@@ -90,13 +90,13 @@ fn_validate_url() {
     
     # Check if URL starts with https
     if [[ ! "${url}" =~ ^https:// ]]; then
-        echo "ERROR: URL must use HTTPS: ${url}" >&2
+        printf "ERROR: URL must use HTTPS: %s\n" "${url}" >&2
         return 1
     fi
     
     # Basic URL format validation
     if [[ ! "${url}" =~ ^https://[a-zA-Z0-9.-]+/.*$ ]]; then
-        echo "ERROR: Invalid URL format: ${url}" >&2
+        printf "ERROR: Invalid URL format: %s\n" "${url}" >&2
         return 1
     fi
     
@@ -109,7 +109,7 @@ fn_verify_checksum() {
     local hash_type="${3:-sha256}"
     
     if [[ ! -f "${file}" ]]; then
-        echo "ERROR: File not found for checksum verification: ${file}" >&2
+        printf "ERROR: File not found for checksum verification: %s\n" "${file}" >&2
         return 1
     fi
     
@@ -122,15 +122,15 @@ fn_verify_checksum() {
             actual_checksum=$(sha512sum "${file}" | cut -d' ' -f1)
             ;;
         *)
-            echo "ERROR: Unsupported hash type: ${hash_type}" >&2
+            printf "ERROR: Unsupported hash type: %s\n" "${hash_type}" >&2
             return 1
             ;;
     esac
     
     if [[ "${actual_checksum}" != "${expected_checksum}" ]]; then
-        echo "ERROR: Checksum mismatch for ${file}" >&2
-        echo "Expected: ${expected_checksum}" >&2
-        echo "Actual:   ${actual_checksum}" >&2
+        printf "ERROR: Checksum mismatch for %s\n" "${file}" >&2
+        printf "Expected: %s\n" "${expected_checksum}" >&2
+        printf "Actual:   %s\n" "${actual_checksum}" >&2
         return 1
     fi
     
@@ -152,7 +152,7 @@ fn_secure_download() {
     output_dir="$(dirname "${output_file}")"
     if [[ ! -d "${output_dir}" ]]; then
         mkdir -p "${output_dir}" || {
-            echo "ERROR: Failed to create directory: ${output_dir}" >&2
+            printf "ERROR: Failed to create directory: %s\n" "${output_dir}" >&2
             return 1
         }
     fi
@@ -474,7 +474,7 @@ fn_system_install_tailscale() {
         local temp_aptlist="/tmp/tailscale.list"
         
         if ! dpkg -l tailscale > /dev/null 2>&1; then
-            echo "Installing Tailscale for Debian..."
+            printf "Installing Tailscale for Debian...\n"
             
             # Download keyring securely
             if fn_secure_download "https://pkgs.tailscale.com/stable/debian/${VERSION_CODENAME}.noarmor.gpg" "${temp_keyring}"; then
@@ -1547,6 +1547,22 @@ fn_local_install_neovim() {
 
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
+fn_local_install_vim_plug() {
+    # Install vim-plug with secure download
+    local VIM_PLUG_DIR="${HOME}/.vim/autoload"
+    local VIM_PLUG_FILE="${VIM_PLUG_DIR}/plug.vim"
+    local VIM_PLUG_URL="https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+
+    if [[ ! -f "${VIM_PLUG_FILE}" ]]; then
+        printf "Installing vim-plug...\n"
+        mkdir -p "${VIM_PLUG_DIR}" || fn_log_error "Failed to create vim autoload directory"
+        
+        if ! fn_secure_download "${VIM_PLUG_URL}" "${VIM_PLUG_FILE}"; then
+            fn_log_error "Failed to download vim-plug"
+        fi
     fi
 }
 
