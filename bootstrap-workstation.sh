@@ -4,12 +4,12 @@
 set -euo pipefail
 
 # Validate environment
-readonly _SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-readonly _LIB_FILE="${_SCRIPT_DIR}/bootstrap-lib.sh"
+_SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+_LIB_FILE="${_SCRIPT_DIR}/bootstrap-lib.sh"
 
 # Source library with error handling
 if [[ ! -f "${_LIB_FILE}" ]]; then
-    echo "ERROR: Required library file not found: ${_LIB_FILE}" >&2
+    printf "ERROR: Required library file not found: %s" "${_LIB_FILE}" >&2
     exit 1
 fi
 

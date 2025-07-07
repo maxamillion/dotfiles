@@ -181,12 +181,14 @@ fn_secure_download() {
         
         ((retries++))
         if [[ ${retries} -lt ${MAX_RETRIES} ]]; then
-            echo "Download failed, retrying in ${RETRY_DELAY} seconds... (${retries}/${MAX_RETRIES})" >&2
+            printf "Download failed, retrying in %s seconds... (%s/%s)\n" \
+                "${RETRY_DELAY}" "${retries}" "${MAX_RETRIES}" >&2
             sleep "${RETRY_DELAY}"
         fi
     done
     
-    echo "ERROR: Failed to download after ${MAX_RETRIES} attempts: ${url}" >&2
+    printf "ERROR: Failed to download after %s attempts: %s\n" \
+        "${MAX_RETRIES}" "${url}" >&2
     return 1
 }
 
@@ -196,13 +198,14 @@ fn_validate_path() {
     # Resolve path and check for directory traversal
     local resolved_path
     resolved_path="$(realpath -m "${path}" 2>/dev/null)" || {
-        echo "ERROR: Invalid path: ${path}" >&2
+        printf "ERROR: Invalid path: %s\n" "${path}" >&2
         return 1
     }
     
     # Ensure path is within HOME directory for user files
     if [[ "${path}" =~ ^${HOME}/ ]] && [[ ! "${resolved_path}" =~ ^${HOME}/ ]]; then
-        echo "ERROR: Path traversal detected: ${path} -> ${resolved_path}" >&2
+        printf "ERROR: Path traversal detected: %s -> %s\n" \
+            "${path}" "${resolved_path}" >&2
         return 1
     fi
     
@@ -210,31 +213,31 @@ fn_validate_path() {
 }
 
 fn_rollback_changes() {
-    echo "Rolling back changes..."
+    printf "Rolling back changes...\n"
     
     # Remove created symlinks
     if [[ ${#_CREATED_SYMLINKS[@]} -gt 0 ]]; then
-        echo "Removing created symlinks..."
+        printf "Removing created symlinks...\n"
         for symlink in "${_CREATED_SYMLINKS[@]}"; do
             if [[ -L "${symlink}" ]]; then
-                rm "${symlink}" && echo "Removed symlink: ${symlink}"
+                rm "${symlink}" && printf "Removed symlink: %s\n" "${symlink}"
             fi
         done
     fi
     
     # Remove created directories (in reverse order)
     if [[ ${#_CREATED_DIRECTORIES[@]} -gt 0 ]]; then
-        echo "Removing created directories..."
+        printf "Removing created directories...\n"
         local i
         for ((i=${#_CREATED_DIRECTORIES[@]}-1; i>=0; i--)); do
             local dir="${_CREATED_DIRECTORIES[i]}"
             if [[ -d "${dir}" ]] && [[ -z "$(ls -A "${dir}" 2>/dev/null)" ]]; then
-                rmdir "${dir}" && echo "Removed directory: ${dir}"
+                rmdir "${dir}" && printf "Removed directory: %s\n" "${dir}"
             fi
         done
     fi
     
-    echo "Rollback completed."
+    printf"Rollback completed.\n"
 }
 
 # Common function for GitHub API releases
@@ -250,14 +253,14 @@ fn_get_github_latest_release() {
             rm -f "${temp_file}"
             
             if [[ -n "${release}" && "${release}" != "null" ]]; then
-                echo "${release}"
+                printf "%s\n" "${release}"
                 return 0
             fi
         fi
         rm -f "${temp_file}"
     fi
     
-    echo "ERROR: Failed to get latest release for ${repo}" >&2
+    printf "ERROR: Failed to get latest release for %s\n" "${repo}" >&2
     return 1
 }
 
@@ -267,18 +270,18 @@ fn_validate_install_params() {
     local install_path="$2"
     
     if [[ -z "${tool_name}" ]]; then
-        echo "ERROR: Tool name cannot be empty" >&2
+        printf "ERROR: Tool name cannot be empty" >&2
         return 1
     fi
     
     if [[ -z "${install_path}" ]]; then
-        echo "ERROR: Install path cannot be empty" >&2
+        printf "ERROR: Install path cannot be empty" >&2
         return 1
     fi
     
     # Validate install path is within expected directories
     if [[ ! "${install_path}" =~ ^(${_LOCAL_BIN_DIR}|${HOME}/.cargo/bin|${HOME}/go/bin)/ ]]; then
-        echo "ERROR: Install path outside allowed directories: ${install_path}" >&2
+        printf "ERROR: Install path outside allowed directories: %s\n" "${install_path}" >&2
         return 1
     fi
     
@@ -295,7 +298,7 @@ fn_mkdir_if_needed() {
     if [[ ! -d "${dir}" ]]; then
         if mkdir -p "${dir}"; then
             _CREATED_DIRECTORIES+=("${dir}")
-            echo "Created directory: ${dir}"
+            printf "Created directory: %s\n" "${dir}"
         else
             fn_log_error "Failed to create directory: ${dir}"
             return 1
@@ -1313,7 +1316,7 @@ fn_local_install_kubectl() {
     
     if [[ ${1:-} == "update" ]]; then
         if [[ -f "${install_path}" ]]; then
-            currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }' || echo "unknown")
+            currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }' || printf "unknown")
             local uninstall_paths=("${install_path}" "${completions_install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
@@ -1378,7 +1381,7 @@ fn_local_install_rosa() {
                 wget -c "https://github.com/openshift/rosa/releases/download/${latest_release}/rosa_Linux_${_GOLANG_ARCH}.tar.gz"
                 tar zxvf "rosa_Linux_${_GOLANG_ARCH}.tar.gz"
             else
-                printf "ERROR: Unsupported ROSA architecture: ${_MACHINE_ARCH}\n"
+                printf "ERROR: Unsupported ROSA architecture: %s\n" "${_MACHINE_ARCH}"
                 return
             fi
             cp rosa "${install_path}"
@@ -1439,7 +1442,7 @@ fn_local_install_rustup() {
     # Get latest release info securely
     local temp_releases="/tmp/rustup-releases.$$"
     if fn_secure_download "https://api.github.com/repos/rust-lang/rustup/tags" "${temp_releases}"; then
-        latest_release="$(jq -r '.[0].name' "${temp_releases}" 2>/dev/null || echo "unknown")"
+        latest_release="$(jq -r '.[0].name' "${temp_releases}" 2>/dev/null || printf "unknown")"
         rm -f "${temp_releases}"
     else
         fn_log_error "${FUNCNAME[0]}: failed to get rustup release info"
@@ -1448,14 +1451,14 @@ fn_local_install_rustup() {
     
     if [[ ${1:-} == "update" ]]; then
         if [[ -f "${install_path}" ]]; then
-            currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }' || echo "unknown")
+            currently_installed_version=$(rustup --version 2>/dev/null| awk '/^rustup/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }' || printf "unknown")
             local uninstall_paths=("${install_path}")
             fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
     if [[ ! -f "${install_path}" ]]; then
-        echo "Installing rustup..."
+        printf "Installing rustup...\n"
 
         # Download rustup installer securely
         if fn_secure_download "https://sh.rustup.rs" "${rustup_script}"; then
@@ -1463,7 +1466,7 @@ fn_local_install_rustup() {
 
             # Run installer with strict settings
             if "${rustup_script}" -y --no-modify-path --profile minimal; then
-                echo "Rustup installed successfully"
+                printf "Rustup installed successfully\n"
             else
                 fn_log_error "${FUNCNAME[0]}: rustup installation failed"
                 rm -f "${rustup_script}"
@@ -1714,8 +1717,7 @@ fn_local_install_charm() {
     fi
 
     if [[ ! -f ${install_path} ]]; then
-        printf "Installing ${1:-}...\n"
-
+        printf "Installing %s...\n" "${1:-}"
 
         pushd /tmp/ || return
             if [[ ${_GOLANG_ARCH} == "amd64" ]]; then
@@ -1784,7 +1786,6 @@ fn_local_install_k9s() {
 
     if [[ ! -f ${install_path} ]]; then
         printf "Installing k9s...\n"
-
 
         pushd /tmp/ || return
             k9s_tarname="k9s_Linux_${_GOLANG_ARCH}.tar.gz"
