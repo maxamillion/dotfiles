@@ -98,8 +98,9 @@ noremap <right> <nop>
 
 " fzf
 noremap <Leader>ff :Files<CR>
-noremap <Leader>fg :GFiles<CR>
+noremap <Leader>fg :Rg<CR>
 noremap <Leader>fl :Lines<CR>
+noremap <Leader>gf :GFiles<CR>
 
 " windsurf suggestion cycling - only accept with Ctrl-g
 imap <script><silent><nowait><expr> <C-g> codeium#Accept()
