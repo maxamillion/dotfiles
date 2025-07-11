@@ -164,10 +164,11 @@ augroup trailing
 augroup END
 
 " ALE
-nmap gd <Plug>ALEGoToDefinition<cr>
-nmap ge <Plug>ALEDetail<cr>
-nmap gr <Plug>ALEFindReferences<cr>
-nmap gk <Plug>ALEDocumentation<cr>
+nmap gd :ALEGoToDefinition<cr>
+nmap ge :ALEDetail<cr>
+nmap gr :ALEFindReferences<cr>
+nmap gk :ALEDocumentation<cr>
+nmap gi :ALEGoToImplementation<cr>
 
 let g:ale_completion_enabled = 1
 let g:ale_completion_autoimport = 1
