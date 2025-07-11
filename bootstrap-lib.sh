@@ -1033,6 +1033,15 @@ fn_system_setup_fedora_el() {
 
         fn_system_gnome_settings
     fi
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        if [[ -n "${DESKTOP_SESSION}" ]]; then
+            printf "Disabling SSH...\n"
+            sudo systemctl stop sshd || fn_log_error "${FUNCNAME[0]}: failed to stop sshd"
+            sudo systemctl disable sshd || fn_log_error "${FUNCNAME[0]}: failed to disable sshd"
+            sudo firewall-cmd --remove-service=ssh --permanent || fn_log_error "${FUNCNAME[0]}: failed to remove ssh from firewall-cmd permanently"
+            sudo firewall-cmd --remove-service=ssh || fn_log_error "${FUNCNAME[0]}: failed to remove ssh from firewall-cmd"
+        fi
+    fi
 }
 
 fn_local_install_virtualenvwrapper(){
