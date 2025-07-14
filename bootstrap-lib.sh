@@ -1035,11 +1035,21 @@ fn_system_setup_fedora_el() {
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         if [[ -n "${DESKTOP_SESSION}" ]]; then
-            printf "Disabling SSH...\n"
-            sudo systemctl stop sshd || fn_log_error "${FUNCNAME[0]}: failed to stop sshd"
-            sudo systemctl disable sshd || fn_log_error "${FUNCNAME[0]}: failed to disable sshd"
-            sudo firewall-cmd --remove-service=ssh --permanent || fn_log_error "${FUNCNAME[0]}: failed to remove ssh from firewall-cmd permanently"
-            sudo firewall-cmd --remove-service=ssh || fn_log_error "${FUNCNAME[0]}: failed to remove ssh from firewall-cmd"
+            local systemctl_sshd_enabled
+            local systemctl_sshd_active
+            systemctl_sshd_enabled="$(sudo systemctl is-enabled sshd || true)"
+            systemctl_sshd_active="$(sudo systemctl is-active sshd || true)"
+
+            if [[ "${systemctl_sshd_enabled}" == "enabled" || "${systemctl_sshd_active}" == "active" ]]; then
+                printf "Disabling SSH...\n"
+                sudo systemctl stop sshd || fn_log_error "${FUNCNAME[0]}: failed to stop sshd"
+                sudo systemctl disable sshd || fn_log_error "${FUNCNAME[0]}: failed to disable sshd"
+
+                if sudo firewall-cmd --list-all | grep ssh > /dev/null; then
+                    sudo firewall-cmd --remove-service=ssh --permanent || fn_log_error "${FUNCNAME[0]}: failed to remove ssh from firewall-cmd permanently"
+                    sudo firewall-cmd --remove-service=ssh || fn_log_error "${FUNCNAME[0]}: failed to remove ssh from firewall-cmd"
+                fi
+            fi
         fi
     fi
 }
@@ -1078,6 +1088,18 @@ fn_local_install_claude_code_requirements_builder() {
     if ! [[ -d "${HOME}/src/claude-code-requirements-builder" ]]; then
         git clone https://github.com/rizethereum/claude-code-requirements-builder.git "${HOME}/src/claude-code-requirements-builder"
         fn_symlink_if_needed "${HOME}/src/claude-code-requirements-builder" "${HOME}/.claude/commands"
+    fi
+}
+
+fn_local_install_super_claude() {
+    fn_mkdir_if_needed "${HOME}/src/"
+    local clone_path="${HOME}/src/SuperClaude"
+    if ! [[ -d "${clone_path}" ]]; then
+        printf "Installing SuperClaude...\n"
+        git clone https://github.com/NomenAK/SuperClaude.git "${clone_path}"
+        pushd "${clone_path}" || return
+            python3 SuperClaude.py install --quick -y || fn_log_error "${FUNCNAME[0]}: failed to install SuperClaude"
+        popd
     fi
 }
 
