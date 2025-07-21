@@ -1050,6 +1050,28 @@ fn_system_setup_fedora_el() {
                     sudo firewall-cmd --remove-service=ssh || fn_log_error "${FUNCNAME[0]}: failed to remove ssh from firewall-cmd"
                 fi
             fi
+
+            local systemctl_cockpit_service_enabled
+            local systemctl_cockpit_service_active
+            local systemctl_cockpit_socket_enabled
+            local systemctl_cockpit_socket_active
+            systemctl_cockpit_service_enabled="$(sudo systemctl is-enabled cockpit.service || true)"
+            systemctl_cockpit_service_active="$(sudo systemctl is-active cockpit.service || true)"
+            systemctl_cockpit_socket_enabled="$(sudo systemctl is-enabled cockpit.socket || true)"
+            systemctl_cockpit_socket_active="$(sudo systemctl is-active cockpit.socket || true)"
+            if [[ "${systemctl_cockpit_service_enabled}" == "enabled" || "${systemctl_cockpit_socket_enabled}" == "enabled" || \
+                "${systemctl_cockpit_service_active}" == "active" || "${systemctl_cockpit_socket_active}" == "active" ]]; then
+                printf "Disabling cockpit...\n"
+                sudo systemctl stop cockpit.socket || fn_log_error "${FUNCNAME[0]}: failed to stop cockpit.socket"
+                sudo systemctl stop cockpit.service || fn_log_error "${FUNCNAME[0]}: failed to stop cockpit.service"
+                sudo systemctl disable cockpit.socket || fn_log_error "${FUNCNAME[0]}: failed to disable cockpit.socket"
+                sudo systemctl disable cockpit.service || fn_log_error "${FUNCNAME[0]}: failed to disable cockpit.service"
+
+                if sudo firewall-cmd --list-all | grep cockpit > /dev/null; then
+                    sudo firewall-cmd --remove-service=cockpit --permanent || fn_log_error "${FUNCNAME[0]}: failed to remove cockpit from firewall-cmd permanently"
+                    sudo firewall-cmd --remove-service=cockpit || fn_log_error "${FUNCNAME[0]}: failed to remove cockpit from firewall-cmd"
+                fi
+            fi
         fi
     fi
 }
