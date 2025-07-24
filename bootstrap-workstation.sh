@@ -36,6 +36,7 @@ fi
 
 if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
     fn_system_setup_fedora_el
+    # fn_system_install_gcloud
 
     # virtualenvwrapper
     fn_local_install_virtualenvwrapper

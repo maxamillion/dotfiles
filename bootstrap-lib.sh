@@ -338,6 +338,29 @@ fn_system_install_chrome() {
     # fi
 }
 
+fn_system_install_gcloud() {
+    fn_check_distro
+    if [[ "${ID}" == "rhel" ]] || [[ "${ID}" == "redhat" ]] || [[ "${ID}" == "centos" ]]; then
+        if [[ ! -f /etc/yum.repos.d/google-cloud-sdk.repo ]]; then
+            printf "Installing gcloud repo...\n"
+            sudo tee /etc/yum.repos.d/google-cloud-sdk.repo &>/dev/null << "EOF"
+[google-cloud-cli]
+name=Google Cloud CLI
+baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el$releasever-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+        fi
+        if ! rpm -q google-cloud-cli &>/dev/null; then
+            printf "Installing gcloud...\n"
+            sudo dnf install -y libxcrypt-compat.x86_64 || fn_log_error "${FUNCNAME[0]}: failed to dnf install libxcrypt-compat"
+            sudo dnf install -y google-cloud-cli || fn_log_error "${FUNCNAME[0]}: failed to dnf install google-cloud-cli"
+        fi
+    fi
+}
+
 fn_system_setup_rht_copr() {
     fn_check_distro
     local repofile='/etc/yum.repos.d/_copr:copr.devel.redhat.com:group_endpoint-systems-sysadmins:unsupported-fedora-packages.repo'
