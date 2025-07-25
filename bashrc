@@ -278,6 +278,13 @@ yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"
 }
 
+rhtclaude() {
+    export CLAUDE_CODE_USE_VERTEX=1
+    export CLOUD_ML_REGION=us-east5
+    export ANTHROPIC_VERTEX_PROJECT_ID=itpc-gcp-ai-eng-claude
+    claude "$@"
+}
+
 cleancontainers() {
     # Clean exited containers
     for container in $(cruntime ps -a | awk '/Exited/{ print $1}')
@@ -735,16 +742,6 @@ short_hostname=${HOSTNAME%%.*}
 if [[ "penguin" == "${short_hostname}" ]]; then
     export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 fi
-if [[ -z "${short_hostname}" ]]; then
-    if [[ -n "${container}" ]]; then
-        if [[ ${NAME} == *"toolbox"* ]]; then
-            short_hostname="${NAME}:${VERSION}"
-        elif [[ ${NAME} != *"toolbox"* ]]; then
-            source /etc/os-release
-            short_hostname="${ID}:${VERSION_ID}"
-        fi
-    fi
-fi
 
 ### UGLY HACK
 # This works and the vcs prompt from git bash completion did weird things to
@@ -785,7 +782,7 @@ __prompt_command() {
             local date_c=$red_c
             local user_c=$yellow_c
             local at_c=$blue_c
-            if [[ ${short_hostname} == "toolbox" ]]; then
+            if [[ -n "${TOOLBOX_PATH}" ]]; then
                 local host_c=$teal_c
             else
                 local host_c=$yellow_c
