@@ -721,7 +721,6 @@ pathappend () {
 
 export GOPATH=$HOME/go
 pathappend "${GOPATH}/bin"
-pathappend "${HOME}/.claude/local/"
 pathappend "${HOME}/bin"
 pathappend "${HOME}/.local/bin"
 pathappend "${HOME}/.local/node_modules/.bin"
