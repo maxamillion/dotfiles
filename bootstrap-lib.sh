@@ -637,7 +637,6 @@ fn_flathub_install() {
         "io.podman_desktop.PodmanDesktop"
         "com.google.Chrome"
         "com.github.tchx84.Flatseal"
-        "org.gnome.Epiphany"
         "org.gnome.Fractal"
         "org.signal.Signal"
     )
