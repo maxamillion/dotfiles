@@ -282,6 +282,8 @@ rhtclaude() {
     export CLAUDE_CODE_USE_VERTEX=1
     export CLOUD_ML_REGION=us-east5
     export ANTHROPIC_VERTEX_PROJECT_ID=itpc-gcp-ai-eng-claude
+    export ANTHROPIC_MODEL='claude-sonnet-4@20250514'
+    export ANTHROPIC_SMALL_FAST_MODEL='claude-sonnet-4@20250514'
     claude "$@"
 }
 
