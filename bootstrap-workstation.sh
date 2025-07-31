@@ -43,6 +43,9 @@ if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}"
 
 fi
 
+# setup vim plug
+fn_local_install_vim_plug
+
 # k8s stuff
 fn_local_install_minikube
 fn_local_install_kind
