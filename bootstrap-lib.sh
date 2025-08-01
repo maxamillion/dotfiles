@@ -1060,7 +1060,7 @@ fn_system_setup_fedora_el() {
         fn_system_gnome_settings
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        if [[ -n "${DESKTOP_SESSION}" ]]; then
+        if [[ -z "${DESKTOP_SESSION}" ]]; then
             local systemctl_sshd_enabled
             local systemctl_sshd_active
             systemctl_sshd_enabled="$(sudo systemctl is-enabled sshd || true)"
@@ -1114,6 +1114,12 @@ fn_ensure_npm_prefix() {
     npm_prefix=$(npm get prefix)
     if ! [[ "${npm_prefix}" == "${HOME}/.local" ]]; then
         npm config set prefix "${HOME}/.local/"
+    fi
+
+    local npm_config_os
+    npm_config_os=$(npm config get os)
+    if ! [[ "${npm_config_os}" == "linux" ]]; then
+        npm config set os linux
     fi
 }
 
