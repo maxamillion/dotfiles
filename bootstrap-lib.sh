@@ -1146,18 +1146,10 @@ fn_local_install_claude_code_requirements_builder() {
 }
 
 fn_local_install_super_claude() {
-    fn_mkdir_if_needed "${HOME}/src/"
     fn_mkdir_if_needed "${HOME}/.claude/commands/"
-    local clone_path="${HOME}/src/SuperClaude"
     local super_claude_path="${HOME}/.claude/commands/sc/"
-    if ! [[ -d "${clone_path}" ]]; then
-        printf "Installing SuperClaude...\n"
-        git clone https://github.com/NomenAK/SuperClaude.git "${clone_path}"
-    fi
     if ! [[ -d "${super_claude_path}" ]]; then
-        pushd "${clone_path}" || return
-            python3 SuperClaude.py install --quick -y || fn_log_error "${FUNCNAME[0]}: failed to install SuperClaude"
-        popd
+        uv tool run SuperClaude install --quick -y || fn_log_error "${FUNCNAME[0]}: failed to install SuperClaude"
     fi
 }
 
