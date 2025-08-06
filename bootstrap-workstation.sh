@@ -98,6 +98,9 @@ fn_local_install_aws
 # go-blueprint
 fn_local_install_go_blueprint
 
+#shfmt
+fn_local_install_shfmt
+
 # goose
 fn_local_install_goose
 

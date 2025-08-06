@@ -3,8 +3,17 @@
 # Basic library functions for my dotfiles
 #
 
-# Strict error handling
-set -euo pipefail
+# Detect if script is being sourced or executed
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    _SCRIPT_SOURCED=false
+else
+    _SCRIPT_SOURCED=true
+fi
+
+# Strict error handling (only when executing directly)
+if [[ "${_SCRIPT_SOURCED}" == "false" ]]; then
+    set -euo pipefail
+fi
 
 # Global variables
 declare -a _ERRORS=()
@@ -27,7 +36,7 @@ esac)
 
 if [[ "${_GOLANG_ARCH}" == "unsupported" ]]; then
     printf "ERROR: Unsupported architecture: %s\n" "${_MACHINE_ARCH}" >&2
-    exit 1
+    fn_safe_exit 1
 fi
 
 # Security and networking configuration
@@ -35,6 +44,16 @@ readonly CURL_TIMEOUT=30
 readonly CURL_MAX_TIME=300
 readonly MAX_RETRIES=3
 readonly RETRY_DELAY=2
+
+# Safe exit function that handles both sourcing and executing contexts
+fn_safe_exit() {
+    local exit_code=${1:-$?}
+    if [[ "${_SCRIPT_SOURCED}" == "false" ]]; then
+        exit ${exit_code}
+    else
+        return ${exit_code}
+    fi
+}
 
 # Cleanup function for trap
 fn_cleanup() {
@@ -49,11 +68,13 @@ fn_cleanup() {
         fn_rollback_changes
     fi
     
-    exit ${exit_code}
+    fn_safe_exit ${exit_code}
 }
 
-# Set up signal handlers
-trap 'fn_cleanup' EXIT ERR INT TERM
+# Set up signal handlers (only when executing directly)
+if [[ "${_SCRIPT_SOURCED}" == "false" ]]; then
+    trap 'fn_cleanup' EXIT ERR INT TERM
+fi
 
 fn_check_distro() {
     # Set defaults for os-release variables
@@ -2122,6 +2143,32 @@ fn_local_install_go_blueprint() {
         printf "Installing go-blueprint...\n"
         go install github.com/melkeydev/go-blueprint@latest
         ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
+fn_local_install_shfmt() {
+    local install_path="${HOME}/go/bin/shfmt"
+    local latest_release
+    local currently_installed_version
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+    latest_release="$(curl -s 'https://api.github.com/repos/mvdan/sh/releases' | \
+        jq '.[] | select(.tag_name | contains("beta") | not) | select(.tag_name | contains("alpha") | not).tag_name' | head -1 | tr -d \")"
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(shfmt version)
+            local uninstall_paths=("${install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+    # shfmt install
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing shfmt...\n"
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest
     fi
 
     if [[ ! -f ${install_path} ]]; then
