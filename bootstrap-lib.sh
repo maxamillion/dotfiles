@@ -1081,7 +1081,7 @@ fn_system_setup_fedora_el() {
         fn_system_gnome_settings
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        if [[ -z "${DESKTOP_SESSION}" ]]; then
+        if [[ -z "${DESKTOP_SESSION:-}" ]]; then
             local systemctl_sshd_enabled
             local systemctl_sshd_active
             systemctl_sshd_enabled="$(sudo systemctl is-enabled sshd || true)"
