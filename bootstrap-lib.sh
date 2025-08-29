@@ -1864,6 +1864,7 @@ fn_local_install_charm_apps() {
         "soft-serve"
         "vhs"
         "wishlist"
+        "crush"
     )
     for charm in "${charm_pkglist[@]}"; do
         fn_local_install_charm "${charm}"
