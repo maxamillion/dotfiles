@@ -37,6 +37,11 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
+if [ -x /usr/bin/fzf ]; then
+    # Set up fzf key bindings and fuzzy completion
+    eval "$(fzf --bash)" 
+fi
+
 # Handle my hosts for shortnames of things in my homelab
 if [ -f ~/.myhosts ]; then
     export HOSTALIASES="${HOME}/.myhosts"
