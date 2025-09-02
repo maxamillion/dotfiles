@@ -1012,6 +1012,7 @@ fn_system_setup_fedora_el() {
         "fedpkg"
         "toolbox"
         "pcp-system-tools"
+        "fzf"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
