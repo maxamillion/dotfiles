@@ -658,8 +658,8 @@ fn_flathub_install() {
         "io.podman_desktop.PodmanDesktop"
         "com.google.Chrome"
         "com.github.tchx84.Flatseal"
-        "org.gnome.Fractal"
         "org.signal.Signal"
+        "im.fluffychat.Fluffychat"
     )
     if ! flatpak remotes --user | grep flathub &>/dev/null; then
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
