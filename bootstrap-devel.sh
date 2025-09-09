@@ -46,6 +46,7 @@ git_repos=(
     "${dev_dir}/syft git@github.com:maxamillion/syft.git https://github.com/anchore/syft.git"
     "${dev_dir}/grype git@github.com:maxamillion/grype.git https://github.com/anchore/grype.git"
     "${dev_dir}/grant git@github.com:maxamillion/grant.git https://github.com/anchore/grant.git"
+    "${dev_dir}/vunnel git@github.com:maxamillion/vunnel.git https://github.com/anchore/vunnel.git"
     "${dev_dir}/goose git@github.com:maxamillion/goose.git https://github.com/block/goose.git"
     "${dev_dir}/gemini-cli git@github.com:maxamillion/gemini-cli.git https://github.com/google-gemini/gemini-cli.git"
     "${dev_dir}/command-line-assistant git@github.com:maxamillion/command-line-assistant.git https://github.com/rhel-lightspeed/command-line-assistant.git"
