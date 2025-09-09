@@ -1013,8 +1013,6 @@ fn_system_setup_fedora_el() {
         "toolbox"
         "pcp-system-tools"
         "fzf"
-        "ruby"
-        "rbenv"
     )
 
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
