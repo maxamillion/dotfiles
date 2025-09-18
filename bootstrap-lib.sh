@@ -1006,7 +1006,7 @@ fn_system_setup_fedora_el() {
         "mosh"
         "lm_sensors"
         "rpmconf"
-        "python3-ramalama"
+        "ramalama"
         "iotop-c"
         "ninja-build"
         "fedpkg"
