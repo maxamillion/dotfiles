@@ -109,6 +109,9 @@ fn_local_install_claude_code
 fn_local_install_super_claude
 #fn_local_install_claude_code_requirements_builder
 
+# openai codex
+fn_local_install_openai_codex
+
 # gemini cli
 fn_local_install_gemini
 

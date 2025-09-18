@@ -1175,6 +1175,20 @@ fn_local_install_super_claude() {
     fi
 }
 
+fn_local_install_openai_codex() {
+    fn_ensure_npm_prefix
+    local bin_path
+    bin_path="${HOME}/.local/bin/codex"
+    if ! [[ -f "${bin_path}" ]]; then
+        printf "Installing OpenAI Codex...\n"
+        npm install -g @openai/codex
+    fi
+    if ! [[ -f "${bin_path}" ]]; then
+        fn_log_error "OpenAI Codex npm install failed"
+    fi
+}
+
+
 fn_local_install_amp_code() {
     fn_ensure_npm_prefix
     local bin_path
