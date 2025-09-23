@@ -43,6 +43,7 @@ fn_git_clone_with_upstream() {
 
 # local_clone_destination_dir my_fork_or_repo [upstream_repo]
 git_repos=(
+    "${dev_dir}/vTeam git@github.com:maxamillion/vTeam.git https://github.com/ambient-code/vTeam.git"
     "${dev_dir}/syft git@github.com:maxamillion/syft.git https://github.com/anchore/syft.git"
     "${dev_dir}/grype git@github.com:maxamillion/grype.git https://github.com/anchore/grype.git"
     "${dev_dir}/grant git@github.com:maxamillion/grant.git https://github.com/anchore/grant.git"
