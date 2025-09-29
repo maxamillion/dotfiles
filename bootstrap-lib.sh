@@ -1059,10 +1059,6 @@ fn_system_setup_fedora_el() {
     fn_system_install_packages "${fedora_el_pkglist[@]}"
     sudo usermod "${USER}" -a -G mock
 
-
-    # Tailscale
-    fn_system_install_tailscale
-
     # RHEL Lightspeed / command-line-assistant
     fn_system_install_command_line_assistant
 
@@ -1073,16 +1069,20 @@ fn_system_setup_fedora_el() {
     #     fi
     # fi
 
-    # Only install the GUI stuff if we're on a real system and not in a toolbox container
+    # Only install the GUI/machine utils if we're on a real system and not in a toolbox container
     if [[ -z "${TOOLBOX_PATH:-}" ]]; then
         fn_system_polkit_libvirt_nonroot_user
 
         fn_flathub_install
 
         fn_system_gnome_settings
+ 
+        # Tailscale
+        fn_system_install_tailscale
     fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        if [[ -z "${DESKTOP_SESSION:-}" ]]; then
+        # Only disable ssh and cockpit if we're on a desktop system and not in a toolbox container
+        if ! [[ -z "${DESKTOP_SESSION:-}" ]] && [[ -z "${TOOLBOX_PATH:-}" ]]; then
             local systemctl_sshd_enabled
             local systemctl_sshd_active
             systemctl_sshd_enabled="$(sudo systemctl is-enabled sshd || true)"
