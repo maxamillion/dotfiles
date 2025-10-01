@@ -1010,11 +1010,16 @@ fn_system_setup_fedora_el() {
         "iotop-c"
         "ninja-build"
         "fedpkg"
-        "toolbox"
         "pcp-system-tools"
         "fzf"
     )
 
+    if [[ -z "${TOOLBOX_PATH:-}" ]]; then
+        # only install the toolbox package if we're not in a toolbox container
+        fedora_el_pkglist+=(
+            "toolbox"
+        )
+    fi
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
         if [[ "${el_major_version}" -lt 10 ]]; then
             fedora_el_pkglist+=(
