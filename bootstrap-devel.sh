@@ -72,7 +72,7 @@ git_repos=(
     "${dev_dir}/odh-dashboard git@github.com:maxamillion/odh-dashboard.git https://github.com/opendatahub-io/odh-dashboard.git"
     "${dev_dir}/architecture-decision-records git@github.com:maxamillion/architecture-decision-records.git https://github.com/opendatahub-io/architecture-decision-records.git"
     "${dev_dir}/odh-model-controller git@github.com:maxamillion/odh-model-controller.git https://github.com/opendatahub-io/odh-model-controller.git"
-    "${dev_dir}/rhods-devops-infra git@github.com:maxamillion/rhods-devops-infra.git https://github.com/red-hat-data-services/rhods-devops-infra.git"
+    "${dev_dir}/rhods-devops-infra git@github.com:maxamillion/rhods-devops-infra.git git@github.com:red-hat-data-services/rhods-devops-infra.git"
     "${dev_dir}/opendatahub-documentation git@github.com:maxamillion/opendatahub-documentation.git https://github.com/opendatahub-io/opendatahub-documentation.git"
     "${dev_dir}/opendatahub-operator git@github.com:maxamillion/opendatahub-operator.git https://github.com/opendatahub-io/opendatahub-operator.git"
     "${dev_dir}/model-registry-operator git@github.com:maxamillion/model-registry-operator.git https://github.com/opendatahub-io/model-registry-operator.git"
