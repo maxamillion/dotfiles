@@ -660,6 +660,7 @@ fn_flathub_install() {
         "com.github.tchx84.Flatseal"
         "org.signal.Signal"
         "im.fluffychat.Fluffychat"
+        "org.gnome.Epiphany"
     )
     if ! flatpak remotes --user | grep flathub &>/dev/null; then
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
