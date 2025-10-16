@@ -16,6 +16,7 @@ Plug 'tpope/vim-surround'
 Plug 'Exafunction/windsurf.vim', { 'branch': 'main' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'Coacher/vim-virtualenv'
 call plug#end()
 
 set autoindent
