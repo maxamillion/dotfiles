@@ -1024,6 +1024,7 @@ fn_system_setup_fedora_el() {
         "fedpkg"
         "pcp-system-tools"
         "fzf"
+        "fd-find"
     )
 
     if [[ -z "${TOOLBOX_PATH:-}" ]]; then
@@ -1056,7 +1057,7 @@ fn_system_setup_fedora_el() {
             # "python3-neovim"
             "python3-torch"
             "fedora-review"
-            "fd-find"
+            "v4l-utils"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
