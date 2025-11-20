@@ -2304,5 +2304,6 @@ fn_update_local_installs() {
     fn_local_install_syft update
     fn_local_install_cosign update
     fn_local_install_chtsh update
-    pipx upgrade-all
+    #pipx upgrade-all
+    uv tool upgrade --all
 }
