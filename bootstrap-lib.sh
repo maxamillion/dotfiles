@@ -2271,6 +2271,11 @@ fn_local_uv_tool_install() {
                 fi
             fi
         done
+
+        # spec-kit wants to be installed from github ¯\_(ツ)_/¯
+        if [[ ! -d ${HOME}/.local/share/uv/tools/specify-cli ]]; then
+            uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+        fi
     fi
 }
 
