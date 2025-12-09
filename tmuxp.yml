@@ -1,8 +1,8 @@
 session_name: wm
 windows:
-- window_name: ramalama
+- window_name: chat
   shell_command_before:
-    - cd ~/src/dev/ramalama/
+    - cd ~/
 - window_name: home
   shell_command_before:
     - cd ~/
