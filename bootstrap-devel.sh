@@ -126,6 +126,7 @@ git_repos=(
     "${dev_dir}/ai-lab-recipes git@github.com:maxamillion/ai-lab-recipes.git https://github.com/containers/ai-lab-recipes.git"
     "${dev_dir}/dool git@github.com:maxamillion/dool.git https://github.com/scottchiefbaker/dool.git"
     "${dev_dir}/tuned git@github.com:maxamillion/tuned.git https://github.com/redhat-performance/tuned.git"
+    "${dev_dir}/bluefin git@github.com:maxamillion/bluefin.git https://github.com/ublue-os/bluefin.git"
     "${src_dir}/maxible git@github.com:maxamillion/maxible.git"
     "${src_dir}/maxamillion.github.io git@github.com:maxamillion/maxamillion.github.io.git"
     "${src_dir}/maxamillion git@github.com:maxamillion/maxamillion.git"
