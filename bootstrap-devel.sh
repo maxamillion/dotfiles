@@ -52,7 +52,7 @@ git_repos=(
     "${dev_dir}/gemini-cli git@github.com:maxamillion/gemini-cli.git https://github.com/google-gemini/gemini-cli.git"
     "${dev_dir}/command-line-assistant git@github.com:maxamillion/command-line-assistant.git https://github.com/rhel-lightspeed/command-line-assistant.git"
     "${dev_dir}/pytorch git@github.com:maxamillion/pytorch.git https://github.com/pytorch/pytorch.git"
-    "${dev_dir}/vllm git@github.com:maxamillion/vllm.git https://github.com/opendatahub-io/vllm.git"
+    "${dev_dir}/vllm git@github.com:maxamillion/vllm.git https://github.com/vllm-project/vllm.git"
     "${dev_dir}/llama.cpp git@github.com:maxamillion/llama.cpp.git https://github.com/ggerganov/llama.cpp.git"
     "${dev_dir}/ramalama git@github.com:maxamillion/ramalama.git https://github.com/containers/ramalama.git"
     "${dev_dir}/archey4 git@github.com:maxamillion/archey4.git https://github.com/HorlogeSkynet/archey4.git"
