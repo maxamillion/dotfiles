@@ -1058,6 +1058,7 @@ fn_system_setup_fedora_el() {
             "python3-torch"
             "fedora-review"
             "v4l-utils"
+            "weechat"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
