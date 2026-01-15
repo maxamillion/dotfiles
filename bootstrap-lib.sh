@@ -977,6 +977,7 @@ fn_system_setup_fedora_el() {
         "python3"
         "python3-pip"
         "python3-devel"
+        "python-unversioned-command"
         "uv"
         "nodejs"
         "nodejs-npm"
@@ -1040,9 +1041,6 @@ fn_system_setup_fedora_el() {
                 "python3.12-pip"
             )
         fi
-        fedora_el_pkglist+=(
-            "python-unversioned-command"
-        )
         # NEOVIM STUB
         # if [[ "${el_major_version}" -lt 10 ]]; then
         #     fn_local_install_neovim
