@@ -2223,6 +2223,33 @@ fn_local_install_goose() {
     fi
 }
 
+fn_local_install_beads() {
+    local install_path="${HOME}/go/bin/bd"
+    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/bd"
+    local latest_release
+    local currently_installed_version
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+    latest_release="$(curl -s 'https://api.github.com/repos/steveyegge/beads/releases' | jq -r '.[].name' | head -1 )"
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(bd version | awk '{print $3}')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+
+    # beads install
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing ${install_path}...\n"
+        go install github.com/steveyegge/beads/cmd/bd@latest
+        ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
 
 fn_local_uv_tool_install() {
     # uv install package list
