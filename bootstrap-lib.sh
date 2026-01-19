@@ -1027,6 +1027,13 @@ fn_system_setup_fedora_el() {
         "fzf"
         "fd-find"
     )
+    
+    # these are needed for the uv tool install of rh-aws-saml-login
+    fedora_el_pkglist+=(
+    "krb5-devel"
+    "python3-devel"
+    "clang"
+    )
 
     if [[ -z "${TOOLBOX_PATH:-}" ]]; then
         # only install the toolbox package if we're not in a toolbox container
@@ -2285,6 +2292,12 @@ fn_local_uv_tool_install() {
         "harlequin"
         "pyright"
     )
+    
+    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
+        uv_pkgs+=(
+            "rh-aws-saml-login"
+        )
+    fi
 
     if which uv > /dev/null 2>&1; then
         for pypkg in "${uv_pkgs[@]}";
