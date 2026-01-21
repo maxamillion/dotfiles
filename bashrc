@@ -270,14 +270,14 @@ alias hexd='od -A x -t x1z -v'
 # BEGIN: Misc functions
 
 # Go back to allowing keyring daemon to manage this ... for now
-#export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
-#ssh_agent() {
-#    rm -f ${SSH_AUTH_SOCK}
-#    # if socket is available create the new auth session
-#    SSH_AGENT_PID=$(ssh-agent -a ${SSH_AUTH_SOCK} > /dev/null 2>&1)
-#    # Add all default keys to ssh auth
-#    ssh-add 2>/dev/null
-#}
+export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
+ssh_agent() {
+    rm -f ${SSH_AUTH_SOCK}
+    # if socket is available create the new auth session
+    SSH_AGENT_PID=$(ssh-agent -a ${SSH_AUTH_SOCK} > /dev/null 2>&1)
+    # Add all default keys to ssh auth
+    ssh-add 2>/dev/null
+}
 
 yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"
@@ -743,7 +743,7 @@ fi
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("penguin" "x1carbongen9" "thinkcentrem75q5" "thinkpadt14s" "optiplex7010m" "xps9350" "promicroQCM1250")
+_localhosts=("penguin" "thinkcentrem75q5" "optiplex7010m" "xps9350" "promicroQCM1250" "admiller-thinkpadx1carbongen9")
 short_hostname=${HOSTNAME%%.*}
 if [[ "penguin" == "${short_hostname}" ]]; then
     export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
