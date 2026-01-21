@@ -2286,7 +2286,7 @@ fn_local_uv_tool_install() {
         "nbconvert"
         "frogmouth"
         "llm"
-        "aider-chat"
+        #"aider-chat"
         "pdm"
         "posting"
         "harlequin"
