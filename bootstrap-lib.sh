@@ -1198,7 +1198,7 @@ fn_local_install_super_claude() {
     fn_mkdir_if_needed "${HOME}/.claude/commands/"
     local super_claude_path="${HOME}/.claude/commands/sc/"
     if ! [[ -d "${super_claude_path}" ]]; then
-        uv tool run superclaude install --quick -y || fn_log_error "${FUNCNAME[0]}: failed to install SuperClaude"
+        uv tool run superclaude install || fn_log_error "${FUNCNAME[0]}: failed to install SuperClaude"
     fi
 }
 
