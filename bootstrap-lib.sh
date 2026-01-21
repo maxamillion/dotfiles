@@ -2320,7 +2320,9 @@ fn_local_uv_tool_install() {
         fi
         
         # agentready
-        uv tool install --from git+https://github.com/ambient-code/agentready agentready
+        if [[ ! -f ${HOME}/.local/bin/agentready ]]; then
+            uv tool install --from git+https://github.com/ambient-code/agentready agentready
+        fi
     fi
 }
 
