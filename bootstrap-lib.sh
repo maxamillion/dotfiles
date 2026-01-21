@@ -1178,7 +1178,8 @@ fn_local_install_claude_code() {
     bin_path="${HOME}/.local/bin/claude"
     if ! [[ -f "${bin_path}" ]]; then
         printf "Installing Claude Code...\n"
-        npm install -g @anthropic-ai/claude-code
+        # I hate this so much, but it is what it is
+        curl -fsSL https://claude.ai/install.sh | bash
     fi
     if ! [[ -f "${bin_path}" ]]; then
         fn_log_error "Claude Code npm install failed"
