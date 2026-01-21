@@ -1198,7 +1198,7 @@ fn_local_install_super_claude() {
     fn_mkdir_if_needed "${HOME}/.claude/commands/"
     local super_claude_path="${HOME}/.claude/commands/sc/"
     if ! [[ -d "${super_claude_path}" ]]; then
-        uv tool run SuperClaude install --quick -y || fn_log_error "${FUNCNAME[0]}: failed to install SuperClaude"
+        uv tool run superclaude install --quick -y || fn_log_error "${FUNCNAME[0]}: failed to install SuperClaude"
     fi
 }
 
@@ -2286,11 +2286,11 @@ fn_local_uv_tool_install() {
         "nbconvert"
         "frogmouth"
         "llm"
-        #"aider-chat"
         "pdm"
         "posting"
         "harlequin"
         "pyright"
+        "superclaude"
     )
     
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
@@ -2318,6 +2318,9 @@ fn_local_uv_tool_install() {
         if [[ ! -d ${HOME}/.local/share/uv/tools/specify-cli ]]; then
             uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
         fi
+        
+        # agentready
+        uv tool install --from git+https://github.com/ambient-code/agentready agentready
     fi
 }
 
