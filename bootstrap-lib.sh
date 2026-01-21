@@ -556,7 +556,7 @@ fn_system_install_tailscale() {
     if [[ "${ID}" == "fedora" ]]; then
         if ! rpm -q tailscale &>/dev/null; then
             # sudo dnf config-manager --add-repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
-            sudo dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+            sudo dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo --overwrite
             sudo dnf install -y tailscale || fn_log_error "${FUNCNAME[0]}: failed to install tailscale"
             sudo systemctl enable --now tailscaled || fn_log_error "${FUNCNAME[0]}: failed to enable tailscale.service"
         fi
