@@ -1026,6 +1026,7 @@ fn_system_setup_fedora_el() {
         "pcp-system-tools"
         "fzf"
         "fd-find"
+        "waypipe"
     )
     
     # these are needed for the uv tool install of rh-aws-saml-login
