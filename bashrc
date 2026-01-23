@@ -230,7 +230,7 @@ alias issh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
 # Go back to allowing keyring daemon to manage this ... for now
 ## start ssh agent (if necessary)
-#alias ssa='ssh_agent'
+alias ssa='ssh_agent'
 
 # traditional util aliases
 alias l.='ls -d .* --color=auto'
