@@ -788,6 +788,7 @@ fn_system_setup_termux() {
         "openssh"
         "mandoc"
         "krb5"
+        "vim"
     )
     fn_system_install_packages "${pkglist[@]}"
 
