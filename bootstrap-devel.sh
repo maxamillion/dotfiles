@@ -69,6 +69,7 @@ git_repos=(
     "${dev_dir}/mcp-python-sdk git@github.com:maxamillion/mcp-python-sdk.git https://github.com/modelcontextprotocol/python-sdk"
     "${dev_dir}/mcp-specification git@github.com:maxamillion/mcp-specification.git https://github.com/modelcontextprotocol/specification"
     "${dev_dir}/mcp-security-scanner git@github.com:maxamillion/mcp-security-scanner.git https://github.com/sidhpurwala-huzaifa/mcp-security-scanner"
+    "${dev_dir}/rhoai-mcp git@github.com:maxamillion/rhoai-mcp.git https://github.com/opendatahub-io/rhoai-mcp.git"
     "${dev_dir}/odh-dashboard git@github.com:maxamillion/odh-dashboard.git https://github.com/opendatahub-io/odh-dashboard.git"
     "${dev_dir}/architecture-decision-records git@github.com:maxamillion/architecture-decision-records.git https://github.com/opendatahub-io/architecture-decision-records.git"
     "${dev_dir}/odh-model-controller git@github.com:maxamillion/odh-model-controller.git https://github.com/opendatahub-io/odh-model-controller.git"
