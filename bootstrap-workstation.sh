@@ -120,9 +120,6 @@ fn_local_install_openai_codex
 # gemini cli
 fn_local_install_gemini
 
-#amp
-fn_local_install_amp_code
-
 # bash language server
 fn_local_bash_language_server
 

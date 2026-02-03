@@ -1219,19 +1219,6 @@ fn_local_install_openai_codex() {
 }
 
 
-fn_local_install_amp_code() {
-    fn_ensure_npm_prefix
-    local bin_path
-    bin_path="${HOME}/.local/bin/amp"
-    if ! [[ -f "${bin_path}" ]]; then
-        printf "Installing amp...\n"
-        npm install -g @sourcegraph/amp
-    fi
-    if ! [[ -f "${bin_path}" ]]; then
-        fn_log_error "Amp npm install failed"
-    fi
-}
-
 fn_local_install_gemini() {
     fn_ensure_npm_prefix
     local bin_path
