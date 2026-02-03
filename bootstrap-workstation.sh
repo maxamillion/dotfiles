@@ -108,6 +108,9 @@ fn_local_install_shfmt
 # goose
 fn_local_install_goose
 
+# ollama
+fn_local_install_ollama
+
 # claude code
 fn_local_install_claude_code
 fn_local_install_super_claude
