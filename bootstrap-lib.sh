@@ -1796,9 +1796,16 @@ fn_local_install_ollama() {
     if [[ ! -f ${install_path} ]]; then
         printf "Installing ollama...\n"
 
-        curl -L "https://ollama.com/download/ollama-linux-${_GOLANG_ARCH}" -o "${install_path}"
-        chmod +x "${install_path}"
+        pushd /tmp/ || return
+            curl -L "https://github.com/ollama/ollama/releases/download/${latest_release}/ollama-linux-amd64.tar.zst" -o "ollama.tar.zst"
+            tar -x --zstd -f "ollama.tar.zst"
+            cp bin/ollama "${install_path}"
+            cp -r lib/ollama/ "${HOME}/.local/lib/"
+            chmod +x "${install_path}"
+            rm -rf bin lib
+            rm "ollama.tar.zst"
 
+        popd || return
         # ollama systemd user unit
         fn_mkdir_if_needed ~/.config/systemd/user
 
