@@ -1028,6 +1028,8 @@ fn_system_setup_fedora_el() {
         "fzf"
         "fd-find"
         "waypipe"
+        "bubblewrap"
+        "socat"
     )
     
     # these are needed for the uv tool install of rh-aws-saml-login
