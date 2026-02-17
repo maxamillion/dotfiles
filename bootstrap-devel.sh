@@ -51,6 +51,7 @@ git_repos=(
     "${dev_dir}/goose git@github.com:maxamillion/goose.git https://github.com/block/goose.git"
     "${dev_dir}/gemini-cli git@github.com:maxamillion/gemini-cli.git https://github.com/google-gemini/gemini-cli.git"
     "${dev_dir}/command-line-assistant git@github.com:maxamillion/command-line-assistant.git https://github.com/rhel-lightspeed/command-line-assistant.git"
+    "${dev_dir}/lightspeed-stack git@github.com:maxamillion/lightspeed-stack.git https://github.com/lightspeed-core/lightspeed-stack.git"
     "${dev_dir}/pytorch git@github.com:maxamillion/pytorch.git https://github.com/pytorch/pytorch.git"
     "${dev_dir}/vllm git@github.com:maxamillion/vllm.git https://github.com/vllm-project/vllm.git"
     "${dev_dir}/llama.cpp git@github.com:maxamillion/llama.cpp.git https://github.com/ggerganov/llama.cpp.git"
