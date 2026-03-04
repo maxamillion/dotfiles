@@ -292,6 +292,15 @@ rhtclaude() {
     claude "$@"
 }
 
+rhtgoose() {
+  GOOSE_PROVIDER="gcp_vertex_ai" \
+  GOOSE_MODEL="claude-opus-4-5@20251101" \
+  GCP_PROJECT_ID="itpc-gcp-ai-eng-claude" \
+  GCP_LOCATION="global" \
+  goose "$@"
+}
+
+
 rhtgemini() {
     GOOGLE_CLOUD_PROJECT="itpc-gcp-ai-eng-claude" \
     GOOGLE_CLOUD_LOCATION="us-east5" \
