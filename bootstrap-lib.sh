@@ -2232,10 +2232,27 @@ fn_local_install_goose() {
 
 fn_local_install_container_use() {
     local install_path="${_LOCAL_BIN_DIR}/container-use"
+    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/container-use"
+    local latest_release
+    local currently_installed_version
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    if [[ ! -f ${install_path} ]]; then
-        curl -fsSL https://raw.githubusercontent.com/dagger/container-use/main/install.sh | bash
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+    latest_release="$(curl -s 'https://api.github.com/repos/dagger/container-use/tags' | jq -r '.[].name' | head -1)"
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(container-use version | awk '{print $1}')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
     fi
+
+    # container-use install
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing container-use...\n"
+        curl -fsSL https://raw.githubusercontent.com/dagger/container-use/main/install.sh | bash
+        container-use completion bash > "${completions_install_path}"
+    fi
+
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
