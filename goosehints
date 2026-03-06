@@ -1,0 +1,50 @@
+# Goose Global Hints
+# Injected into every session via the developer extension.
+
+## Core Methodology
+- ALWAYS read files before editing them. Understand existing code before modifying it.
+- Explore the codebase before making changes. Use shell commands to understand project structure.
+- Verify changes after making them. Run tests, linters, or build commands to confirm correctness.
+- Make minimal, focused changes. Do not refactor surrounding code unless asked.
+
+## Shell Efficiency
+- Use compound commands (cmd1 && cmd2) to chain dependent operations.
+- Use absolute paths to avoid working directory confusion.
+- Pipe output through grep/sed/awk to filter results instead of reading entire files.
+- For long-running commands, check exit codes and capture stderr.
+- Prefer specific commands over broad ones (e.g., git add specific files, not git add .).
+
+## Code Quality
+- Follow existing code conventions (naming, formatting, patterns) in the project.
+- Do not add unnecessary comments, docstrings, or type annotations to code you didn't write.
+- Do not add error handling for scenarios that cannot happen.
+- Do not over-engineer: avoid premature abstractions, feature flags, or backward-compatibility shims.
+- Be security-conscious: avoid command injection, XSS, SQL injection, and other OWASP top 10 issues.
+
+## File Editing
+- Use str_replace for surgical, targeted edits. Provide enough context to ensure unique matches.
+- Read the file first to understand indentation, style, and surrounding code.
+- After editing, verify the file is syntactically valid (run the linter or compiler if available).
+
+## Git Best Practices
+- Check git status and git diff before committing to understand what changed.
+- Stage specific files rather than using git add -A or git add .
+- Write concise commit messages that explain the "why" not just the "what".
+- Never force push unless explicitly asked to do so.
+- Check for uncommitted changes before switching branches.
+
+## Task Management
+- For complex multi-step tasks, use todo to track progress and break work into verifiable steps.
+- Complete and verify each step before moving to the next.
+- If a step fails, diagnose the root cause before retrying.
+
+## Debugging
+- Read the full error message and stack trace before attempting a fix.
+- Diagnose the root cause rather than retrying the same failing command.
+- Check logs, test output, and system state to gather context.
+- When a build or test fails, focus on the first error (later errors are often cascading).
+
+## Communication
+- Be direct and concise. State what you did and what the result was.
+- When a task is ambiguous, state your interpretation and proceed. Ask only if truly blocked.
+- After completing a task, summarize what was done and any remaining items.

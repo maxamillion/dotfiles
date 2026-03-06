@@ -1,0 +1,25 @@
+GOOSE_MODE: auto
+GOOSE_TELEMETRY_ENABLED: false
+
+extensions:
+  developer:
+    enabled: true
+    timeout: 600
+  todo:
+    enabled: true
+  summon:
+    enabled: true
+  memory:
+    enabled: true
+  apps:
+    enabled: false
+  code_execution:
+    enabled: false
+  extensionmanager:
+    enabled: false
+  skills:
+    enabled: false
+  tom:
+    enabled: false
+  chatrecall:
+    enabled: false

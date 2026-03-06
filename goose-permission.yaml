@@ -1,0 +1,25 @@
+permissions:
+  - tool: developer__analyze
+    permission: always_allow
+  - tool: developer__shell
+    permission: always_allow
+  - tool: developer__text_editor
+    permission: always_allow
+  - tool: developer__list_windows
+    permission: always_allow
+  - tool: developer__screen_capture
+    permission: always_allow
+  - tool: platform__read_resource
+    permission: always_allow
+  - tool: platform__list_resources
+    permission: always_allow
+  - tool: memory__remember
+    permission: always_allow
+  - tool: memory__recall
+    permission: always_allow
+  - tool: todo__read
+    permission: always_allow
+  - tool: todo__update
+    permission: always_allow
+  - tool: summon__summon
+    permission: always_allow

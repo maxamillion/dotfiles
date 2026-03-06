@@ -296,7 +296,7 @@ rhtgoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
   GOOSE_MODEL="claude-opus-4-5@20251101" \
   GCP_PROJECT_ID="itpc-gcp-ai-eng-claude" \
-  GCP_LOCATION="global" \
+  GCP_LOCATION="us-east5" \
   goose "$@"
 }
 

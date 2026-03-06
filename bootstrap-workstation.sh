@@ -106,7 +106,7 @@ fn_local_install_go_blueprint
 fn_local_install_shfmt
 
 # goose
-# fn_local_install_goose # using r0x0d/goose copr for now
+fn_local_install_goose # waiting on r0x0d/goose copr to fix some things
 
 # ollama
 fn_local_install_ollama
