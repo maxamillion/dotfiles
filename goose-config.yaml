@@ -13,11 +13,7 @@ extensions:
     enabled: true
   apps:
     enabled: false
-  code_execution:
-    enabled: false
   extensionmanager:
-    enabled: false
-  skills:
     enabled: false
   tom:
     enabled: false
