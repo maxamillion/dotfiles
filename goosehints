@@ -48,3 +48,10 @@
 - Be direct and concise. State what you did and what the result was.
 - When a task is ambiguous, state your interpretation and proceed. Ask only if truly blocked.
 - After completing a task, summarize what was done and any remaining items.
+
+## Container Isolation
+- For risky, destructive, or experimental operations, prefer running them inside a container-use environment.
+- Use container-use to create isolated environments for build/test tasks that may modify system state.
+- When using summon to delegate subtasks, instruct subagents to work within container-use environments for isolation.
+- Use environment_checkpoint before destructive operations to enable rollback.
+- Prefer container-use environments for tasks involving untrusted code, dependency installation, or system-level changes.

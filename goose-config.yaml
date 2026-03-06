@@ -19,3 +19,10 @@ extensions:
     enabled: false
   chatrecall:
     enabled: false
+  container-use:
+    command: container-use
+    args:
+      - stdio
+    type: stdio
+    enabled: true
+    timeout: 600

@@ -108,6 +108,9 @@ fn_local_install_shfmt
 # goose
 fn_local_install_goose # waiting on r0x0d/goose copr to fix some things
 
+# container-use (goose sandbox extension)
+fn_local_install_container_use
+
 # ollama
 fn_local_install_ollama
 

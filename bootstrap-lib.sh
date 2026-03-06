@@ -2229,6 +2229,17 @@ fn_local_install_goose() {
     fi
 }
 
+fn_local_install_container_use() {
+    local install_path="${_LOCAL_BIN_DIR}/container-use"
+    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
+    if [[ ! -f ${install_path} ]]; then
+        curl -fsSL https://raw.githubusercontent.com/dagger/container-use/main/install.sh | bash
+    fi
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_install_beads() {
     local install_path="${HOME}/go/bin/bd"
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/bd"

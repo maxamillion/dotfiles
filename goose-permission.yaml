@@ -23,3 +23,27 @@ permissions:
     permission: always_allow
   - tool: summon__summon
     permission: always_allow
+  - tool: container-use__environment_add_service
+    permission: always_allow
+  - tool: container-use__environment_checkpoint
+    permission: always_allow
+  - tool: container-use__environment_config
+    permission: always_allow
+  - tool: container-use__environment_create
+    permission: always_allow
+  - tool: container-use__environment_file_delete
+    permission: always_allow
+  - tool: container-use__environment_file_edit
+    permission: always_allow
+  - tool: container-use__environment_file_list
+    permission: always_allow
+  - tool: container-use__environment_file_read
+    permission: always_allow
+  - tool: container-use__environment_file_write
+    permission: always_allow
+  - tool: container-use__environment_open
+    permission: always_allow
+  - tool: container-use__environment_run_cmd
+    permission: always_allow
+  - tool: container-use__environment_update_metadata
+    permission: always_allow
