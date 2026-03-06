@@ -995,6 +995,7 @@ fn_system_setup_fedora_el() {
         "nmap"
         "jq"
         "podman"
+        "podman-docker"
         "skopeo"
         "buildah"
         "luarocks"
@@ -2237,6 +2238,13 @@ fn_local_install_container_use() {
     fi
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+
+    # Enable podman socket for Docker API compatibility (used by container-use)
+    if command -v podman > /dev/null 2>&1; then
+        if ! systemctl --user is-enabled podman.socket > /dev/null 2>&1; then
+            systemctl --user enable --now podman.socket
+        fi
     fi
 }
 

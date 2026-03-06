@@ -82,6 +82,11 @@ else
     export container_runtime='podman' # default
 fi
 
+# Set DOCKER_HOST to podman socket for Docker API compatibility (container-use, etc)
+if [[ "${container_runtime}" == "podman" ]]; then
+    export DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
+fi
+
 # OpenShift/k8s stuff - I typically install these to ~/bin/ for personal sanity
 if [ -f ~/.local/bin/oc ]; then
     if ! [ -f "${HOME}/.local/share/bash-completion/completions/oc" ]; then
