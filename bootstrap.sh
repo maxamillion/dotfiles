@@ -32,6 +32,7 @@ fn_mkdir_if_needed "${HOME}/.vim"
 fn_mkdir_if_needed "${HOME}/.ipython/profile_default/"
 fn_mkdir_if_needed "${HOME}/.shelloracle/"
 fn_mkdir_if_needed "${HOME}/.config/goose"
+fn_mkdir_if_needed "${HOME}/.config/kitty"
 
 # Create symlinks with absolute paths
 fn_symlink_if_needed "${_DOTFILES_DIR}/snclirc"            "${HOME}/.snclirc"
@@ -60,6 +61,7 @@ fn_symlink_if_needed "${_DOTFILES_DIR}/shelloracle-config.toml" "${HOME}/.shello
 fn_symlink_if_needed "${_DOTFILES_DIR}/goose-config.yaml"    "${HOME}/.config/goose/config.yaml"
 fn_symlink_if_needed "${_DOTFILES_DIR}/goosehints"            "${HOME}/.config/goose/.goosehints"
 fn_symlink_if_needed "${_DOTFILES_DIR}/goose-permission.yaml" "${HOME}/.config/goose/permission.yaml"
+fn_symlink_if_needed "${_DOTFILES_DIR}/kitty.conf"            "${HOME}/.config/kitty/kitty.conf"
 
 # Run workstation-specific bootstrap
 _WORKSTATION_SCRIPT="${_DOTFILES_DIR}/bootstrap-workstation.sh"
