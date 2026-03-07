@@ -20,9 +20,12 @@ extensions:
   chatrecall:
     enabled: false
   container-use:
-    command: container-use
+    name: container-use
+    cmd: container-use
     args:
       - stdio
     type: stdio
     enabled: true
     timeout: 600
+    envs:
+      DOCKER_HOST: "unix:///run/user/18626/podman/podman.sock"
