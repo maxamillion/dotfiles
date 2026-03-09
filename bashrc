@@ -297,6 +297,13 @@ rhtclaude() {
     claude "$@"
 }
 
+rhtpaude() {
+    CLAUDE_CODE_USE_VERTEX=1 \
+    CLOUD_ML_REGION="us-east5" \
+    ANTHROPIC_VERTEX_PROJECT_ID="itpc-gcp-ai-eng-claude" \
+    paude "$@"
+}
+
 rhtgoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
   GOOSE_MODEL="claude-opus-4-5@20251101" \
