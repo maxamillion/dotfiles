@@ -2325,7 +2325,7 @@ fn_local_uv_tool_install() {
         "posting"
         "harlequin"
         "pyright"
-        "superclaude"
+        "paude"
     )
     
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
