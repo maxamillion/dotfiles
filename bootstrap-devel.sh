@@ -49,6 +49,7 @@ git_repos=(
     "${dev_dir}/grant git@github.com:maxamillion/grant.git https://github.com/anchore/grant.git"
     "${dev_dir}/vunnel git@github.com:maxamillion/vunnel.git https://github.com/anchore/vunnel.git"
     "${dev_dir}/goose git@github.com:maxamillion/goose.git https://github.com/block/goose.git"
+    "${dev_dir}/paude git@github.com:maxamillion/paude.git https://github.com/bbrowning/paude.git"
     "${dev_dir}/gemini-cli git@github.com:maxamillion/gemini-cli.git https://github.com/google-gemini/gemini-cli.git"
     "${dev_dir}/command-line-assistant git@github.com:maxamillion/command-line-assistant.git https://github.com/rhel-lightspeed/command-line-assistant.git"
     "${dev_dir}/lightspeed-stack git@github.com:maxamillion/lightspeed-stack.git https://github.com/lightspeed-core/lightspeed-stack.git"
