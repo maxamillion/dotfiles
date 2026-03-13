@@ -39,6 +39,182 @@ if [[ "${_GOLANG_ARCH}" == "unsupported" ]]; then
     fn_safe_exit 1
 fi
 
+# bin-managed app arrays
+# Format: REPO|BINARY_NAME|COMPLETION_CMD
+# COMPLETION_CMD: "completion bash", "completion -s bash", or "" for none
+_BIN_APPS_GITHUB=(
+    "open-policy-agent/opa|opa|"
+    "kubernetes/minikube|minikube|completion bash"
+    "kubernetes-sigs/kind|kind|completion bash"
+    "helm/helm|helm|completion bash"
+    "kubernetes-sigs/kustomize|kustomize|completion bash"
+    "derailed/k9s|k9s|completion bash"
+    "kubernetes-sigs/kubebuilder|kubebuilder|completion bash"
+    "operator-framework/operator-sdk|operator-sdk|completion bash"
+    "openshift/rosa|rosa|completion bash"
+    "sigstore/cosign|cosign|completion bash"
+    "cli/cli|gh|completion -s bash"
+    "go-task/task|task|"
+    "mikefarah/yq|yq|completion bash"
+    "anchore/syft|syft|completion bash"
+    "anchore/grype|grype|completion bash"
+    "ollama/ollama|ollama|"
+    "block/goose|goose|"
+    "dagger/container-use|container-use|completion bash"
+    "charmbracelet/glow|glow|completion bash"
+    "charmbracelet/soft-serve|soft|completion bash"
+    "charmbracelet/vhs|vhs|completion bash"
+    "charmbracelet/wishlist|wishlist|completion bash"
+    "charmbracelet/crush|crush|completion bash"
+)
+
+_BIN_APPS_HASHICORP=(
+    "hashicorp/terraform|terraform|"
+)
+
+_BIN_APPS_GOINSTALL=(
+    "github.com/melkeydev/go-blueprint@latest|go-blueprint|completion bash"
+    "mvdan.cc/sh/v3/cmd/shfmt@latest|shfmt|"
+    "github.com/steveyegge/beads/cmd/bd@latest|bd|completion bash"
+)
+
+# Post-install hooks for bin-managed apps
+_post_install_ollama() {
+    local install_path="${_LOCAL_BIN_DIR}/ollama"
+
+    # Download lib files
+    local latest_release
+    latest_release="$(curl -s 'https://api.github.com/repos/ollama/ollama/tags' \
+        | jq -r '.[] | select(.name | contains("rc") | not).name' \
+        | head -1)"
+
+    if [[ ! -d "${HOME}/.local/lib/ollama" ]]; then
+        pushd /tmp/ || return
+            curl -L "https://github.com/ollama/ollama/releases/download/${latest_release}/ollama-linux-amd64.tar.zst" -o "ollama.tar.zst"
+            tar -x --zstd -f "ollama.tar.zst"
+            cp -r lib/ollama/ "${HOME}/.local/lib/"
+            rm -rf bin lib
+            rm "ollama.tar.zst"
+        popd || return
+    fi
+
+    # ollama systemd user unit
+    fn_mkdir_if_needed ~/.config/systemd/user
+
+    if [[ ! -f ~/.config/systemd/user/ollama.service ]]; then
+        cat > ~/.config/systemd/user/ollama.service << EOF
+[Unit]
+Description=Ollama Service - User mode
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=${install_path} serve
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target
+EOF
+        systemctl --user daemon-reload
+        systemctl --user enable ollama.service || fn_log_error "_post_install_ollama: failed to enable ollama.service"
+        systemctl --user start ollama.service || fn_log_error "_post_install_ollama: failed to start ollama.service"
+    fi
+}
+
+_post_install_container_use() {
+    # Enable podman socket for Docker API compatibility (used by container-use)
+    if command -v podman > /dev/null 2>&1; then
+        if ! systemctl --user is-enabled podman.socket > /dev/null 2>&1; then
+            systemctl --user enable --now podman.socket
+        fi
+    fi
+}
+
+fn_local_install_bin_apps() {
+    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+
+    local entry repo binary_name completion_cmd install_path
+
+    # GitHub-hosted apps via bin
+    for entry in "${_BIN_APPS_GITHUB[@]}"; do
+        IFS='|' read -r repo binary_name completion_cmd <<< "${entry}"
+        install_path="${_LOCAL_BIN_DIR}/${binary_name}"
+
+        if [[ ! -f "${install_path}" ]]; then
+            printf "Installing %s via bin...\n" "${binary_name}"
+            bin install "github.com/${repo}" "${install_path}" \
+                || { fn_log_error "fn_local_install_bin_apps: failed to install ${binary_name}"; continue; }
+
+            # Generate completions
+            if [[ -n "${completion_cmd}" ]]; then
+                "${install_path}" ${completion_cmd} > "${_LOCAL_COMPLETIONS_DIR}/${binary_name}" 2>/dev/null || true
+            fi
+
+            # Post-install hooks
+            case "${binary_name}" in
+                ollama) _post_install_ollama ;;
+                container-use) _post_install_container_use ;;
+            esac
+        fi
+    done
+
+    # HashiCorp apps via bin
+    for entry in "${_BIN_APPS_HASHICORP[@]}"; do
+        IFS='|' read -r repo binary_name completion_cmd <<< "${entry}"
+        install_path="${_LOCAL_BIN_DIR}/${binary_name}"
+
+        if [[ ! -f "${install_path}" ]]; then
+            printf "Installing %s via bin...\n" "${binary_name}"
+            bin install --provider hashicorp "https://releases.hashicorp.com/${binary_name}" "${install_path}" \
+                || { fn_log_error "fn_local_install_bin_apps: failed to install ${binary_name}"; continue; }
+
+            if [[ -n "${completion_cmd}" ]]; then
+                "${install_path}" ${completion_cmd} > "${_LOCAL_COMPLETIONS_DIR}/${binary_name}" 2>/dev/null || true
+            fi
+        fi
+    done
+
+    # Go-installed apps
+    for entry in "${_BIN_APPS_GOINSTALL[@]}"; do
+        IFS='|' read -r repo binary_name completion_cmd <<< "${entry}"
+        install_path="${HOME}/go/bin/${binary_name}"
+
+        if [[ ! -f "${install_path}" ]]; then
+            printf "Installing %s via go install...\n" "${binary_name}"
+            go install "${repo}" \
+                || { fn_log_error "fn_local_install_bin_apps: failed to go install ${binary_name}"; continue; }
+
+            if [[ -n "${completion_cmd}" ]]; then
+                "${install_path}" ${completion_cmd} > "${_LOCAL_COMPLETIONS_DIR}/${binary_name}" 2>/dev/null || true
+            fi
+        fi
+    done
+}
+
+fn_regenerate_bin_app_completions() {
+    local entry binary_name completion_cmd install_path
+
+    for entry in "${_BIN_APPS_GITHUB[@]}" "${_BIN_APPS_HASHICORP[@]}"; do
+        IFS='|' read -r _ binary_name completion_cmd <<< "${entry}"
+        install_path="${_LOCAL_BIN_DIR}/${binary_name}"
+
+        if [[ -n "${completion_cmd}" ]] && [[ -f "${install_path}" ]]; then
+            "${install_path}" ${completion_cmd} > "${_LOCAL_COMPLETIONS_DIR}/${binary_name}" 2>/dev/null || true
+        fi
+    done
+
+    for entry in "${_BIN_APPS_GOINSTALL[@]}"; do
+        IFS='|' read -r _ binary_name completion_cmd <<< "${entry}"
+        install_path="${HOME}/go/bin/${binary_name}"
+
+        if [[ -n "${completion_cmd}" ]] && [[ -f "${install_path}" ]]; then
+            "${install_path}" ${completion_cmd} > "${_LOCAL_COMPLETIONS_DIR}/${binary_name}" 2>/dev/null || true
+        fi
+    done
+}
+
 # Security and networking configuration
 readonly CURL_TIMEOUT=30
 readonly CURL_MAX_TIME=300
@@ -1299,277 +1475,6 @@ fn_local_install_distrobox() {
     fi
 }
 
-fn_local_install_opa() {
-    local install_path="${_LOCAL_BIN_DIR}/opa"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-
-    latest_release="$(curl -s 'https://api.github.com/repos/open-policy-agent/opa/tags' | jq -r '.[0].name')"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(opa version | awk -F: '/^Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-            local uninstall_paths=("${install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        if [[ ${_MACHINE_ARCH} == "x86_64" ]]; then
-            curl -L -o "${install_path}" "https://openpolicyagent.org/downloads/${latest_release}/opa_linux_amd64_static"
-        fi  
-        if [[ ${_MACHINE_ARCH} == "aarch64" ]]; then
-            curl -L -o "${install_path}" "https://openpolicyagent.org/downloads/${latest_release}/opa_linux_arm64_static"
-        fi  
-        if [[ ! -f ${install_path} ]]; then
-            fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-        fi
-        chmod +x "${install_path}"
-    fi
-}
-
-fn_local_install_minikube() {
-    local install_path="${_LOCAL_BIN_DIR}/minikube"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/minikube"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-
-    latest_release="$(curl -s 'https://api.github.com/repos/kubernetes/minikube/tags' | jq -r '.[0].name')"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(minikube version | awk -F: '/^minikube version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    # minikube install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing minikube...\n"
-        curl -LO "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${_GOLANG_ARCH}"
-        chmod +x "./minikube-linux-${_GOLANG_ARCH}"
-        cp "./minikube-linux-${_GOLANG_ARCH}" "${install_path}"
-        rm "./minikube-linux-${_GOLANG_ARCH}"
-        ${install_path} completion bash > "${completions_install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_kind() {
-    local install_path="${_LOCAL_BIN_DIR}/kind"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/kind"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    # kind tags alpha and stable, if it's alpha, use the latest stable - query with jq
-    latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kind/tags' | jq -r '.[] | select(.name | contains("alpha") | not ).name' | head -1)"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(kind version | awk '/^kind/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    kind_numerical_version="${latest_release#v*}"
-
-    # kind install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing kind...\n"
-        curl -Lo ./kind "https://kind.sigs.k8s.io/dl/${latest_release}/kind-linux-${_GOLANG_ARCH}"
-        chmod +x ./kind
-        cp ./kind "${install_path}"
-        rm ./kind 
-        ${install_path} completion bash > "${completions_install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_helm() {
-    local install_path="${_LOCAL_BIN_DIR}/helm"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/helm"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    # helm tags alpha and stable, if it's alpha, use the latest stable - query with jq
-    latest_release="$(curl -s 'https://api.github.com/repos/helm/helm/tags' | jq -r '.[] | select(.name | contains("rc") | not ).name' | head -1)"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(helm version |awk -F, '/^version/ { print $1 }' | awk -F\" '{print $2}')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    helm_numerical_version="${latest_release#v*}"
-
-    # helm install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing helm...\n"
-        curl -Lo ./helm.tar.gz "https://get.helm.sh/helm-${latest_release}-linux-${_GOLANG_ARCH}.tar.gz"
-        tar -zxvf ./helm.tar.gz
-        chmod +x "./linux-${_GOLANG_ARCH}/helm"
-        cp "./linux-${_GOLANG_ARCH}/helm" "${install_path}"
-        rm -fr "./linux-${_GOLANG_ARCH}"
-        rm ./helm.tar.gz
-        ${install_path} completion bash > "${completions_install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_kubectl() {
-    local install_path="${_LOCAL_BIN_DIR}/kubectl"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/kubectl"
-    local latest_release
-    local currently_installed_version
-    local temp_file="/tmp/kubectl.$$"
-    
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}" || return 1
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}" || return 1
-
-    # Get latest release version securely
-    if ! latest_release=$(fn_secure_download "https://dl.k8s.io/release/stable.txt" "/tmp/kubectl-version.$$" && cat "/tmp/kubectl-version.$$" && rm "/tmp/kubectl-version.$$"); then
-        fn_log_error "${FUNCNAME[0]}: failed to get latest kubectl version"
-        return 1
-    fi
-    
-    # Validate version format
-    if [[ ! "${latest_release}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        fn_log_error "${FUNCNAME[0]}: invalid version format: ${latest_release}"
-        return 1
-    fi
-    
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f "${install_path}" ]]; then
-            currently_installed_version=$(kubectl version 2>/dev/null | awk -F: '/^Client Version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }' || printf "unknown")
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    # kubectl install
-    if [[ ! -f "${install_path}" ]]; then
-        printf "Installing kubectl %s...\n" "${latest_release}"
-        
-        local kubectl_url="https://dl.k8s.io/release/${latest_release}/bin/linux/${_GOLANG_ARCH}/kubectl"
-        if fn_secure_download "${kubectl_url}" "${temp_file}"; then
-            chmod +x "${temp_file}"
-            mv "${temp_file}" "${install_path}" || {
-                fn_log_error "${FUNCNAME[0]}: failed to install kubectl binary"
-                rm -f "${temp_file}"
-                return 1
-            }
-            
-            # Generate completions
-            if ! "${install_path}" completion bash > "${completions_install_path}"; then
-                fn_log_error "${FUNCNAME[0]}: failed to generate kubectl completions"
-            fi
-        else
-            fn_log_error "${FUNCNAME[0]}: failed to download kubectl"
-            return 1
-        fi
-    fi
-
-    if [[ ! -f "${install_path}" ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-        return 1
-    fi
-}
-
-fn_local_install_rosa() {
-    local install_path="${_LOCAL_BIN_DIR}/rosa"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/rosa"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-
-    latest_release=$(curl -s 'https://api.github.com/repos/openshift/rosa/tags' \
-        | jq -r '.[] | select(.name | contains("-rc") | not) | select(.name | contains("-testing") | not).name' | head -1)
-    latest_numerical_version="${latest_release#v*}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(rosa version 2>/dev/null | grep "${latest_numerical_version}" | td -d 'INFO: ')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    # rosa install
-    if [[ ! -f ${install_path} ]]; then
-        pushd /tmp/ || return
-            printf "Installing rosa...\n"
-            if [[ "${_MACHINE_ARCH}" == "x86_64" ]]; then
-                wget -c "https://github.com/openshift/rosa/releases/download/${latest_release}/rosa_Linux_${_MACHINE_ARCH}.tar.gz"
-                tar zxvf "rosa_Linux_${_MACHINE_ARCH}.tar.gz"
-            elif [[ "${_MACHINE_ARCH}" == "aarch64" ]]; then
-                wget -c "https://github.com/openshift/rosa/releases/download/${latest_release}/rosa_Linux_${_GOLANG_ARCH}.tar.gz"
-                tar zxvf "rosa_Linux_${_GOLANG_ARCH}.tar.gz"
-            else
-                printf "ERROR: Unsupported ROSA architecture: %s\n" "${_MACHINE_ARCH}"
-                return
-            fi
-            cp rosa "${install_path}"
-            ${install_path} completion bash > "${completions_install_path}"
-        popd || return
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_terraform() {
-    local install_path="${_LOCAL_BIN_DIR}/terraform"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-
-    # terraform tags alpha, beta, and rc ... don't get those
-    latest_release="$(
-        curl -s 'https://api.github.com/repos/hashicorp/terraform/tags' \
-            | jq -r '.[] | select(.name | contains("alpha") | not )| select(.name | contains("beta") | not ) | select(.name | contains("rc") | not).name' \
-            | head -1 \
-    )"
-
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(terraform version | awk '/^Terraform/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2 }')
-            local uninstall_paths=("${install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    local terraform_version="${latest_release#v*}"
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing terraform...\n"
-        pushd /tmp/ || return
-            rm -f terraform terraform.zip # just to make sure the zip command doesn't complain
-            curl -Lo terraform.zip \
-                "https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_${_GOLANG_ARCH}.zip"
-            unzip terraform.zip
-            cp terraform "${install_path}"
-        popd || return
-        chmod +x "${install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
 
 fn_local_install_rustup() {
     local install_path="${HOME}/.cargo/bin/rustup"
@@ -1621,37 +1526,6 @@ fn_local_install_rustup() {
     if [[ ! -f "${install_path}" ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
         return 1
-    fi
-}
-
-fn_local_install_gh() {
-    local install_path="${_LOCAL_BIN_DIR}/gh"
-    local latest_release
-    local currently_installed_version
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/gh"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-
-    latest_release="$(curl -s 'https://api.github.com/repos/cli/cli/tags' | jq -r '.[0].name')"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(gh version| awk '/^gh version/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $3 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    local gh_numerical_version="${latest_release#v*}"
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing gh...\n"
-        curl -Lo /tmp/gh.tar.gz "https://github.com/cli/cli/releases/download/${latest_release}/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}.tar.gz"
-        tar -zxvf /tmp/gh.tar.gz -C /tmp/
-        cp "/tmp/gh_${gh_numerical_version}_linux_${_GOLANG_ARCH}/bin/gh" "${install_path}"
-        ${install_path} completion -s bash > "${completions_install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
     fi
 }
 
@@ -1707,388 +1581,6 @@ fn_local_install_vim_plug() {
     fi
 }
 
-fn_local_install_task() {
-    local install_path="${_LOCAL_BIN_DIR}/task"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/task"
-    local latest_release
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/go-task/task/tags' | jq -r '.[0].name')"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(task --version)
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing task...\n"
-
-        pushd /tmp/ || return
-            wget -c "https://github.com/go-task/task/releases/download/${latest_release}/task_linux_${_GOLANG_ARCH}.tar.gz"
-            tar -zxvf "task_linux_${_GOLANG_ARCH}.tar.gz"
-            cp task "${install_path}"
-            cp completion/bash/task.bash "${completions_install_path}"
-
-            # cleanup the tarball artifacts
-            for file in $(tar --list --file "task_linux_${_GOLANG_ARCH}.tar.gz"); do
-                rm -f "${file}"
-            done
-            rm -fr completion
-        popd || return
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_yq() {
-    local install_path="${_LOCAL_BIN_DIR}/yq"
-    local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/yq"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(
-        curl -s 'https://api.github.com/repos/mikefarah/yq/tags' \
-            | jq -r '.[] | select(.name | contains("Test") | not).name' \
-            | head -1
-    )"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(yq --version | awk '{ print $4 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing yq...\n"
-
-        pushd /tmp/ || return
-            wget -c "https://github.com/mikefarah/yq/releases/download/${latest_release}/yq_linux_${_GOLANG_ARCH}.tar.gz" -O - \
-                | tar xz && cp "yq_linux_${_GOLANG_ARCH}" "${install_path}"
-            ${install_path} completion bash > "${completions_install_path}"
-        popd || return
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_ollama() {
-    local install_path="${_LOCAL_BIN_DIR}/ollama"
-    local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/ollama"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(
-        curl -s 'https://api.github.com/repos/ollama/ollama/tags' \
-            | jq -r '.[] | select(.name | contains("rc") | not).name' \
-            | head -1
-    )"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(ollama --version | grep "client version" | awk '{ print $5 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing ollama...\n"
-
-        pushd /tmp/ || return
-            curl -L "https://github.com/ollama/ollama/releases/download/${latest_release}/ollama-linux-amd64.tar.zst" -o "ollama.tar.zst"
-            tar -x --zstd -f "ollama.tar.zst"
-            cp bin/ollama "${install_path}"
-            cp -r lib/ollama/ "${HOME}/.local/lib/"
-            chmod +x "${install_path}"
-            rm -rf bin lib
-            rm "ollama.tar.zst"
-
-        popd || return
-        # ollama systemd user unit
-        fn_mkdir_if_needed ~/.config/systemd/user
-
-        if [[ ! -f ~/.config/systemd/user/ollama.service ]]; then
-            cat > ~/.config/systemd/user/ollama.service << EOF
-[Unit]
-Description=Ollama Service - User mode
-After=network-online.target
-
-[Service]
-Type=simple
-ExecStart=${install_path} serve
-Restart=always
-RestartSec=3
-
-[Install]
-WantedBy=default.target
-EOF
-            systemctl --user daemon-reload
-            systemctl --user enable ollama.service || fn_log_error "${FUNCNAME[0]}: failed to enable ollama.service"
-            systemctl --user start ollama.service || fn_log_error "${FUNCNAME[0]}: failed to start ollama.service"
-       fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_charm() {
-    if [[ "${1:-}" == "soft-serve" ]]; then
-        # special case because soft-serve binary is called "soft"
-        local install_path="${_LOCAL_BIN_DIR}/soft"
-    else
-        local install_path="${_LOCAL_BIN_DIR}/${1:-}"
-    fi
-    local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/${1:-}"
-    local manpage_install_path="${HOME}/.local/share/man/man1/${1:-}.1.gz"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s "https://api.github.com/repos/charmbracelet/${1:-}/tags" | jq '.[0].name' | tr -d \")"
-    latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(${1:-} --version | grep "client version" | awk '{ print $5 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing %s...\n" "${1:-}"
-
-        pushd /tmp/ || return
-            if [[ ${_GOLANG_ARCH} == "amd64" ]]; then
-                charm_tarname="${1:-}_${latest_release_numerical_version}_Linux_x86_64.tar.gz"
-            else
-                charm_tarname="${1:-}_${latest_release_numerical_version}_Linux_${_GOLANG_ARCH}.tar.gz"
-            fi
-            wget -c "https://github.com/charmbracelet/${1:-}/releases/download/${latest_release}/${charm_tarname}"
-            tar zxvf "${charm_tarname}"
-            pushd "${charm_tarname%.tar.gz}" || return
-                if [[ "${1:-}" == "soft-serve" ]]; then
-                    # special case because soft-serve binary is called "soft"
-                    cp "soft" "${install_path}"
-                else
-                    cp "${1:-}" "${install_path}"
-                fi
-                chmod +x "${install_path}"
-
-                cp "completions/${1:-}.bash" "${completions_install_path}"
-                cp "manpages/${1:-}.1.gz" "${manpage_install_path}"
-            popd || return
-            rm -fr "${charm_tarname%.tar.gz}"
-            rm "${charm_tarname}"
-        popd || return
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-    if [[ ! -f ${completions_install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${completions_install_path}"
-    fi
-    if [[ ! -f ${manpage_install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${manpage_install_path}"
-    fi
-}
-
-fn_local_install_charm_apps() {
-    # charm apps
-    local charm_pkglist
-    charm_pkglist=(
-        "glow"
-        "soft-serve"
-        "vhs"
-        "wishlist"
-        "crush"
-    )
-    for charm in "${charm_pkglist[@]}"; do
-        fn_local_install_charm "${charm}"
-    done
-}
-
-fn_local_install_k9s() {
-    local install_path="${_LOCAL_BIN_DIR}/k9s"
-    local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/k9s"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/derailed/k9s/tags' | jq '.[0].name' | tr -d \")"
-    latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(k9s version | grep "Version" | awk '{ print $2 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing k9s...\n"
-
-        pushd /tmp/ || return
-            k9s_tarname="k9s_Linux_${_GOLANG_ARCH}.tar.gz"
-            wget -c "https://github.com/derailed/k9s/releases/download/${latest_release}/k9s_Linux_${_GOLANG_ARCH}.tar.gz"
-            tar zxvf "${k9s_tarname}"
-            cp "k9s" "${install_path}"
-            chmod +x "${install_path}"
-            "${install_path}" completion bash > "${completions_install_path}"
-            rm "${k9s_tarname}"
-        popd || return
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_kubebuilder() {
-    local install_path="${_LOCAL_BIN_DIR}/kubebuilder"
-    local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/kubebuilder"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(
-        curl -s 'https://api.github.com/repos/kubernetes-sigs/kubebuilder/tags'  \
-            | jq -r '.[] | select(.name | contains("alpha") | not )| select(.name | contains("beta") | not ) | select(.name | contains("rc") | not).name' \
-            | head -1 | tr -d \"
-    )"
-    latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(kubebuilder version | sed 's/.*KubeBuilderVersion:"\([^"]*\)".*/\1/')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release#v*}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing kubebuilder...\n"
-
-        pushd /tmp/ || return
-            wget -c "https://github.com/kubernetes-sigs/kubebuilder/releases/download/${latest_release}/kubebuilder_linux_${_GOLANG_ARCH}"
-            mv "kubebuilder_linux_${_GOLANG_ARCH}" "kubebuilder"
-            cp "kubebuilder" "${install_path}"
-            chmod +x "${install_path}"
-            "${install_path}" completion bash > "${completions_install_path}"
-            rm "kubebuilder"
-        popd || return
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_operator_sdk() {
-    local install_path="${_LOCAL_BIN_DIR}/operator-sdk"
-    local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/operator-sdk"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/operator-framework/operator-sdk/tags' | jq '.[0].name' | tr -d \")"
-    latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(operator-sdk version | grep "Version" | awk '{ print $2 }')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing operator-sdk...\n"
-
-
-        pushd /tmp/ || return
-            wget -c "https://github.com/operator-framework/operator-sdk/releases/download/${latest_release}/operator-sdk_linux_${_GOLANG_ARCH}"
-            cp "operator-sdk_linux_${_GOLANG_ARCH}" "${install_path}"
-            chmod +x "${install_path}"
-            "${install_path}" completion bash > "${completions_install_path}"
-            rm "operator-sdk_linux_${_GOLANG_ARCH}" 
-        popd || return
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_syft() {
-    local install_path="${_LOCAL_BIN_DIR}/syft"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/syft"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            rm "${install_path}" "${completions_install_path}"
-        fi
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ~/.local/bin/
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    else
-        "${install_path}" completion bash > "${completions_install_path}"
-    fi
-}
-
-fn_local_install_grype() {
-    local install_path="${_LOCAL_BIN_DIR}/grype"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/grype"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            rm "${install_path}" "${completions_install_path}"
-        fi
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b ~/.local/bin/
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    else
-        "${install_path}" completion bash > "${completions_install_path}"
-    fi
-}
-
-fn_local_install_cosign() {
-    local install_path="${_LOCAL_BIN_DIR}/cosign"
-    local latest_release
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/cosign"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(
-        curl -s 'https://api.github.com/repos/sigstore/cosign/tags' | 
-            jq '.[] | select(.name | contains("rc") | not).name' | head -1 | tr -d \"
-    )"
-    latest_release_numerical_version="${latest_release#v*}"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version="$(cosign version | awk '/GitVersion/{print$2}')"
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing cosign...\n"
-
-        wget -O "${install_path}" "https://github.com/sigstore/cosign/releases/download/${latest_release}/cosign-linux-${_GOLANG_ARCH}"
-        chmod +x "${install_path}"
-        "${install_path}" completion bash > "${completions_install_path}"
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
 fn_local_install_chtsh() {
     local install_path="${_LOCAL_BIN_DIR}/chtsh"
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/chtsh"
@@ -2129,164 +1621,34 @@ fn_local_install_aws() {
     fi
 }
 
-fn_local_install_kustomize() {
-    local install_path="${_LOCAL_BIN_DIR}/kustomize"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/kustomize"
+fn_local_install_bin() {
+    local install_path="${_LOCAL_BIN_DIR}/bin"
     local latest_release
     local currently_installed_version
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    # kustomize tags alpha and stable, if it's alpha, use the latest stable - query with jq
-    latest_release="$(curl -s 'https://api.github.com/repos/kubernetes-sigs/kustomize/releases' |
-        jq -r '.[] | select(.name | contains("kustomize") ).name' | head -1 | awk -F/ '{ print $2 }')"
+
+    latest_release="$(curl -s 'https://api.github.com/repos/marcosnils/bin/tags' | jq -r '.[0].name')"
     if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(kustomize version)
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    # kustomize_numerical_version="${latest_release#v*}"
-
-    # kustomize install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing kustomize...\n"
-        wget -c "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${latest_release}/kustomize_${latest_release}_linux_${_GOLANG_ARCH}.tar.gz"
-        tar -zxvf "kustomize_${latest_release}_linux_${_GOLANG_ARCH}.tar.gz"
-        cp ./kustomize "${install_path}"
-        rm ./kustomize 
-        rm "./kustomize_${latest_release}_linux_${_GOLANG_ARCH}.tar.gz"
-        ${install_path} completion bash > "${completions_install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_go_blueprint() {
-    local install_path="${HOME}/go/bin/go-blueprint"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/go-blueprint"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/Melkeydev/go-blueprint/releases' | jq -r '.[].name' | head -1 )"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(go-blueprint version)
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    # go-blueprint_numerical_version="${latest_release#v*}"
-
-    # go-blueprint install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing go-blueprint...\n"
-        go install github.com/melkeydev/go-blueprint@latest
-        ${install_path} completion bash > "${completions_install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
-
-fn_local_install_shfmt() {
-    local install_path="${HOME}/go/bin/shfmt"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/mvdan/sh/releases' | \
-        jq '.[] | select(.tag_name | contains("beta") | not) | select(.tag_name | contains("alpha") | not).tag_name' | head -1 | tr -d \")"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(shfmt version)
+            currently_installed_version=$(bin version 2>/dev/null | awk '{print $2}')
             local uninstall_paths=("${install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "v${currently_installed_version}" "${uninstall_paths[@]}"
         fi
     fi
 
-    # shfmt install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing shfmt...\n"
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest
-    fi
+    local bin_numerical_version="${latest_release#v*}"
 
     if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
+        printf "Installing bin (binary manager)...\n"
 
-fn_local_install_goose() {
-    local install_path="${_LOCAL_BIN_DIR}/goose"
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    if [[ ! -f ${install_path} ]]; then
-        curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash
-    fi
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-}
+        local temp_bin="/tmp/bin.$$"
+        curl -Lo "${temp_bin}" \
+            "https://github.com/marcosnils/bin/releases/download/${latest_release}/bin_${bin_numerical_version}_linux_${_GOLANG_ARCH}"
+        chmod +x "${temp_bin}"
 
-fn_local_install_container_use() {
-    local install_path="${_LOCAL_BIN_DIR}/container-use"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/container-use"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/dagger/container-use/tags' | jq -r '.[].name' | head -1)"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(container-use version | awk '{print $1}')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-    # container-use install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing container-use...\n"
-        curl -fsSL https://raw.githubusercontent.com/dagger/container-use/main/install.sh | bash
-        container-use completion bash > "${completions_install_path}"
-    fi
-
-    if [[ ! -f ${install_path} ]]; then
-        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
-    fi
-
-    # Enable podman socket for Docker API compatibility (used by container-use)
-    if command -v podman > /dev/null 2>&1; then
-        if ! systemctl --user is-enabled podman.socket > /dev/null 2>&1; then
-            systemctl --user enable --now podman.socket
-        fi
-    fi
-}
-
-fn_local_install_beads() {
-    local install_path="${HOME}/go/bin/bd"
-    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/bd"
-    local latest_release
-    local currently_installed_version
-    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
-    latest_release="$(curl -s 'https://api.github.com/repos/steveyegge/beads/releases' | jq -r '.[].name' | head -1 )"
-    if [[ ${1:-} == "update" ]]; then
-        if [[ -f ${install_path} ]]; then
-            currently_installed_version=$(bd version | awk '{print $3}')
-            local uninstall_paths=("${install_path}" "${completions_install_path}")
-            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
-        fi
-    fi
-
-
-    # beads install
-    if [[ ! -f ${install_path} ]]; then
-        printf "Installing ${install_path}...\n"
-        go install github.com/steveyegge/beads/cmd/bd@latest
-        ${install_path} completion bash > "${completions_install_path}"
+        # Use bin to install itself so it's self-managed
+        "${temp_bin}" install github.com/marcosnils/bin "${install_path}"
+        rm -f "${temp_bin}"
     fi
 
     if [[ ! -f ${install_path} ]]; then
@@ -2366,31 +1728,13 @@ fn_update_local_installs() {
 
     if [[ "${ID}" == "debian" ]]; then
         fn_local_install_rustup update
-        # NEOVIM STUB
-        # fn_local_install_neovim update
-        fn_local_install_ollama update
-    fi
-    if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
-        local el_major_version
-        el_major_version=$(rpm -E %rhel)
-        # NEOVIM STUB
-        # if [[ "${el_major_version}" -lt 10 ]]; then
-        #     fn_local_install_neovim update
-        # fi
     fi
 
+    # Update all bin-managed tools
+    bin update
+    fn_regenerate_bin_app_completions
+
     fn_local_install_distrobox update
-    fn_local_install_opa update
-    fn_local_install_minikube update
-    fn_local_install_kind update
-    fn_local_install_kubectl update
-    fn_local_install_kubebuilder update
-    fn_local_install_terraform update
-    fn_local_install_gh update
-    fn_local_install_task update
-    fn_local_install_yq update
-    fn_local_install_syft update
-    fn_local_install_cosign update
     fn_local_install_chtsh update
     #pipx upgrade-all
     uv tool upgrade --all

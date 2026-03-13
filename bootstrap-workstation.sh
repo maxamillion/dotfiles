@@ -50,48 +50,11 @@ fi
 # setup vim plug
 fn_local_install_vim_plug
 
-# k8s stuff
-fn_local_install_minikube
-fn_local_install_kind
-fn_local_install_helm
-fn_local_install_kustomize
-fn_local_install_kubectl
-fn_local_install_k9s
-fn_local_install_kubebuilder
-fn_local_install_operator_sdk
-
-# rosa
-fn_local_install_rosa
-
-# terraform
-fn_local_install_terraform
-
 # uv tool install
 fn_local_uv_tool_install
 
 # rootless distrobox
 fn_local_install_distrobox
-
-# OPA
-fn_local_install_opa
-
-# GH cli
-fn_local_install_gh
-
-# Task
-fn_local_install_task
-
-# yq
-fn_local_install_yq
-
-# syft
-fn_local_install_syft
-
-# grype
-fn_local_install_grype
-
-# cosign
-fn_local_install_cosign
 
 # cheat.sh
 fn_local_install_chtsh
@@ -99,25 +62,15 @@ fn_local_install_chtsh
 # aws cli
 fn_local_install_aws
 
-# go-blueprint
-fn_local_install_go_blueprint
+# bin (binary manager) - must come before fn_local_install_bin_apps
+fn_local_install_bin
 
-#shfmt
-fn_local_install_shfmt
-
-# goose
-fn_local_install_goose # waiting on r0x0d/goose copr to fix some things
-
-# container-use (goose sandbox extension)
-fn_local_install_container_use
-
-# ollama
-fn_local_install_ollama
+# all bin-managed apps (k8s, security, dev tools, charm apps, etc.)
+fn_local_install_bin_apps
 
 # claude code
 fn_local_install_claude_code
 fn_local_install_super_claude
-fn_local_install_beads
 #fn_local_install_claude_code_requirements_builder
 
 # openai codex
@@ -128,9 +81,6 @@ fn_local_install_gemini
 
 # bash language server
 fn_local_bash_language_server
-
-# charms
-fn_local_install_charm_apps
 
 # print errors if there are any
 fn_print_errors
