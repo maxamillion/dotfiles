@@ -139,6 +139,7 @@ git_repos=(
     "${src_dir}/portfolio-architecture-examples https://gitlab.com/redhatdemocentral/portfolio-architecture-examples.git"
     "${src_dir}/fedora-infra-ansible https://infrastructure.fedoraproject.org/infra/ansible.git"
     "${src_dir}/requirements-pipeline git@gitlab.com:redhat/rhel-ai/wheels/requirements-pipeline.git"
+    "${src_dir}/agency-agents https://github.com/msitarzewski/agency-agents.git"
     # "${dev_dir}/ansible-zuul-jobs git@github.com:maxamillion/ansible-zuul-jobs.git https://github.com/ansible/ansible-zuul-jobs.git"
     # "${dev_dir}/ansible-operator-plugins git@github.com:maxamillion/ansible-operator-plugins.git https://github.com/operator-framework/ansible-operator-plugins.git"
     # "${dev_dir}/ansible.pages.redhat.com git@gitlab.cee.redhat.com:admiller/ansible.pages.redhat.com.git https://gitlab.cee.redhat.com/ansible/ansible.pages.redhat.com.git"
