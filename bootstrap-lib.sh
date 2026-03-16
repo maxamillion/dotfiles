@@ -1073,6 +1073,8 @@ fn_system_setup_fedora_el() {
             "v4l-utils"
             "weechat"
             "glab"
+            "rustfmt"
+            "clippy"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
