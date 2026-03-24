@@ -1005,6 +1005,7 @@ fn_system_setup_fedora_el() {
         "golang"
         "rust"
         "cargo"
+        "cargo-deny"
         "gettext"
         "unzip"
         "curl"
