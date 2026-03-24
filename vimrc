@@ -170,6 +170,7 @@ nmap ge :ALEDetail<cr>
 nmap gr :ALEFindReferences<cr>
 nmap gk :ALEDocumentation<cr>
 nmap gi :ALEGoToImplementation<cr>
+nmap K :ALEMover<CR>
 
 let g:ale_completion_enabled = 1
 let g:ale_completion_autoimport = 1
@@ -179,8 +180,16 @@ let g:ale_sign_error = '>>'
 let g:ale_sign_warning = 'WW'
 let g:ale_linters = {
 \   'bash': ['bash-language-server'],
+\   'rust': ['analyzer'],
 \}
 
+let g:ale_fixers = {
+\   'rust': ['rustfmt'],
+\}
+let g:ale_fix_on_save = 1
+
+let g:ale_rust_cargo_check_all_targets = 1
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 " Enable omni completion
 set omnifunc=ale#completion#OmniFunc
