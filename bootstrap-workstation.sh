@@ -117,7 +117,7 @@ fn_local_install_ollama
 # claude code
 fn_local_install_claude_code
 fn_local_install_super_claude
-fn_local_install_beads
+#fn_local_install_beads # waiting on r0x0d/beads to fix some things
 #fn_local_install_claude_code_requirements_builder
 
 # openai codex
