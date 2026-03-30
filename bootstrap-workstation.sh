@@ -129,6 +129,9 @@ fn_local_install_gemini
 # cursor cli
 fn_local_install_cursor_cli
 
+# OpenCode
+fn_local_install_opencode
+
 # bash language server
 fn_local_bash_language_server
 

@@ -1240,6 +1240,19 @@ fn_local_install_gemini() {
     fi
 }
 
+fn_local_install_opencode() {
+    fn_ensure_npm_prefix
+    local bin_path
+    bin_path="${HOME}/.local/bin/opencode"
+    if ! [[ -f "${bin_path}" ]]; then
+        printf "Installing OpenCode...\n"
+        npm install -g opencode-ai
+    fi
+    if ! [[ -f ${bin_path} ]]; then
+        fn_log_error "OpenCode npm install failed"
+    fi
+}
+
 fn_local_install_cursor_cli() {
     fn_ensure_npm_prefix
     local bin_path
