@@ -1240,6 +1240,19 @@ fn_local_install_gemini() {
     fi
 }
 
+fn_local_install_cursor_cli() {
+    fn_ensure_npm_prefix
+    local bin_path
+    bin_path="${HOME}/.local/bin/agent"
+    if ! [[ -f "${bin_path}" ]]; then
+        printf "Installing Cursor CLI...\n"
+        curl https://cursor.com/install -fsS | bash
+    fi
+    if ! [[ -f ${bin_path} ]]; then
+        fn_log_error "Cursor CLI install failed"
+    fi
+}
+
 fn_local_bash_language_server() {
     fn_ensure_npm_prefix
     local bin_path

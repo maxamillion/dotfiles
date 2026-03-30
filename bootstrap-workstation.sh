@@ -126,6 +126,9 @@ fn_local_install_openai_codex
 # gemini cli
 fn_local_install_gemini
 
+# cursor cli
+fn_local_install_cursor_cli
+
 # bash language server
 fn_local_bash_language_server
 
