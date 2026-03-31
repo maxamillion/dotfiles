@@ -1005,8 +1005,10 @@ fn_system_setup_fedora_el() {
         "gcc-c++"
         "golang"
         "rust"
+        "rust-analyzer"
+        "rustfmt"
+        "clippy"
         "cargo"
-        "cargo-deny"
         "gettext"
         "unzip"
         "curl"
@@ -1075,8 +1077,7 @@ fn_system_setup_fedora_el() {
             "v4l-utils"
             "weechat"
             "glab"
-            "rustfmt"
-            "clippy"
+            "cargo-deny"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
