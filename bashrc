@@ -297,6 +297,14 @@ rhtclaude() {
     claude "$@"
 }
 
+rhtopencode() {
+    # ANTHROPIC_MODEL='claude-sonnet-4@20250514'
+    # ANTHROPIC_SMALL_FAST_MODEL='claude-sonnet-4@20250514'
+    VERTEX_LOCATION="us-east5" \
+    GOOGLE_CLOUD_PROJECT="itpc-gcp-ai-eng-claude" \
+    opencode "$@"
+}
+
 rhtpaude() {
     CLAUDE_CODE_USE_VERTEX=1 \
     CLOUD_ML_REGION="us-east5" \
