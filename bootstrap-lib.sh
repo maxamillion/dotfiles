@@ -1072,7 +1072,6 @@ fn_system_setup_fedora_el() {
             # NEOVIM STUB
             # "neovim"
             # "python3-neovim"
-            "python3-torch"
             "fedora-review"
             "v4l-utils"
             "weechat"
@@ -1085,6 +1084,7 @@ fn_system_setup_fedora_el() {
             "rocm-runtime"
             "rocm-smi"
             "nvtop"
+            "python3-torch"
         )
         fi
     fi
