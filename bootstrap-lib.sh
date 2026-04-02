@@ -1029,6 +1029,7 @@ fn_system_setup_fedora_el() {
         "iotop-c"
         "ninja-build"
         "fedpkg"
+        "packit"
         "pcp-system-tools"
         "fzf"
         "fd-find"
