@@ -288,42 +288,45 @@ yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"
 }
 
+export _rht_vertex_project_id="itpc-gcp-core-pe-eng-claude"
+export _rht_vertex_region="us-east5"
+
 rhtclaude() {
     # ANTHROPIC_MODEL='claude-sonnet-4@20250514'
     # ANTHROPIC_SMALL_FAST_MODEL='claude-sonnet-4@20250514'
     CLAUDE_CODE_USE_VERTEX=1 \
-    CLOUD_ML_REGION="us-east5" \
-    ANTHROPIC_VERTEX_PROJECT_ID="itpc-gcp-ai-eng-claude" \
+    CLOUD_ML_REGION="${_rht_vertex_region}" \
+    ANTHROPIC_VERTEX_PROJECT_ID="${_rht_vertex_project_id}" \
     claude "$@"
 }
 
 rhtopencode() {
     # ANTHROPIC_MODEL='claude-sonnet-4@20250514'
     # ANTHROPIC_SMALL_FAST_MODEL='claude-sonnet-4@20250514'
-    VERTEX_LOCATION="us-east5" \
-    GOOGLE_CLOUD_PROJECT="itpc-gcp-ai-eng-claude" \
+    VERTEX_LOCATION="${_rht_vertex_region}" \
+    GOOGLE_CLOUD_PROJECT="${_rht_vertex_project_id}" \
     opencode "$@"
 }
 
 rhtpaude() {
     CLAUDE_CODE_USE_VERTEX=1 \
-    CLOUD_ML_REGION="us-east5" \
-    ANTHROPIC_VERTEX_PROJECT_ID="itpc-gcp-ai-eng-claude" \
+    CLOUD_ML_REGION="${_rht_vertex_region}" \
+    ANTHROPIC_VERTEX_PROJECT_ID="${_rht_vertex_project_id}" \
     paude "$@"
 }
 
 rhtgoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
   GOOSE_MODEL="claude-opus-4-5@20251101" \
-  GCP_PROJECT_ID="itpc-gcp-ai-eng-claude" \
-  GCP_LOCATION="us-east5" \
+  GCP_PROJECT_ID="${_rht_vertex_project_id}" \
+  GCP_LOCATION="${_rht_vertex_region}" \
   goose "$@"
 }
 
 
 rhtgemini() {
-    GOOGLE_CLOUD_PROJECT="itpc-gcp-ai-eng-claude" \
-    GOOGLE_CLOUD_LOCATION="us-east5" \
+    GOOGLE_CLOUD_PROJECT="${_rht_vertex_project_id}" \
+    GOOGLE_CLOUD_LOCATION="${_rht_vertex_region}" \
     gemini "$@"
 }
 
