@@ -1030,6 +1030,7 @@ fn_system_setup_fedora_el() {
         "ninja-build"
         "fedpkg"
         "packit"
+        "copr-cli"
         "pcp-system-tools"
         "fzf"
         "fd-find"
