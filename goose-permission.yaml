@@ -1,49 +1,28 @@
-permissions:
-  - tool: developer__analyze
-    permission: always_allow
-  - tool: developer__shell
-    permission: always_allow
-  - tool: developer__text_editor
-    permission: always_allow
-  - tool: developer__list_windows
-    permission: always_allow
-  - tool: developer__screen_capture
-    permission: always_allow
-  - tool: platform__read_resource
-    permission: always_allow
-  - tool: platform__list_resources
-    permission: always_allow
-  - tool: memory__remember
-    permission: always_allow
-  - tool: memory__recall
-    permission: always_allow
-  - tool: todo__read
-    permission: always_allow
-  - tool: todo__update
-    permission: always_allow
-  - tool: summon__summon
-    permission: always_allow
-  - tool: container-use__environment_add_service
-    permission: always_allow
-  - tool: container-use__environment_checkpoint
-    permission: always_allow
-  - tool: container-use__environment_config
-    permission: always_allow
-  - tool: container-use__environment_create
-    permission: always_allow
-  - tool: container-use__environment_file_delete
-    permission: always_allow
-  - tool: container-use__environment_file_edit
-    permission: always_allow
-  - tool: container-use__environment_file_list
-    permission: always_allow
-  - tool: container-use__environment_file_read
-    permission: always_allow
-  - tool: container-use__environment_file_write
-    permission: always_allow
-  - tool: container-use__environment_open
-    permission: always_allow
-  - tool: container-use__environment_run_cmd
-    permission: always_allow
-  - tool: container-use__environment_update_metadata
-    permission: always_allow
+user:
+  always_allow:
+    - developer__analyze
+     - developer__shell
+     - developer__text_editor
+     - developer__list_windows
+     - developer__screen_capture
+     - platform__read_resource
+     - platform__list_resources
+     - memory__remember
+     - memory__recall
+     - todo__read
+     - todo__update
+     - summon__summon
+     - container-use__environment_add_service
+     - container-use__environment_checkpoint
+     - container-use__environment_config
+     - container-use__environment_create
+     - container-use__environment_file_delete
+     - container-use__environment_file_edit
+     - container-use__environment_file_list
+     - container-use__environment_file_read
+     - container-use__environment_file_write
+     - container-use__environment_open
+     - container-use__environment_run_cmd
+     - container-use__environment_update_metadata
+  ask_before: []
+  never_allow: []
