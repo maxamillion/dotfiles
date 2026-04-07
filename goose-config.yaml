@@ -89,5 +89,4 @@ extensions:
     available_tools: []
 GOOSE_TELEMETRY_ENABLED: true
 GOOSE_CLI_THEME: dark
-GOOSE_CLI_DARK_THEME: Dracula
 GOOSE_CLI_SHOW_THINKING: 1
