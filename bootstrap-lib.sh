@@ -1016,6 +1016,7 @@ fn_system_setup_fedora_el() {
         "dconf"
         "xsel"
         "ripgrep"
+        "bat"
         "centpkg"
         "centpkg-sig"
         "subscription-manager"
