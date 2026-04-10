@@ -853,6 +853,7 @@ fn_system_setup_crostini() {
         "nmap"
         "jq"
         "podman"
+        "podman-tui"
         "crun-vm"
         "skopeo"
         "buildah"
