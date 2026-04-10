@@ -17,7 +17,7 @@ windows:
     - cd ~/src/dev/ansible    
 - window_name: openshell
   shell_command_before:
-    - cd ~/src/dev/openshell
+    - cd ~/src/dev/OpenShell
 - window_name: virt
   shell_command_before:
     - cd ~/
