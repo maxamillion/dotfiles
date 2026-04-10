@@ -15,9 +15,9 @@ windows:
 - window_name: ansible
   shell_command_before:
     - cd ~/src/dev/ansible    
-- window_name: venv
+- window_name: openshell
   shell_command_before:
-    - cd ~/
+    - cd ~/src/dev/openshell
 - window_name: virt
   shell_command_before:
     - cd ~/
