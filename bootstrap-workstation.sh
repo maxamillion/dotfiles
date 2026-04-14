@@ -138,6 +138,9 @@ fn_local_bash_language_server
 # charms
 fn_local_install_charm_apps
 
+# Agent Skills
+fn_local_install_skills
+
 # print errors if there are any
 fn_print_errors
 
