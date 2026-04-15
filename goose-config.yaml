@@ -87,6 +87,14 @@ extensions:
     display_name: Chat Recall
     bundled: true
     available_tools: []
+  skills:
+    enabled: true
+    type: platform
+    name: skills
+    description: Discover and provide skill instructions from filesystem and builtins
+    display_name: Skills
+    bundled: true
+    available_tools: []
 GOOSE_TELEMETRY_ENABLED: true
 GOOSE_CLI_THEME: dark
 GOOSE_CLI_DARK_THEME: OneHalfDark
