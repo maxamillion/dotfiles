@@ -317,7 +317,9 @@ rhtpaude() {
 
 rhtgoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
-  GOOSE_MODEL="claude-opus-4-6" \
+  GOOSE_MODEL="claude-sonnet-4-6" \
+  GOOSE_PLANNER_MODEL="claude-opus-4-6" \
+  GOOSE_EDITOR_MODEL="claude-sonnet-4-6" \
   GCP_PROJECT_ID="${_rht_vertex_project_id}" \
   GCP_LOCATION="${_rht_vertex_region}" \
   goose "$@"
