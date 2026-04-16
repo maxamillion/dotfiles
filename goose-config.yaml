@@ -101,6 +101,8 @@ GOOSE_CLI_DARK_THEME: OneHalfDark
 GOOSE_CLI_SHOW_THINKING: 1
 GOOSE_PROMPT_EDITOR: vim
 GOOSE_PROVIDER: gcp_vertex_ai
-GOOSE_MODEL: claude-opus-4-6
+GOOSE_MODEL: claude-sonnet-4-6
+GOOSE_PLANNER_MODEL: claude-opus-4-6
+GOOSE_EDITOR_MODEL: claude-sonnet-4-6
 GCP_PROJECT_ID: itpc-gcp-core-pe-eng-claude
 GCP_REGION_ID: us-east5
