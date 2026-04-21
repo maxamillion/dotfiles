@@ -2405,6 +2405,7 @@ fn_local_install_skills() {
     npx skills add JuliusBrussee/caveman -g -y
     npx skills add https://github.com/anthropics/knowledge-work-plugins --skill code-review -g -y
     npx skills add https://github.com/softaworks/agent-toolkit --skill humanizer -g -y
+    npx skills add https://github.com/wshobson/agents --skill git-advanced-workflows -g -y
 }
 
 fn_update_local_installs() {
