@@ -289,7 +289,7 @@ yaml2json() {
 }
 
 export _rht_vertex_project_id="itpc-gcp-core-pe-eng-claude"
-export _rht_vertex_region="us-east5"
+export _rht_vertex_region="global"
 
 rhtclaude() {
     # ANTHROPIC_MODEL='claude-sonnet-4@20250514'
