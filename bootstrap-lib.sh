@@ -1005,6 +1005,7 @@ fn_system_setup_fedora_el() {
         "gcc"
         "gcc-c++"
         "golang"
+        "just"
         "rust"
         "rust-analyzer"
         "rustfmt"
