@@ -32,7 +32,7 @@ extensions:
     bundled: true
     available_tools: []
   todo:
-    enabled: true
+    enabled: false
     type: platform
     name: todo
     description: Enable a todo list for goose so it can keep track of what it is doing
@@ -100,6 +100,7 @@ GOOSE_CLI_THEME: dark
 GOOSE_CLI_DARK_THEME: OneHalfDark
 GOOSE_CLI_SHOW_THINKING: 1
 GOOSE_PROMPT_EDITOR: vim
+GOOSE_PROMPT_EDITOR_ALWAYS: false
 GOOSE_PROVIDER: gcp_vertex_ai
 GOOSE_MODEL: claude-sonnet-4-6
 GOOSE_PLANNER_MODEL: claude-opus-4-6
