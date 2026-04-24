@@ -6,6 +6,8 @@
 - Explore the codebase before making changes. Use shell commands to understand project structure.
 - Verify changes after making them. Run tests, linters, or build commands to confirm correctness.
 - Make minimal, focused changes. Do not refactor surrounding code unless asked.
+- Always adhere to DRY and KISS principles unless otherwise directed.
+- Code changes should be self-contained, testable, stable, and simple as possible.
 
 ## Shell Efficiency
 - Use compound commands (cmd1 && cmd2) to chain dependent operations.
