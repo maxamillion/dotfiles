@@ -61,6 +61,8 @@ fn_symlink_if_needed "${_DOTFILES_DIR}/shelloracle-config.toml" "${HOME}/.shello
 fn_symlink_if_needed "${_DOTFILES_DIR}/goose-config.yaml"    "${HOME}/.config/goose/config.yaml"
 fn_symlink_if_needed "${_DOTFILES_DIR}/goosehints"            "${HOME}/.config/goose/.goosehints"
 # fn_symlink_if_needed "${_DOTFILES_DIR}/goose-permission.yaml" "${HOME}/.config/goose/permission.yaml"
+fn_mkdir_if_needed "${HOME}/.config/goose/recipes"
+fn_symlink_if_needed "${_DOTFILES_DIR}/goose-recipes/dual-model-review" "${HOME}/.config/goose/recipes/dual-model-review"
 fn_symlink_if_needed "${_DOTFILES_DIR}/kitty.conf"            "${HOME}/.config/kitty/kitty.conf"
 
 # Run workstation-specific bootstrap

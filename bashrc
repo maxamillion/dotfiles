@@ -325,6 +325,50 @@ rhtgoose() {
   goose "$@"
 }
 
+goose_recipe_run_coding() {
+    local task_description="${1:?Usage: goose_recipe_run_coding '<task_description>' [project_path]}"
+    local project_path
+    project_path="$(cd "${2:-.}" && pwd)"
+    local recipe_path="${HOME}/dotfiles/goose-recipes/dual-model-review/recipe.yaml"
+    local lock_dir="${project_path}/.goose-collab/.lock"
+    local log_file="${project_path}/.goose-collab/run.log"
+
+    mkdir -p "${project_path}/.goose-collab" || {
+        echo "ERROR: Cannot create ${project_path}/.goose-collab" >&2
+        return 1
+    }
+
+    # Atomic lock: mkdir is atomic, prevents concurrent runs on same project
+    if ! mkdir "${lock_dir}" 2>/dev/null; then
+        echo "ERROR: A dual-model review is already running for ${project_path}" >&2
+        echo "       If stale, remove: ${lock_dir}" >&2
+        return 1
+    fi
+
+    # Log header (overwrites previous run log)
+    {
+        echo "=== Dual-Model Iterative Code Review ==="
+        echo "Started: $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "Task: ${task_description}"
+        echo "Project: ${project_path}"
+        echo "==="
+    } > "${log_file}"
+
+    echo "Logging to: ${log_file}"
+
+    # Run in subshell to scope EXIT trap; tee captures output for background runs
+    (
+        trap "rm -rf '${lock_dir}'" EXIT
+        GCP_PROJECT_ID="${_rht_vertex_project_id}" \
+        GCP_LOCATION="${_rht_vertex_region}" \
+        goose recipe run "${recipe_path}" \
+            --param task_description="${task_description}" \
+            --param project_path="${project_path}" \
+            --param quality_standard="production" 2>&1 | tee -a "${log_file}"
+    )
+}
+
+alias grrc='goose_recipe_run_coding'
 
 rhtgemini() {
     GOOGLE_CLOUD_PROJECT="${_rht_vertex_project_id}" \
