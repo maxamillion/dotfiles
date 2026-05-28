@@ -670,7 +670,7 @@ fn_flathub_install() {
         "com.google.Chrome"
         "com.github.tchx84.Flatseal"
         "org.signal.Signal"
-        "im.fluffychat.Fluffychat"
+        "in.cinny.Cinny"
         "org.gnome.Epiphany"
     )
     if ! flatpak remotes --user | grep flathub &>/dev/null; then
