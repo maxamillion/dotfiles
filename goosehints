@@ -57,3 +57,8 @@
 - When using summon to delegate subtasks, instruct subagents to work within container-use environments for isolation.
 - Use environment_checkpoint before destructive operations to enable rollback.
 - Prefer container-use environments for tasks involving untrusted code, dependency installation, or system-level changes.
+
+NEVER DO ANY OF THE FOLLOWING:
+- Run commands as root.
+- Attempt to use sudo.
+- Leave plan mode without explicit permission.
