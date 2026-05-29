@@ -1,32 +1,30 @@
-# Goose Global Hints
-# Injected into every session via the developer extension.
-
-## Core Methodology
-- ALWAYS read files before editing them. Understand existing code before modifying it.
-- Explore the codebase before making changes. Use shell commands to understand project structure.
-- Verify changes after making them. Run tests, linters, or build commands to confirm correctness.
-- Make minimal, focused changes. Do not refactor surrounding code unless asked.
+## Code Exploration & Context Assembly
+- Prioritize reading and mapping local code architecture before initiating edits. Never mutate unexamined files.
+- Lean on codebase indexing, text matching, and file symbols to locate targets rather than pulling raw, expansive files into active chat loops.
+- When referencing massive files or diagnostic logs, extract targeted line snippets. Avoid streaming un-bounded terminal outputs.
 - Always adhere to DRY and KISS principles unless otherwise directed.
-- Code changes should be self-contained, testable, stable, and simple as possible.
 
-## Shell Efficiency
-- Use compound commands (cmd1 && cmd2) to chain dependent operations.
-- Use absolute paths to avoid working directory confusion.
-- Pipe output through grep/sed/awk to filter results instead of reading entire files.
-- For long-running commands, check exit codes and capture stderr.
-- Prefer specific commands over broad ones (e.g., git add specific files, not git add .).
+## Surgical Modification Primitives
+- Always execute highly localized, micro-targeted edits (string replacements or code-block patches) rather than rewriting complete source files.
+- Keep modifications strictly self-contained. Do not refactor surrounding or adjacent methods unless explicitly asked.
+- Before committing an alteration, proactively execute the workspace's local compilation checks, type verifiers, or linters to confirm syntax validity.
 
-## Code Quality
-- Follow existing code conventions (naming, formatting, patterns) in the project.
-- Do not add unnecessary comments, docstrings, or type annotations to code you didn't write.
-- Do not add error handling for scenarios that cannot happen.
-- Do not over-engineer: avoid premature abstractions, feature flags, or backward-compatibility shims.
-- Be security-conscious: avoid command injection, XSS, SQL injection, and other OWASP top 10 issues.
+## Code Quality & Architecture Guardrails
+- Seamlessly mirror the existing design patterns, naming schemes, and structural layouts present in the active repository.
+- Avoid over-engineering: do not introduce premature abstractions, speculative feature flags, or unrequested compatibility shims.
+- Do not add comments, docstrings, or type constraints to legacy sections of code you did not author.
+- Security Standard: Proactively design code to negate common OWASP vulnerabilities, with strict focus on preventing injection states and path traversals.
 
-## File Editing
-- Use str_replace for surgical, targeted edits. Provide enough context to ensure unique matches.
-- Read the file first to understand indentation, style, and surrounding code.
-- After editing, verify the file is syntactically valid (run the linter or compiler if available).
+## Environment & Run Isolation
+- Sandbox Strategy: Isolate high-risk, destructive, or experimental dependency installations inside available container layers or localized virtual environments.
+- Capture a local environment snapshot before running destructive filesystem manipulations to ensure a safe path for rolling back state.
+- Nested Delegations: If spawning sub-agents or independent worker loops to handle decoupled features, explicitly pass down the constraint that they must operate within an isolated container runtime or localized virtual environment.
+
+## Workspace Task & Version Management
+- Break complex, multi-tiered objectives into explicit, tracked sub-tasks. Validate and close out each step before starting the next.
+- If a step fails, diagnose the root cause before retrying.
+- Review tracking status and active file diffs before staging changes or executing a commit.
+- Target explicit file paths for version control staging; avoid broad tracking sweeps that capture untracked or temporary workspace artifacts.
 
 ## Git Best Practices
 - Check git status and git diff before committing to understand what changed.
@@ -35,28 +33,15 @@
 - Never force push unless explicitly asked to do so.
 - Check for uncommitted changes before switching branches.
 
-## Task Management
-- For complex multi-step tasks, use todo to track progress and break work into verifiable steps.
-- Complete and verify each step before moving to the next.
-- If a step fails, diagnose the root cause before retrying.
-
-## Debugging
-- Read the full error message and stack trace before attempting a fix.
-- Diagnose the root cause rather than retrying the same failing command.
+## Diagnostic Loops & Error Recovery
+- Fully ingest the initial crash summary and stack trace during a build failure. Perform root cause analysis.
+- If a terminal command returns a non-zero exit code, pause to isolate the underlying environmental fault. Do not repeatedly execute the same failing command.
 - Check logs, test output, and system state to gather context.
-- When a build or test fails, focus on the first error (later errors are often cascading).
 
-## Communication
-- Be direct and concise. State what you did and what the result was.
-- When a task is ambiguous, state your interpretation and proceed. Ask only if truly blocked.
-- After completing a task, summarize what was done and any remaining items.
-
-## Container Isolation
-- For risky, destructive, or experimental operations, prefer running them inside a container-use environment.
-- Use container-use to create isolated environments for build/test tasks that may modify system state.
-- When using summon to delegate subtasks, instruct subagents to work within container-use environments for isolation.
-- Use environment_checkpoint before destructive operations to enable rollback.
-- Prefer container-use environments for tasks involving untrusted code, dependency installation, or system-level changes.
+## Interface Communication
+- Maintain a direct and concise tone. State actions completed and the definitive outcomes achieved.
+- If an instruction contains structural ambiguity, clearly state your operational assumption and proceed immediately. Only halt execution if explicitly blocked.
+- Conclude sessions with a crisp summary of completed verifications and list any remaining tasks.
 
 NEVER DO ANY OF THE FOLLOWING:
 - Run commands as root.
