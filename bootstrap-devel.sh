@@ -54,6 +54,7 @@ git_repos=(
     "${dev_dir}/puzzlepod git@github.com:maxamillion/puzzlepod.git https://github.com/LobsterTrap/puzzlepod.git"
     "${dev_dir}/openclaw-installer git@github.com:maxamillion/openclaw-installer.git https://github.com/sallyom/openclaw-installer.git"
     "${dev_dir}/OpenShell git@github.com:maxamillion/OpenShell.git https://github.com/NVIDIA/OpenShell.git"
+    "${dev_dir}/OpenShell-Community git@github.com:maxamillion/OpenShell-Community.git https://github.com/NVIDIA/OpenShell-Community.git"
     "${dev_dir}/gemini-cli git@github.com:maxamillion/gemini-cli.git https://github.com/google-gemini/gemini-cli.git"
     "${dev_dir}/command-line-assistant git@github.com:maxamillion/command-line-assistant.git https://github.com/rhel-lightspeed/command-line-assistant.git"
     "${dev_dir}/lightspeed-stack git@github.com:maxamillion/lightspeed-stack.git https://github.com/lightspeed-core/lightspeed-stack.git"
