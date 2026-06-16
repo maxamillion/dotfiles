@@ -326,6 +326,13 @@ rhtgoose() {
   goose "$@"
 }
 
+rhtcgoose() {
+    GOOSE_PROVIDER="openai" \
+    GOOSE_MODEL="gpt-5.5" \
+    OPENAI_API_KEY=$(<"${HOME}/.codex_api_key") \
+    goose "$@"
+}
+
 goose_recipe_run_coding() {
     local task_description="${1:?Usage: goose_recipe_run_coding '<task_description>' [project_path]}"
     local project_path
