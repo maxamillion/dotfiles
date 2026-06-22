@@ -3,6 +3,8 @@
 - Lean on codebase indexing, text matching, and file symbols to locate targets rather than pulling raw, expansive files into active chat loops.
 - When referencing massive files or diagnostic logs, extract targeted line snippets. Avoid streaming un-bounded terminal outputs.
 - Always adhere to DRY and KISS principles unless otherwise directed.
+- Follow YAGNI principles, and one-liner solutions.
+- Do not implement until explicitly asked to do so.
 
 ## Surgical Modification Primitives
 - Always execute highly localized, micro-targeted edits (string replacements or code-block patches) rather than rewriting complete source files.
