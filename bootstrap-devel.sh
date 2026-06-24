@@ -49,6 +49,7 @@ git_repos=(
     "${dev_dir}/vunnel git@github.com:maxamillion/vunnel.git https://github.com/anchore/vunnel.git"
     "${dev_dir}/goose git@github.com:maxamillion/goose.git https://github.com/aaif-goose/goose.git"
     "${dev_dir}/goosetown git@github.com:maxamillion/goosetown.git https://github.com/aaif-goose/goosetown.git"
+    "${dev_dir}/openclaw git@github.com:maxamillion/openclaw.git https://github.com/openclaw/openclaw.git"
     "${dev_dir}/openshell git@github.com:maxamillion/OpenShell.git https://github.com/NVIDIA/OpenShell.git"
     "${dev_dir}/openshell-community git@github.com:maxamillion/OpenShell-Community.git https://github.com/NVIDIA/OpenShell-Community.git"
     "${dev_dir}/hummingbird-rpms git@gitlab.com:maxamillion/hummingbird-rpms.git https://gitlab.com/redhat/hummingbird/rpms.git"
