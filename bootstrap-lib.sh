@@ -1082,6 +1082,7 @@ fn_system_setup_fedora_el() {
             "weechat"
             "glab"
             "cargo-deny"
+            "pnpm"
         )
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
