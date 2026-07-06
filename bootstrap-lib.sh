@@ -1084,6 +1084,12 @@ fn_system_setup_fedora_el() {
             "cargo-deny"
             "pnpm"
         )
+            # Only install the GUI/machine rpms if we're on a real system and not in a toolbox container
+            if [[ -z "${TOOLBOX_PATH:-}" ]]; then
+                fedora_el_pkglist+=(
+                    "kitty"
+                )
+            fi
         if grep "AMD Ryzen" /proc/cpuinfo &>/dev/null; then
             fedora_el_pkglist+=(
             "rocminfo"
