@@ -1104,7 +1104,7 @@ fn_system_setup_fedora_el() {
     sudo usermod "${USER}" -a -G mock
 
     # RHEL Lightspeed / command-line-assistant
-    fn_system_install_command_line_assistant
+    #fn_system_install_command_line_assistant
 
     # NEOVIM STUB
     # if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
