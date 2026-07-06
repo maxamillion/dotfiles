@@ -835,7 +835,7 @@ fi
 # BEGIN: PROMPT and PS1 stuff
 
 # local hostnames for my machines to set local PS1 colorscheme vs remote
-_localhosts=("penguin" "thinkcentrem75q5" "optiplex7010m" "xps9350" "promicroQCM1250" "admiller-thinkpadx1carbongen9")
+_localhosts=("penguin" "xps9350" "admiller-thinkpadx1carbongen9" "admiller-dellpromicroqcm1250")
 short_hostname=${HOSTNAME%%.*}
 if [[ "penguin" == "${short_hostname}" ]]; then
     export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
