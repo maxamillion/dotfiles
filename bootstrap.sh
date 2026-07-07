@@ -68,9 +68,15 @@ fn_symlink_if_needed "${_DOTFILES_DIR}/kitty.conf"            "${HOME}/.config/k
 # Run workstation-specific bootstrap
 _WORKSTATION_SCRIPT="${_DOTFILES_DIR}/bootstrap-workstation.sh"
 if [[ -f "${_WORKSTATION_SCRIPT}" ]]; then
-    "${_WORKSTATION_SCRIPT}" || fn_log_error "bootstrap-workstation.sh failed"
+    if ! "${_WORKSTATION_SCRIPT}"; then
+        fn_log_error "bootstrap-workstation.sh failed"
+        fn_print_errors
+        exit 1
+    fi
 else
     fn_log_error "bootstrap-workstation.sh not found: ${_WORKSTATION_SCRIPT}"
+    fn_print_errors
+    exit 1
 fi
 
 # This doesn't appear to be necessary, but keep it around just in case

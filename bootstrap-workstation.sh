@@ -3,6 +3,12 @@
 # Strict error handling
 set -euo pipefail
 
+fn_report_error() {
+    local rc=$?
+    printf "ERROR: %s failed at %s:%s with exit code %s\n" "${BASH_COMMAND}" "${BASH_SOURCE[0]}" "${BASH_LINENO[0]}" "${rc}" >&2
+}
+trap fn_report_error ERR
+
 # Validate environment
 _SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 _LIB_FILE="${_SCRIPT_DIR}/bootstrap-lib.sh"
