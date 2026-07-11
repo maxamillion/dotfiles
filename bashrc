@@ -328,7 +328,7 @@ rhtgoose() {
 
 rhtcgoose() {
     GOOSE_PROVIDER="openai" \
-    GOOSE_MODEL="gpt-5.5" \
+    GOOSE_MODEL="gpt-5.6-sol" \
     OPENAI_API_KEY=$(<"${HOME}/.codex_api_key") \
     goose "$@"
 }

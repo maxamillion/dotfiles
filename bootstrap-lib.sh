@@ -2265,12 +2265,21 @@ fn_local_install_shfmt() {
 
 fn_local_install_goose() {
     local install_path="${_LOCAL_BIN_DIR}/goose"
+    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/goose"
     fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            rm "${install_path}" "${completions_install_path}"
+        fi
+    fi
     if [[ ! -f ${install_path} ]]; then
         curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash
     fi
     if [[ ! -f ${install_path} ]]; then
         fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    else
+        "${install_path}" completion bash > "${completions_install_path}"
     fi
 }
 
