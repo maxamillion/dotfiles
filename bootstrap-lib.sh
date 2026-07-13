@@ -2346,6 +2346,35 @@ fn_local_install_beads() {
     fi
 }
 
+fn_local_install_oras() {
+    local install_path="${HOME}/go/bin/oras"
+    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/oras"
+    local latest_release
+    local currently_installed_version
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+    latest_release="$(curl -s 'https://api.github.com/repos/oras-project/oras/releases' \
+        | jq -r '.[] | select(.name | contains("-rc") | not) | select(.name | contains("-alpha") | not) | select(.name | contains("-beta") | not) .name')"
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version=$(bd version | awk '{print $3}')
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${latest_release}" "${currently_installed_version}" "${uninstall_paths[@]}"
+        fi
+    fi
+
+
+    # oras install
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing ${install_path}...\n"
+        go install oras.land/oras/cmd/oras@latest
+        ${install_path} completion bash > "${completions_install_path}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_uv_tool_install() {
     # uv install package list
     local uv_pkgs=(

@@ -69,6 +69,9 @@ fn_local_install_operator_sdk
 # rosa
 fn_local_install_rosa
 
+# oras
+fn_local_install_oras
+
 # terraform
 fn_local_install_terraform
 
