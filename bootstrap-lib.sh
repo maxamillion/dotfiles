@@ -982,6 +982,7 @@ fn_system_setup_fedora_el() {
         "python3-devel"
         "python-unversioned-command"
         "uv"
+        "java-latest-openjdk"
         "nodejs"
         "nodejs-npm"
         "git"
