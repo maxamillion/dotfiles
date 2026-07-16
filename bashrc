@@ -315,7 +315,7 @@ rhtpaude() {
     paude "$@"
 }
 
-rhtgoose() {
+rhtagoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
   GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
   GOOSE_MODEL="claude-sonnet-4-6" \
@@ -326,7 +326,16 @@ rhtgoose() {
   goose "$@"
 }
 
-rhtcgoose() {
+rhtggoose() {
+  GOOSE_PROVIDER="gcp_vertex_ai" \
+  GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
+  GOOSE_MODEL="gemini-3.5-flash" \
+  GCP_PROJECT_ID="${_rht_vertex_project_id}" \
+  GCP_LOCATION="${_rht_vertex_region}" \
+  goose "$@"
+}
+
+rhtogoose() {
     GOOSE_PROVIDER="openai" \
     GOOSE_MODEL="gpt-5.6-sol" \
     GOOSE_CONTEXT_LIMIT="1000000" \
