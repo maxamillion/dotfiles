@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./bootstrap-lib.sh
+BOOTSTRAP_TRACE_FUNCTIONS=true source ./bootstrap-lib.sh
 
 src_dir="${HOME}/src"
 dev_dir="${src_dir}/dev"

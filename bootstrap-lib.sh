@@ -15,6 +15,12 @@ if [[ "${_SCRIPT_SOURCED}" == "false" ]]; then
     set -euo pipefail
 fi
 
+# Optionally report each fn_* function as it is called
+if [[ "${BOOTSTRAP_TRACE_FUNCTIONS:-false}" == "true" ]]; then
+    set -o functrace
+    trap 'if [[ ${FUNCNAME[0]:-} == fn_* && ${BASH_COMMAND%%[[:space:]]*} == "${FUNCNAME[0]}" ]]; then printf "Running %s...\n" "${FUNCNAME[0]}"; fi' DEBUG
+fi
+
 # Global variables
 declare -a _ERRORS=()
 declare -a _INSTALLED_PACKAGES=()
@@ -983,6 +989,8 @@ fn_system_setup_fedora_el() {
         "python-unversioned-command"
         "uv"
         "java-latest-openjdk"
+        "java-latest-openjdk-devel"
+        "maven"
         "nodejs"
         "nodejs-npm"
         "git"
@@ -999,6 +1007,7 @@ fn_system_setup_fedora_el() {
         "jq"
         "podman"
         "podman-docker"
+        "crun-krun"
         "skopeo"
         "buildah"
         "luarocks"

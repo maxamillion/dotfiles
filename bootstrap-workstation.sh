@@ -20,7 +20,7 @@ if [[ ! -f "${_LIB_FILE}" ]]; then
 fi
 
 # shellcheck source=./bootstrap-lib.sh
-source "${_LIB_FILE}"
+BOOTSTRAP_TRACE_FUNCTIONS=true source "${_LIB_FILE}"
 
 # Check distribution
 fn_check_distro
