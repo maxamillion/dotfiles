@@ -301,8 +301,6 @@ rhtclaude() {
 }
 
 rhtopencode() {
-    # ANTHROPIC_MODEL='claude-sonnet-4@20250514'
-    # ANTHROPIC_SMALL_FAST_MODEL='claude-sonnet-4@20250514'
     VERTEX_LOCATION="${_rht_vertex_region}" \
     GOOGLE_CLOUD_PROJECT="${_rht_vertex_project_id}" \
     opencode "$@"
@@ -316,11 +314,11 @@ rhtpaude() {
 }
 
 rhtagoose() {
+  # GOOSE_PLANNER_MODEL="claude-sonnet-5" \
+  # GOOSE_EDITOR_MODEL="claude-sonnet-5" \
   GOOSE_PROVIDER="gcp_vertex_ai" \
   GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
-  GOOSE_MODEL="claude-sonnet-4-6" \
-  GOOSE_PLANNER_MODEL="claude-opus-4-6" \
-  GOOSE_EDITOR_MODEL="claude-sonnet-4-6" \
+  GOOSE_MODEL="claude-sonnet-5" \
   GCP_PROJECT_ID="${_rht_vertex_project_id}" \
   GCP_LOCATION="${_rht_vertex_region}" \
   goose "$@"
