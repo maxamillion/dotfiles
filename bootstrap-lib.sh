@@ -1042,6 +1042,7 @@ fn_system_setup_fedora_el() {
         "iotop-c"
         "ninja-build"
         "fedpkg"
+        "tmt+all"
         "packit"
         "copr-cli"
         "pcp-system-tools"
