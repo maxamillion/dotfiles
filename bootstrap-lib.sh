@@ -678,6 +678,7 @@ fn_flathub_install() {
         "org.signal.Signal"
         "in.cinny.Cinny"
         "org.gnome.Epiphany"
+        "com.github.marktext.marktext"
     )
     if ! flatpak remotes --user | grep flathub &>/dev/null; then
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
