@@ -18,7 +18,7 @@ fi
 # Optionally report each fn_* function as it is called
 if [[ "${BOOTSTRAP_TRACE_FUNCTIONS:-false}" == "true" ]]; then
     set -o functrace
-    trap 'if [[ ${FUNCNAME[0]:-} == fn_* && ${BASH_COMMAND%%[[:space:]]*} == "${FUNCNAME[0]}" ]]; then printf "Running %s...\n" "${FUNCNAME[0]}"; fi' DEBUG
+    trap 'if [[ ${FUNCNAME[0]:-} == fn_* && ${BASH_COMMAND%%[[:space:]]*} == "${FUNCNAME[0]}" ]]; then printf "Running %s...\n" "${FUNCNAME[0]}" >&2; fi' DEBUG
 fi
 
 # Global variables
