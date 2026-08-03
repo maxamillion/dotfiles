@@ -342,6 +342,18 @@ rhtogoose() {
     goose "$@"
 }
 
+localmodelserving() {
+    ramalama serve -p 8080 huggingface://lmstudio-community/gemma-4-e4b-it-GGUF
+}
+
+localgoose() {
+  GOOSE_PROVIDER="openai" \
+  OPENAI_HOST="http://localhost:8080" \
+  OPENAI_API_KEY="none" \
+  GOOSE_MODEL="lmstudio-community/gemma-4-e4b-it-GGUF" \
+  goose "$@"
+}
+
 goose_recipe_run_coding() {
     local task_description="${1:?Usage: goose_recipe_run_coding '<task_description>' [project_path]}"
     local project_path
