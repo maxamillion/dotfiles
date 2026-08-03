@@ -342,15 +342,10 @@ rhtogoose() {
     goose "$@"
 }
 
-localmodelserving() {
-    ramalama serve -p 8080 huggingface://lmstudio-community/gemma-4-e4b-it-GGUF
-}
-
 localgoose() {
-  GOOSE_PROVIDER="openai" \
-  OPENAI_HOST="http://localhost:8080" \
-  OPENAI_API_KEY="none" \
-  GOOSE_MODEL="lmstudio-community/gemma-4-e4b-it-GGUF" \
+  GOOSE_PROVIDER="ollama" \
+  GOOSE_MODEL="gemma4:e4b" \
+  OLLAMA_HOST="https://localhost:11434" \
   goose "$@"
 }
 
