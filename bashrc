@@ -344,7 +344,7 @@ rhtogoose() {
 
 localgoose() {
   GOOSE_PROVIDER="ollama" \
-  GOOSE_MODEL="gemma4:e4b" \
+  GOOSE_MODEL="qwen3.5:9b" \
   goose "$@"
 }
 

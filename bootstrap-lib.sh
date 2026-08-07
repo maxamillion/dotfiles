@@ -1879,7 +1879,7 @@ Type=simple
 ExecStart=${install_path} serve
 Restart=always
 RestartSec=3
-Environment=OLLAMA_CONTEXT_LENGTH=131072
+Environment=OLLAMA_CONTEXT_LENGTH=262144
 Environment=OLLAMA_FLASH_ATTENTION=1
 Environment=OLLAMA_KV_CACHE_TYPE=q8_0
 Environment=OLLAMA_NUM_PARALLEL=1
