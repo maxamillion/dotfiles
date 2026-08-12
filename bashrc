@@ -176,6 +176,7 @@ set enable-bracketed-paste On
 
 export LANG=en_US.UTF-8
 export EDITOR=vim
+export BAT_THEME="Dracula"
 
 # Make dir completion better
 #complete -r cd &> /dev/null
