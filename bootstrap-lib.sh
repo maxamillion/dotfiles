@@ -2426,7 +2426,7 @@ fn_local_uv_tool_install() {
         "harlequin"
         "pyright"
         "ruff"
-        "nikola"
+        "nikola[extras]"
     )
     
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
@@ -2441,6 +2441,11 @@ fn_local_uv_tool_install() {
             # add special case for glances
             if [[ "${pypkg}" =~ glances* ]]; then
                 if [[ ! -d ${HOME}/.local/share/uv/tools/glances ]]; then
+                    uv tool install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to uv install ${pypkg}"
+                fi
+            # add special case for nikola
+            elif [[ "${pypkg}" =~ nikola* ]]; then
+                if [[ ! -d ${HOME}/.local/share/uv/tools/nikola ]]; then
                     uv tool install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to uv install ${pypkg}"
                 fi
             else
