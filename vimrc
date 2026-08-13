@@ -13,7 +13,6 @@ Plug 'tpope/vim-endwise'
 Plug 'gioele/vim-autoswap'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-Plug 'Exafunction/windsurf.vim', { 'branch': 'main' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'Coacher/vim-virtualenv'
@@ -102,12 +101,6 @@ noremap <Leader>ff :Files<CR>
 noremap <Leader>fg :Rg<CR>
 noremap <Leader>fl :Lines<CR>
 noremap <Leader>gf :GFiles<CR>
-
-" windsurf suggestion cycling - only accept with Ctrl-g
-imap <script><silent><nowait><expr> <C-g> codeium#Accept()
-imap <C-j>   <Cmd>call codeium#CycleCompletions(1)<CR>
-imap <C-k>   <Cmd>call codeium#CycleCompletions(-1)<CR>
-let g:codeium_disable_bindings = 1
 
 " the F1 help menu can kick rocks
 nmap <F1> <nop>
