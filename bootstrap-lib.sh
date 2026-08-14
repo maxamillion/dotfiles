@@ -2470,9 +2470,7 @@ fn_local_uv_tool_install() {
 fn_local_install_skills() {
     # Various Agent Skills (https://agentskills.io/home) (https://skills.sh/)
     fn_ensure_npm_prefix
-    npx skills add https://github.com/vercel-labs/skills --skill find-skills -g -y
     npx skills add affaan-m/everything-claude-code@codebase-onboarding -g -y
-    npx skills add JuliusBrussee/caveman -g -y
     npx skills add https://github.com/anthropics/knowledge-work-plugins --skill code-review -g -y
     npx skills add https://github.com/softaworks/agent-toolkit --skill humanizer -g -y
     npx skills add https://github.com/wshobson/agents --skill git-advanced-workflows -g -y
