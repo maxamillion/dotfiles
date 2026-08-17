@@ -64,7 +64,7 @@ extensions:
     bundled: true
     available_tools: []
   code_execution:
-    enabled: true
+    enabled: false
     type: platform
     name: code_execution
     description: Goose will make extension calls through code execution, saving tokens
