@@ -1,6 +1,6 @@
 extensions:
   tom:
-    enabled: true
+    enabled: false
     type: platform
     name: tom
     description: Inject custom context into every turn via GOOSE_MOIM_MESSAGE_TEXT and GOOSE_MOIM_MESSAGE_FILE environment variables
@@ -24,7 +24,7 @@ extensions:
     bundled: true
     available_tools: []
   apps:
-    enabled: true
+    enabled: false
     type: platform
     name: apps
     description: Create and manage custom Goose apps through chat. Apps are HTML/CSS/JavaScript and run in sandboxed windows.
@@ -64,7 +64,7 @@ extensions:
     bundled: true
     available_tools: []
   code_execution:
-    enabled: false
+    enabled: true
     type: platform
     name: code_execution
     description: Goose will make extension calls through code execution, saving tokens
@@ -95,6 +95,22 @@ extensions:
     display_name: Skills
     bundled: true
     available_tools: []
+  mcp-atlassian:
+    enabled: false
+    type: stdio
+    name: mcp-atlassian
+    description: sooperset atlassian mcp
+    cmd: uvx
+    args:
+    - mcp-atlassian
+    envs: {}
+    env_keys:
+    - JIRA_USERNAME
+    - JIRA_URL
+    - JIRA_API_TOKEN
+    timeout: 300
+    cwd: null
+    bundled: null
 GOOSE_TELEMETRY_ENABLED: true
 GOOSE_CLI_THEME: dark
 GOOSE_CLI_DARK_THEME: Dracula
