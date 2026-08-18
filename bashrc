@@ -328,6 +328,7 @@ rhtagoose() {
 rhtggoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
   GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
+  GOOSE_MAX_TOKENS="65536" \
   GOOSE_MODEL="gemini-3.7-flash" \
   GOOSE_CONTEXT_LIMIT="1000000" \
   GOOSE_PLANNER_CONTEXT_LIMIT="1000000" \
