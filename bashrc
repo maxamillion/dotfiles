@@ -329,6 +329,8 @@ rhtggoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
   GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
   GOOSE_MODEL="gemini-3.7-flash" \
+  GOOSE_CONTEXT_LIMIT="1000000" \
+  GOOSE_PLANNER_CONTEXT_LIMIT="1000000" \
   GCP_PROJECT_ID="${_rht_vertex_project_id}" \
   GCP_LOCATION="${_rht_vertex_region}" \
   goose "$@"
