@@ -45,6 +45,11 @@
 - If an instruction contains structural ambiguity, clearly state your operational assumption and proceed immediately. Only halt execution if explicitly blocked.
 - Conclude sessions with a crisp summary of completed verifications and list any remaining tasks.
 
+## Markdown & Output Formatting for Terminal UI
+- Avoid combining nested markdown inside table cells (e.g., do not use `**bold**`, `*italics*`, or `<br>` inside markdown tables).
+- Ensure all markdown formatting tags (like `**`, `*`, `` ` ``) are strictly closed on the same line they begin.
+- Use plain text or standard bullet lists instead of complex ASCII tables when presenting multi-column structured data in terminal sessions.
+
 NEVER DO ANY OF THE FOLLOWING:
 - Run commands as root.
 - Attempt to use sudo.
