@@ -2444,7 +2444,7 @@ fn_local_uv_tool_install() {
                     uv tool install "${pypkg}" || fn_log_error "${FUNCNAME[0]}: failed to uv install ${pypkg}"
                 fi
             # add special case for nikola
-            if [[ "${pypkg}" =~ nikola* ]]; then
+            elif [[ "${pypkg}" =~ nikola* ]]; then
                 if [[ ! -d ${HOME}/.local/share/uv/tools/nikola ]]; then
                     uv tool install "${pypkg}" --with ghp-import --with-executables-from ghp-import || fn_log_error "${FUNCNAME[0]}: failed to uv install ${pypkg}"
                 fi
