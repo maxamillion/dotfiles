@@ -1553,7 +1553,7 @@ fn_local_install_rosa() {
     fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
 
     latest_release=$(curl -s 'https://api.github.com/repos/openshift/rosa/tags' \
-        | jq -r '.[] | select(.name | contains("-rc") | not) | select(.name | contains("-testing") | not).name' | head -1)
+        | jq -r '.[] | select(.name | contains("-rc") | not) | select(.name | contains("-prerelease") | not) | select(.name | contains("-testing") | not).name' | head -1)
     latest_numerical_version="${latest_release#v*}"
     if [[ ${1:-} == "update" ]]; then
         if [[ -f ${install_path} ]]; then
