@@ -289,7 +289,7 @@ yaml2json() {
     python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' < "$1"
 }
 
-export _rht_vertex_project_id="itpc-ca-e37c5b295c"
+export _rht_vertex_project_id="lightwell-devel"
 export _rht_vertex_region="global"
 
 rhtclaude() {
