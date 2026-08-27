@@ -2299,6 +2299,9 @@ fn_local_install_goose() {
     else
         "${install_path}" completion bash > "${completions_install_path}"
     fi
+
+    # enable adversary mode to keep the agent in check, the defaults are sane so just use those
+    touch "${HOME}/.config/goose/adversary.md"
 }
 
 fn_local_install_container_use() {
