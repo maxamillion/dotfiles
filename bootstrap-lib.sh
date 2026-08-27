@@ -613,6 +613,13 @@ EOF
         printf "Enabling NetBird split DNS systemd unit...\n"
         sudo systemctl enable netbird-split-dns.service || fn_log_error "${FUNCNAME[0]}: failed to enable netbird-split-dns.service"
     fi
+
+    if ip link show wt0 &>/dev/null; then
+        if ! sudo systemctl is-active netbird-split-dns.service &>/dev/null; then
+            printf "Starting NetBird split DNS systemd unit...\n"
+            sudo systemctl start netbird-split-dns.service || fn_log_error "${FUNCNAME[0]}: failed to start netbird-split-dns.service"
+        fi
+    fi
 }
 
 fn_system_install_command_line_assistant() {
