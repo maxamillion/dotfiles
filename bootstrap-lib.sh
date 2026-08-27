@@ -570,6 +570,51 @@ fn_system_install_tailscale() {
 
 }
 
+fn_system_setup_netbird_split_dns() {
+    if ! command -v netbird >/dev/null 2>&1 && ! [[ -x /usr/bin/netbird || -x /usr/local/bin/netbird ]]; then
+        return 0
+    fi
+
+    local unit_file="/etc/systemd/system/netbird-split-dns.service"
+    local temp_unit
+    temp_unit="$(mktemp)"
+
+    cat << 'EOF' > "${temp_unit}"
+[Unit]
+Description=NetBird Split DNS Configuration (redhat.com only)
+BindsTo=sys-subsystem-net-devices-wt0.device
+After=sys-subsystem-net-devices-wt0.device
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/resolvectl dns wt0 100.100.100.100 100.100.100.101 100.100.100.102
+ExecStart=/usr/bin/resolvectl domain wt0 redhat.com red.ht redhat.corp
+ExecStart=/usr/bin/resolvectl default-route wt0 no
+
+[Install]
+WantedBy=sys-subsystem-net-devices-wt0.device
+EOF
+
+    local unit_changed=false
+    if ! sudo test -f "${unit_file}" || ! sudo cmp -s "${temp_unit}" "${unit_file}"; then
+        printf "Configuring NetBird split DNS systemd unit...\n"
+        sudo cp "${temp_unit}" "${unit_file}" || fn_log_error "${FUNCNAME[0]}: failed to write ${unit_file}"
+        sudo chmod 644 "${unit_file}" || fn_log_error "${FUNCNAME[0]}: failed to set permissions on ${unit_file}"
+        unit_changed=true
+    fi
+    rm -f "${temp_unit}"
+
+    if [[ "${unit_changed}" == true ]]; then
+        sudo systemctl daemon-reload || fn_log_error "${FUNCNAME[0]}: failed to reload systemd daemon"
+    fi
+
+    if ! sudo systemctl is-enabled netbird-split-dns.service &>/dev/null; then
+        printf "Enabling NetBird split DNS systemd unit...\n"
+        sudo systemctl enable netbird-split-dns.service || fn_log_error "${FUNCNAME[0]}: failed to enable netbird-split-dns.service"
+    fi
+}
+
 fn_system_install_command_line_assistant() {
     fn_check_distro
     local pkg_name="command-line-assistant"

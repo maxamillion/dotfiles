@@ -53,6 +53,9 @@ if [[ "${ID}" == "fedora" ]] && ! [[ -z "${TOOLBOX_PATH:-}" ]]; then
     fn_system_install_gcloud
 fi
 
+# NetBird split DNS
+fn_system_setup_netbird_split_dns
+
 # setup vim plug
 fn_local_install_vim_plug
 
