@@ -662,7 +662,7 @@ fn_system_install_packages() {
             fi
         fi
         if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" || "${ID}" == "fedora" ]]; then
-            if ! rpm -q "${pkg}" &>/dev/null; then
+            if ! rpm -q --whatprovides "${pkg}" &>/dev/null; then
                 pending_install_pkgs+=("${pkg}")
             fi
         fi
