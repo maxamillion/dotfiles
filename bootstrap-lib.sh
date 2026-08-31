@@ -12,7 +12,7 @@ fi
 
 # Strict error handling (only when executing directly)
 if [[ "${_SCRIPT_SOURCED}" == "false" ]]; then
-    set -euo pipefail
+    set -uo pipefail
 fi
 
 # Optionally report each fn_* function as it is called
@@ -99,15 +99,17 @@ fn_check_distro() {
 }
 
 fn_log_error() {
+    printf "ERROR: %s\n" "$*" >&2
     _ERRORS+=("${@}")
 }
 
 fn_print_errors() {
     if [[ ${#_ERRORS[@]} -gt 0 ]]; then
-        printf "\n\nERRORS:\n"
+        printf "\n\n==================== ERRORS ====================\n" >&2
         for error in "${_ERRORS[@]}"; do
-            printf "%s\n" "${error}"
+            printf " - %s\n" "${error}" >&2
         done
+        return 1
     fi
 }
 

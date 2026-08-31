@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Strict error handling
-set -euo pipefail
+set -uo pipefail
 
 # Validate environment
 _DOTFILES_DIR="${HOME}/dotfiles"
@@ -66,15 +66,10 @@ fn_symlink_if_needed "${_DOTFILES_DIR}/kitty.conf"            "${HOME}/.config/k
 # Run workstation-specific bootstrap
 _WORKSTATION_SCRIPT="${_DOTFILES_DIR}/bootstrap-workstation.sh"
 if [[ -f "${_WORKSTATION_SCRIPT}" ]]; then
-    if ! "${_WORKSTATION_SCRIPT}"; then
-        fn_log_error "bootstrap-workstation.sh failed"
-        fn_print_errors
-        exit 1
-    fi
+    # shellcheck source=./bootstrap-workstation.sh
+    source "${_WORKSTATION_SCRIPT}" || fn_log_error "bootstrap-workstation.sh encountered errors"
 else
     fn_log_error "bootstrap-workstation.sh not found: ${_WORKSTATION_SCRIPT}"
-    fn_print_errors
-    exit 1
 fi
 
 # This doesn't appear to be necessary, but keep it around just in case
@@ -87,3 +82,6 @@ if [[ -f "${_SSH_CONFIG}" ]]; then
 else
     fn_log_error "SSH config file not found: ${_SSH_CONFIG}"
 fi
+
+# Print all accumulated errors from bootstrap and workstation setup
+fn_print_errors
