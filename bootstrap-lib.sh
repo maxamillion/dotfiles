@@ -2527,11 +2527,31 @@ fn_local_uv_tool_install() {
 fn_local_install_skills() {
     # Various Agent Skills (https://agentskills.io/home) (https://skills.sh/)
     fn_ensure_npm_prefix
-    npx skills add affaan-m/everything-claude-code@codebase-onboarding -g -y
-    npx skills add https://github.com/anthropics/knowledge-work-plugins --skill code-review -g -y
-    npx skills add https://github.com/softaworks/agent-toolkit --skill humanizer -g -y
-    npx skills add https://github.com/wshobson/agents --skill git-advanced-workflows -g -y
-    npx skills add https://github.com/obra/superpowers --skill verification-before-completion -g -y
+
+    if [[ "${1:-}" == "update" ]]; then
+        printf "Updating agent skills...\n"
+        npx skills update -g -y || fn_log_error "${FUNCNAME[0]}: failed to update agent skills"
+        return 0
+    fi
+
+    local skills_dir="${HOME}/.agents/skills"
+    fn_mkdir_if_needed "${skills_dir}"
+
+    local -A skill_specs=(
+        ["codebase-onboarding"]="affaan-m/everything-claude-code@codebase-onboarding"
+        ["code-review"]="https://github.com/anthropics/knowledge-work-plugins --skill code-review"
+        ["humanizer"]="https://github.com/softaworks/agent-toolkit --skill humanizer"
+        ["git-advanced-workflows"]="https://github.com/wshobson/agents --skill git-advanced-workflows"
+        ["verification-before-completion"]="https://github.com/obra/superpowers --skill verification-before-completion"
+    )
+
+    for skill_name in "${!skill_specs[@]}"; do
+        if [[ ! -d "${skills_dir}/${skill_name}" ]]; then
+            printf "Installing skill: %s...\n" "${skill_name}"
+            # shellcheck disable=SC2086
+            npx skills add ${skill_specs[${skill_name}]} -g -y || fn_log_error "${FUNCNAME[0]}: failed to install skill ${skill_name}"
+        fi
+    done
 }
 
 fn_update_local_installs() {
@@ -2564,6 +2584,7 @@ fn_update_local_installs() {
     fn_local_install_syft update
     fn_local_install_cosign update
     fn_local_install_chtsh update
+    fn_local_install_skills update
     #pipx upgrade-all
     uv tool upgrade --all
 }
