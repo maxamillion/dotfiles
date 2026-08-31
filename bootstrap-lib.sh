@@ -46,10 +46,10 @@ if [[ "${_GOLANG_ARCH}" == "unsupported" ]]; then
 fi
 
 # Security and networking configuration
-readonly CURL_TIMEOUT=30
-readonly CURL_MAX_TIME=300
-readonly MAX_RETRIES=3
-readonly RETRY_DELAY=2
+: "${CURL_TIMEOUT:=30}"
+: "${CURL_MAX_TIME:=300}"
+: "${MAX_RETRIES:=3}"
+: "${RETRY_DELAY:=2}"
 
 # Safe exit function that handles both sourcing and executing contexts
 fn_safe_exit() {
