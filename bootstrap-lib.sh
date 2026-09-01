@@ -590,9 +590,11 @@ After=sys-subsystem-net-devices-wt0.device
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/resolvectl dns wt0 100.100.100.100 100.100.100.101 100.100.100.102
-ExecStart=/usr/bin/resolvectl domain wt0 redhat.com red.ht redhat.corp
-ExecStart=/usr/bin/resolvectl default-route wt0 no
+ExecStart=/usr/bin/bash -c '\
+  sleep 3; \
+  /usr/bin/resolvectl dns wt0 100.100.100.100 100.100.100.101 100.100.100.102; \
+  /usr/bin/resolvectl domain wt0 redhat.com red.ht redhat.corp; \
+  /usr/bin/resolvectl default-route wt0 no'
 
 [Install]
 WantedBy=sys-subsystem-net-devices-wt0.device
