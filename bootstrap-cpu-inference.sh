@@ -2,6 +2,12 @@
 set -euo pipefail
 
 # Gemma 4 26B-A4B CPU inference with an external Q8_0 MTP drafter.
+#
+# Based on this blog series:
+#   https://point.free/blog/open-weights-not-open-source/
+#   https://point.free/blog/gemma-4-mtp/
+#   https://point.free/blog/gemma-4-on-a-2016-xeon/
+#
 # Override install locations with CPU_INFERENCE_HOME, IK_LLAMA_DIR, or MODEL_DIR.
 
 CPU_INFERENCE_HOME="${CPU_INFERENCE_HOME:-${HOME}/.local/share/cpu-inference}"
