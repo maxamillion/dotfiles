@@ -327,12 +327,12 @@ rhtagoose() {
 
 rhtggoose() {
   GOOSE_PROVIDER="gcp_vertex_ai" \
-  GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
-  GOOSE_MAX_TOKENS="65536" \
-  GOOSE_THINKING_EFFORT="low" \
   GOOSE_MODEL="gemini-3.8-flash" \
-  GOOSE_CONTEXT_LIMIT="1000000" \
-  GOOSE_PLANNER_CONTEXT_LIMIT="1000000" \
+  GOOSE_MAX_TOKENS="65536" \
+  GOOSE_CONTEXT_LIMIT="1048576" \
+  GEMINI3_THINKING_LEVEL="low" \
+  GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
+  GOOSE_PLANNER_MODEL="gemini-3.8-flash" \
   GCP_PROJECT_ID="${_rht_vertex_project_id}" \
   GCP_LOCATION="${_rht_vertex_region}" \
   goose "$@"
