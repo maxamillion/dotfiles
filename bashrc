@@ -362,7 +362,8 @@ rhtolgoose() {
 
 localgoose() {
   GOOSE_PROVIDER="ollama" \
-  GOOSE_MODEL="gemma4:e4b" \
+  GOOSE_MODEL="ornith-1.5:9b" \
+  GOOSE_CONTEXT_LIMIT="131072" \
   goose "$@"
 }
 
