@@ -340,7 +340,7 @@ rhtggoose() {
 
 rhtosgoose() {
     GOOSE_PROVIDER="openai" \
-    GOOSE_MODEL="gpt-5.6-sol" \
+    GOOSE_MODEL="gpt-6-sol" \
     GOOSE_MAX_TOKENS="128000" \
     GOOSE_CONTEXT_LIMIT="1050000" \
     GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
@@ -351,7 +351,7 @@ rhtosgoose() {
 
 rhtolgoose() {
     GOOSE_PROVIDER="openai" \
-    GOOSE_MODEL="gpt-5.6-luna" \
+    GOOSE_MODEL="gpt-6-luna" \
     GOOSE_MAX_TOKENS="128000" \
     GOOSE_CONTEXT_LIMIT="1050000" \
     GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
