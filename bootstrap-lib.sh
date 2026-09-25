@@ -2486,6 +2486,8 @@ fn_local_uv_tool_install() {
         "pyright"
         "ruff"
         "nikola[extras]"
+        "tau-ai"
+
     )
     
     if [[ "${ID}" == "rhel" || "${ID}" == "redhat" || "${ID}" == "centos" ]]; then
