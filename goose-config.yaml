@@ -96,18 +96,18 @@ extensions:
     bundled: true
     available_tools: []
   mcp-atlassian:
-    enabled: false
+    enabled: true
     type: stdio
     name: mcp-atlassian
-    description: sooperset atlassian mcp
+    description: sooperset mcp-atlassian
     cmd: uvx
     args:
     - mcp-atlassian
     envs: {}
     env_keys:
+    - JIRA_API_TOKEN
     - JIRA_USERNAME
     - JIRA_URL
-    - JIRA_API_TOKEN
     timeout: 300
     cwd: null
     bundled: null
@@ -117,3 +117,4 @@ GOOSE_CLI_DARK_THEME: Dracula
 GOOSE_CLI_SHOW_THINKING: true
 GOOSE_PROMPT_EDITOR: vim
 GOOSE_PROMPT_EDITOR_ALWAYS: false
+GOOSE_CLI_SHOW_COST: true
