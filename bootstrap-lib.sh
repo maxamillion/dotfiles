@@ -1387,6 +1387,149 @@ EOF
     fi
 }
 
+fn_local_install_ibmcloud() {
+    local install_root="${HOME}/.local/opt/ibmcloud-cli"
+    local install_path="${_LOCAL_BIN_DIR}/ibmcloud"
+    local info_url="https://download.clis.cloud.ibm.com/ibm-cloud-cli-metadata-dn/info.json"
+    local versions_url="https://download.clis.cloud.ibm.com/ibm-cloud-cli-metadata-dn/all_versions.json"
+    local platform version entry archive_url checksum current_version work_dir staging_dir
+
+    case "${_MACHINE_ARCH}" in
+        x86_64) platform="linux64" ;;
+        aarch64|arm64) platform="linux-arm64" ;;
+        ppc64le) platform="ppc64le" ;;
+        s390x) platform="s390x" ;;
+        *) fn_log_error "${FUNCNAME[0]}: unsupported Linux architecture: ${_MACHINE_ARCH}"; return 1 ;;
+    esac
+
+    for command in curl jq tar sha256sum; do
+        if ! command -v "${command}" >/dev/null 2>&1; then
+            fn_log_error "${FUNCNAME[0]}: required command not found: ${command}"
+            return 1
+        fi
+    done
+
+    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
+    fn_mkdir_if_needed "${HOME}/.local/opt"
+
+    work_dir="$(mktemp -d "${HOME}/.local/opt/.ibmcloud-cli.XXXXXX")" || {
+        fn_log_error "${FUNCNAME[0]}: failed to create temporary directory"
+        return 1
+    }
+
+    if ! curl --fail --silent --show-error --location "${info_url}" -o "${work_dir}/info.json" ||
+        ! curl --fail --silent --show-error --location "${versions_url}" -o "${work_dir}/all_versions.json"; then
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: failed to download release metadata"
+        return 1
+    fi
+
+    version="$(jq -er '.latestVersion' "${work_dir}/info.json")" || {
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: could not parse latest version"
+        return 1
+    }
+    entry="$(jq -ce --arg version "${version}" '.[] | select(.version == $version)' "${work_dir}/all_versions.json")" || {
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: metadata missing for version ${version}"
+        return 1
+    }
+    archive_url="$(jq -er --arg platform "${platform}" '.binaries[$platform].url' <<< "${entry}")" || {
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: no ${platform} archive for version ${version}"
+        return 1
+    }
+    checksum="$(jq -er --arg platform "${platform}" '.binaries[$platform].sha256_checksum' <<< "${entry}")" || {
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: no SHA-256 checksum for version ${version}"
+        return 1
+    }
+    if [[ ! "${archive_url}" =~ ^https://download\.clis\.cloud\.ibm\.com/ibm-cloud-cli-dn/ ]] ||
+        [[ ! "${checksum}" =~ ^[[:xdigit:]]{64}$ ]]; then
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: invalid download metadata"
+        return 1
+    fi
+
+    current_version=""
+    if [[ -x "${install_root}/bin/ibmcloud" && -f "${install_root}/VERSION" ]]; then
+        current_version="$(<"${install_root}/VERSION")"
+    fi
+    if [[ "${current_version}" == "${version}" && -x "${install_path}" &&
+        "$(readlink -f "${install_path}" 2>/dev/null)" == "${install_root}/bin/ibmcloud" ]]; then
+        ln -sfn "${install_root}/bin/ibmcloud" "${_LOCAL_BIN_DIR}/bluemix" || {
+            rm -rf "${work_dir}"
+            fn_log_error "${FUNCNAME[0]}: failed to create bluemix command link"
+            return 1
+        }
+        ln -sfn "${install_root}/bin/ibmcloud" "${_LOCAL_BIN_DIR}/bx" || {
+            rm -rf "${work_dir}"
+            fn_log_error "${FUNCNAME[0]}: failed to create bx command link"
+            return 1
+        }
+        rm -rf "${work_dir}"
+        return 0
+    fi
+
+    printf "Installing IBM Cloud CLI %s...\n" "${version}"
+    if ! curl --fail --silent --show-error --location --retry "${MAX_RETRIES}" \
+        "${archive_url}" -o "${work_dir}/ibmcloud.tar.gz" ||
+        ! printf '%s  %s\n' "${checksum}" "${work_dir}/ibmcloud.tar.gz" | sha256sum --check --status; then
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: download or SHA-256 verification failed"
+        return 1
+    fi
+    if ! tar -xzf "${work_dir}/ibmcloud.tar.gz" -C "${work_dir}" Bluemix_CLI; then
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: failed to extract CLI archive"
+        return 1
+    fi
+
+    staging_dir="${work_dir}/installed"
+    if [[ ! -x "${work_dir}/Bluemix_CLI/bin/ibmcloud" ]] || ! cp -a "${work_dir}/Bluemix_CLI" "${staging_dir}"; then
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: archive does not contain the CLI executable"
+        return 1
+    fi
+    printf '%s\n' "${version}" > "${staging_dir}/VERSION"
+
+    # Keep the prior install recoverable if replacing the version fails.
+    local backup_dir="${work_dir}/previous"
+    if [[ -e "${install_root}" ]] && ! mv "${install_root}" "${backup_dir}"; then
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: could not stage existing installation"
+        return 1
+    fi
+    if ! mv "${staging_dir}" "${install_root}"; then
+        [[ ! -e "${backup_dir}" ]] || mv "${backup_dir}" "${install_root}"
+        rm -rf "${work_dir}"
+        fn_log_error "${FUNCNAME[0]}: failed to activate installation"
+        return 1
+    fi
+
+    ln -sfn "${install_root}/bin/ibmcloud" "${install_path}" || {
+        fn_log_error "${FUNCNAME[0]}: failed to create ${install_path}"
+        rm -rf "${work_dir}"
+        return 1
+    }
+    ln -sfn "${install_root}/bin/ibmcloud" "${_LOCAL_BIN_DIR}/bluemix" || {
+        fn_log_error "${FUNCNAME[0]}: failed to create bluemix command link"
+        rm -rf "${work_dir}"
+        return 1
+    }
+    ln -sfn "${install_root}/bin/ibmcloud" "${_LOCAL_BIN_DIR}/bx" || {
+        fn_log_error "${FUNCNAME[0]}: failed to create bx command link"
+        rm -rf "${work_dir}"
+        return 1
+    }
+
+    rm -rf "${work_dir}"
+    "${install_path}" version >/dev/null || {
+        fn_log_error "${FUNCNAME[0]}: installed CLI failed its version check"
+        return 1
+    }
+}
+
 fn_local_install_distrobox() {
     local install_path="${_LOCAL_BIN_DIR}/distrobox"
     local latest_release
@@ -2589,6 +2732,7 @@ fn_update_local_installs() {
     fn_local_install_cosign update
     fn_local_install_chtsh update
     fn_local_install_skills update
+    fn_local_install_ibmcloud update
     #pipx upgrade-all
     uv tool upgrade --all
 }

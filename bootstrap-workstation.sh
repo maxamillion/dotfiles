@@ -63,6 +63,9 @@ fn_local_install_k9s
 fn_local_install_kubebuilder
 fn_local_install_operator_sdk
 
+# ibmcloud
+fn_local_install_ibmcloud
+
 # rosa
 fn_local_install_rosa
 
@@ -122,15 +125,12 @@ fn_local_install_ollama
 
 # claude code
 fn_local_install_claude_code
-fn_local_install_super_claude
+#fn_local_install_super_claude
 #fn_local_install_beads # waiting on r0x0d/beads to fix some things
 #fn_local_install_claude_code_requirements_builder
 
 # openai codex
 fn_local_install_openai_codex
-
-# gemini cli
-fn_local_install_gemini
 
 # cursor cli
 fn_local_install_cursor_cli
