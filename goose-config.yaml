@@ -32,7 +32,7 @@ extensions:
     bundled: true
     available_tools: []
   todo:
-    enabled: false
+    enabled: true
     type: platform
     name: todo
     description: Enable a todo list for goose so it can keep track of what it is doing
