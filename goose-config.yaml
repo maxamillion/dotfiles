@@ -56,7 +56,7 @@ extensions:
     bundled: true
     available_tools: []
   summon:
-    enabled: false
+    enabled: true
     type: platform
     name: summon
     description: Load knowledge and delegate tasks to subagents
@@ -95,22 +95,6 @@ extensions:
     display_name: Skills
     bundled: true
     available_tools: []
-  mcp-atlassian:
-    enabled: false
-    type: stdio
-    name: mcp-atlassian
-    description: sooperset atlassian mcp
-    cmd: uvx
-    args:
-    - mcp-atlassian
-    envs: {}
-    env_keys:
-    - JIRA_USERNAME
-    - JIRA_URL
-    - JIRA_API_TOKEN
-    timeout: 300
-    cwd: null
-    bundled: null
 GOOSE_TELEMETRY_ENABLED: true
 GOOSE_CLI_THEME: dark
 GOOSE_CLI_DARK_THEME: Dracula
