@@ -47,6 +47,30 @@ if [ -f ~/.myhosts ]; then
     export HOSTALIASES="${HOME}/.myhosts"
 fi
 
+# Load environment variables from ~/.env safely without code execution or leaking secrets
+if [[ -f "${HOME}/.env" ]]; then
+    while IFS='=' read -r key val || [[ -n "${key}" ]]; do
+        # Strip leading and trailing whitespace from key
+        key="${key#"${key%%[![:space:]]*}"}"
+        key="${key%"${key##*[![:space:]]}"}"
+
+        # Skip comments and empty lines
+        [[ -z "${key}" || "${key}" =~ ^# ]] && continue
+
+        # Strip leading and trailing whitespace from val
+        val="${val#"${val%%[![:space:]]*}"}"
+        val="${val%"${val##*[![:space:]]}"}"
+
+        # Strip optional matching enclosing quotes
+        if [[ "${val}" =~ ^\"(.*)\"$ ]] || [[ "${val}" =~ ^\'(.*)\'$ ]]; then
+            val="${BASH_REMATCH[1]}"
+        fi
+
+        export "${key}=${val}"
+    done < "${HOME}/.env"
+    unset -v key val
+fi
+
 # Local user install of virtualenvwrapper
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     if [ -f /usr/bin/python3 ]; then
