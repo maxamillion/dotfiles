@@ -1909,6 +1909,51 @@ fn_local_install_gh() {
     fi
 }
 
+fn_local_install_jira_cli() {
+    local install_path="${_LOCAL_BIN_DIR}/jira"
+    local latest_release
+    local currently_installed_version
+    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/jira"
+    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+
+    latest_release="$(curl -s 'https://api.github.com/repos/ankitpokhrel/jira-cli/releases/latest' | jq -r '.tag_name')"
+    local jira_numerical_version="${latest_release#v*}"
+    if [[ ${1:-} == "update" ]]; then
+        if [[ -f ${install_path} ]]; then
+            currently_installed_version="$(${install_path} version 2>/dev/null | sed -n 's/.*(Version="\([^"]*\)".*/\1/p')"
+            local uninstall_paths=("${install_path}" "${completions_install_path}")
+            fn_rm_on_update_if_needed "${install_path}" "${jira_numerical_version}" "${currently_installed_version#v*}" "${uninstall_paths[@]}"
+        fi
+    fi
+    local jira_arch
+    case "${_MACHINE_ARCH}" in
+        x86_64) jira_arch="x86_64" ;;
+        aarch64) jira_arch="arm64" ;;
+        *) jira_arch="unsupported" ;;
+    esac
+
+    if [[ "${jira_arch}" == "unsupported" ]]; then
+        fn_log_error "${FUNCNAME[0]}: Unsupported architecture ${_MACHINE_ARCH}"
+        return 1
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        printf "Installing jira-cli...\n"
+        local archive_name="jira_${jira_numerical_version}_linux_${jira_arch}.tar.gz"
+        curl -Lo "/tmp/${archive_name}" "https://github.com/ankitpokhrel/jira-cli/releases/download/${latest_release}/${archive_name}"
+        tar -zxvf "/tmp/${archive_name}" -C /tmp/
+        cp "/tmp/jira_${jira_numerical_version}_linux_${jira_arch}/bin/jira" "${install_path}"
+        chmod +x "${install_path}"
+        "${install_path}" completion bash > "${completions_install_path}"
+        rm -rf "/tmp/${archive_name}" "/tmp/jira_${jira_numerical_version}_linux_${jira_arch}"
+    fi
+
+    if [[ ! -f ${install_path} ]]; then
+        fn_log_error "${FUNCNAME[0]}: failed to install ${install_path}"
+    fi
+}
+
 fn_local_install_neovim() {
     local install_path="${_LOCAL_BIN_DIR}/nvim"
     local latest_release
@@ -2726,6 +2771,7 @@ fn_update_local_installs() {
     fn_local_install_kubebuilder update
     fn_local_install_terraform update
     fn_local_install_gh update
+    fn_local_install_jira_cli update
     fn_local_install_task update
     fn_local_install_yq update
     fn_local_install_syft update

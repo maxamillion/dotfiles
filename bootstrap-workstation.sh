@@ -87,6 +87,9 @@ fn_local_install_opa
 # GH cli
 fn_local_install_gh
 
+# Jira cli
+fn_local_install_jira_cli
+
 # Task
 fn_local_install_task
 
