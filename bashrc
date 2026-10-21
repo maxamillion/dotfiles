@@ -367,6 +367,7 @@ rhtglmgoose() {
     OPENAI_HOST="${_rht_openai_host}" \
     OPENAI_API_KEY="${ENMAAS_KEY}" \
     OPENAI_BASE_PATH="v1/chat/completions" \
+    goose "$@"
 }
 
 rhtosgoose() {
