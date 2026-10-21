@@ -315,6 +315,7 @@ yaml2json() {
 
 export _rht_vertex_project_id="lightwell-devel"
 export _rht_vertex_region="global"
+export _rht_openai_host="https://api.enmaas.devshift.net"
 
 rhtclaude() {
     # ANTHROPIC_MODEL='claude-sonnet-4@20250514'
@@ -331,56 +332,55 @@ rhtopencode() {
     opencode "$@"
 }
 
-rhtpaude() {
-    CLAUDE_CODE_USE_VERTEX=1 \
-    CLOUD_ML_REGION="${_rht_vertex_region}" \
-    ANTHROPIC_VERTEX_PROJECT_ID="${_rht_vertex_project_id}" \
-    paude "$@"
-}
-
 rhtagoose() {
-  # GOOSE_PLANNER_MODEL="claude-sonnet-5" \
-  # GOOSE_EDITOR_MODEL="claude-sonnet-5" \
-  GOOSE_PROVIDER="gcp_vertex_ai" \
-  GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
-  GOOSE_MODEL="claude-sonnet-5" \
-  GCP_PROJECT_ID="${_rht_vertex_project_id}" \
-  GCP_LOCATION="${_rht_vertex_region}" \
-  goose "$@"
+    # GOOSE_PLANNER_MODEL="claude-sonnet-5" \
+    # GOOSE_EDITOR_MODEL="claude-sonnet-5" \
+    GOOSE_PROVIDER="gcp_vertex_ai" \
+    GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
+    GOOSE_MODEL="claude-sonnet-5" \
+    GCP_PROJECT_ID="${_rht_vertex_project_id}" \
+    GCP_LOCATION="${_rht_vertex_region}" \
+    goose "$@"
 }
 
 rhtggoose() {
-  GOOSE_PROVIDER="gcp_vertex_ai" \
-  GOOSE_MODEL="gemini-3.8-flash" \
-  GOOSE_MAX_TOKENS="65536" \
-  GOOSE_CONTEXT_LIMIT="1048576" \
-  GEMINI3_THINKING_LEVEL="low" \
-  GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
-  GOOSE_PLANNER_MODEL="gemini-3.8-flash" \
-  GCP_PROJECT_ID="${_rht_vertex_project_id}" \
-  GCP_LOCATION="${_rht_vertex_region}" \
-  goose "$@"
+    # GOOSE_PLANNER_MODEL="claude-sonnet-5" \
+    # GOOSE_EDITOR_MODEL="claude-sonnet-5" \
+    GOOSE_PROVIDER="openai" \
+    OPENAI_BASE_PATH="v1/chat/completions" \
+    OPENAI_HOST="${_rht_openai_host}" \
+    OPENAI_API_KEY="${ENMAAS_KEY}" \
+    GOOSE_PROVIDER="gcp_vertex_ai" \
+    GOOSE_MODEL="gemini-3.8-flash" \
+    GOOSE_MAX_TOKENS="65536" \
+    GOOSE_CONTEXT_LIMIT="1048576" \
+    GEMINI3_THINKING_LEVEL="low" \
+    GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
+    GOOSE_PLANNER_MODEL="gemini-3.8-flash" \
+    goose "$@"
 }
 
 rhtosgoose() {
     GOOSE_PROVIDER="openai" \
+    OPENAI_HOST="${_rht_openai_host}" \
+    OPENAI_API_KEY="${ENMAAS_KEY}" \
     GOOSE_MODEL="gpt-6.1-sol" \
     GOOSE_MAX_TOKENS="128000" \
     GOOSE_CONTEXT_LIMIT="1050000" \
     GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
     GOOSE_THINKING_EFFORT="high" \
-    OPENAI_API_KEY=$(<"${HOME}/.codex_api_key") \
     goose "$@"
 }
 
 rhtolgoose() {
     GOOSE_PROVIDER="openai" \
+    OPENAI_HOST="${_rht_openai_host}" \
+    OPENAI_API_KEY="${ENMAAS_KEY}" \
     GOOSE_MODEL="gpt-6-luna" \
     GOOSE_MAX_TOKENS="128000" \
     GOOSE_CONTEXT_LIMIT="1050000" \
     GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
     GOOSE_THINKING_EFFORT="low" \
-    OPENAI_API_KEY=$(<"${HOME}/.codex_api_key") \
     goose "$@"
 }
 
