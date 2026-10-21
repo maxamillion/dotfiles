@@ -361,7 +361,7 @@ rhtggoose() {
 }
 
 rhtglmgoose() {
-    GOOSE_PROVIDER=openai \
+    GOOSE_PROVIDER="openai" \
     GOOSE_MODEL="rits/zai-org/glm-5-3" \
     GOOSE_CONTEXT_LIMIT=1000000 \
     OPENAI_HOST="${_rht_openai_host}" \
