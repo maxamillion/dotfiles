@@ -363,7 +363,8 @@ rhtggoose() {
 rhtglmgoose() {
     GOOSE_PROVIDER="openai" \
     GOOSE_MODEL="rits/zai-org/glm-5-3" \
-    GOOSE_CONTEXT_LIMIT=1000000 \
+    GOOSE_MAX_TOKENS="131072" \
+    GOOSE_CONTEXT_LIMIT=1048576 \
     OPENAI_HOST="${_rht_openai_host}" \
     OPENAI_API_KEY="${ENMAAS_KEY}" \
     OPENAI_BASE_PATH="v1/chat/completions" \
