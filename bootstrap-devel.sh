@@ -59,6 +59,7 @@ git_repos=(
     "${dev_dir}/traust-contracts git@github.com:maxamillion/traust-contracts.git https://github.com/traust-security/traust-contracts"
     "${dev_dir}/traust-ledger git@github.com:maxamillion/traust-ledger.git https://github.com/traust-security/traust-ledger"
     "${dev_dir}/traust-sdk git@github.com:maxamillion/traust-sdk.git https://github.com/traust-security/traust-sdk"
+    "${dev_dir}/traust-cli git@github.com:maxamillion/traust-cli.git https://github.com/traust-security/traust-cli"
     "${dev_dir}/lightspeed-stack git@github.com:maxamillion/lightspeed-stack.git https://github.com/lightspeed-core/lightspeed-stack.git"
     "${dev_dir}/pytorch git@github.com:maxamillion/pytorch.git https://github.com/pytorch/pytorch.git"
     "${dev_dir}/vllm git@github.com:maxamillion/vllm.git https://github.com/vllm-project/vllm.git"
