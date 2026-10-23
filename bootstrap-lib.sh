@@ -2611,6 +2611,64 @@ fn_local_install_beads() {
     fi
 }
 
+fn_local_install_fx() {
+    local install_path="${_LOCAL_BIN_DIR}/fx"
+    local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/fx"
+    local os arch platform version tmp_dir archive_url
+    os="linux"
+
+    fn_mkdir_if_needed "${_LOCAL_BIN_DIR}"
+    fn_mkdir_if_needed "${_LOCAL_COMPLETIONS_DIR}"
+
+    case "${_MACHINE_ARCH}" in
+        x86_64|amd64) arch="x86_64" ;;
+        arm64|aarch64) arch="aarch64" ;;
+        *) fn_log_error "${FUNCNAME[0]}: unsupported architecture: ${_MACHINE_ARCH}"; return 1 ;;
+    esac
+    platform="${os}-${arch}"
+
+    # Normal invocations are idempotent. An explicit update replaces the binary;
+    # stage the replacement first so a failed download never destroys the working install.
+    if [[ -x "${install_path}" && ${1:-} != "update" ]]; then
+        if [[ ! -s "${completions_install_path}" ]]; then
+            "${install_path}" completion bash > "${completions_install_path}" || {
+                rm -f "${completions_install_path}"
+                fn_log_error "${FUNCNAME[0]}: failed to generate bash completions"
+                return 1
+            }
+        fi
+        return 0
+    fi
+
+    version="$(curl -fsSL --retry "${MAX_RETRIES:-3}" "https://releases.fx.sh/latest.txt" | tr -d '[:space:]')" || {
+        fn_log_error "${FUNCNAME[0]}: failed to determine latest fx version"
+        return 1
+    }
+    if [[ -z "${version}" ]]; then
+        fn_log_error "${FUNCNAME[0]}: latest fx version was empty"
+        return 1
+    fi
+
+    tmp_dir="$(mktemp -d)" || return 1
+    if ! curl -fsSL --retry "${MAX_RETRIES:-3}" "https://releases.fx.sh/${version}/fx-${platform}.tar.gz" -o "${tmp_dir}/fx.tar.gz" \
+        || ! tar -xzf "${tmp_dir}/fx.tar.gz" -C "${tmp_dir}" \
+        || [[ ! -f "${tmp_dir}/fx" ]]; then
+        rm -rf "${tmp_dir}"
+        fn_log_error "${FUNCNAME[0]}: failed to download/extract fx ${version}"
+        return 1
+    fi
+    chmod +x "${tmp_dir}/fx" || { rm -rf "${tmp_dir}"; return 1; }
+    mv -f "${tmp_dir}/fx" "${install_path}" || { rm -rf "${tmp_dir}"; return 1; }
+    rm -rf "${tmp_dir}"
+
+    if ! "${install_path}" completion bash > "${completions_install_path}"; then
+        rm -f "${completions_install_path}"
+        fn_log_error "${FUNCNAME[0]}: failed to generate bash completions"
+        return 1
+    fi
+    printf "Installed fx %s\n" "${version#v}"
+}
+
 fn_local_install_oras() {
     local install_path="${HOME}/go/bin/oras"
     local completions_install_path="${_LOCAL_COMPLETIONS_DIR}/oras"
