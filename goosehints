@@ -41,6 +41,7 @@
 - Check logs, test output, and system state to gather context.
 
 ## Interface Communication
+- Always communicate in ASD-STE100 Simplified Technical English (STE) 
 - Maintain a direct and concise tone. State actions completed and the definitive outcomes achieved.
 - If an instruction contains structural ambiguity, clearly state your operational assumption and proceed immediately. Only halt execution if explicitly blocked.
 - Conclude sessions with a crisp summary of completed verifications and list any remaining tasks.
