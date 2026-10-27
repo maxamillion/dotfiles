@@ -401,6 +401,17 @@ localgoose() {
   goose "$@"
 }
 
+personalolgoose() {
+    GOOSE_PROVIDER="openai" \
+    OPENAI_API_KEY="${OPENAI_API_KEY}" \
+    GOOSE_MODEL="gpt-6-luna" \
+    GOOSE_MAX_TOKENS="128000" \
+    GOOSE_CONTEXT_LIMIT="1050000" \
+    GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
+    GOOSE_THINKING_EFFORT="low" \
+    goose "$@"
+}
+
 cleancontainers() {
     # Clean exited containers
     for container in $(cruntime ps -a | awk '/Exited/{ print $1}')
