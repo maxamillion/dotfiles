@@ -327,8 +327,9 @@ rhtclaude() {
 }
 
 rhtopencode() {
-    VERTEX_LOCATION="${_rht_vertex_region}" \
-    GOOGLE_CLOUD_PROJECT="${_rht_vertex_project_id}" \
+    OPENAI_BASE_URL="${_rht_openai_host}/v1" \
+    OPENAI_HOST="${_rht_openai_host}" \
+    OPENAI_API_KEY="${ENMAAS_KEY}" \
     opencode "$@"
 }
 
@@ -337,7 +338,7 @@ rhtagoose() {
     # GOOSE_EDITOR_MODEL="claude-sonnet-5" \
     GOOSE_PROVIDER="gcp_vertex_ai" \
     GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
-    GOOSE_MODEL="claude-sonnet-5" \
+    GOOSE_MODEL="claude-sonnet-5-5" \
     GCP_PROJECT_ID="${_rht_vertex_project_id}" \
     GCP_LOCATION="${_rht_vertex_region}" \
     goose "$@"
