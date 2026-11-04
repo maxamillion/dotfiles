@@ -47,6 +47,7 @@ git_repos=(
     "${dev_dir}/grype git@github.com:maxamillion/grype.git https://github.com/anchore/grype.git"
     "${dev_dir}/grant git@github.com:maxamillion/grant.git https://github.com/anchore/grant.git"
     "${dev_dir}/vunnel git@github.com:maxamillion/vunnel.git https://github.com/anchore/vunnel.git"
+    "${dev_dir}/fx git@github.com:maxamillion/fx.git https://github.com/vercel-labs/fx.git"
     "${dev_dir}/goose git@github.com:maxamillion/goose.git https://github.com/aaif-goose/goose.git"
     "${dev_dir}/goosetown git@github.com:maxamillion/goosetown.git https://github.com/aaif-goose/goosetown.git"
     "${dev_dir}/agent-trace git@github.com:maxamillion/agent-trace.git https://github.com/stump-wtf/agent-trace.git"
