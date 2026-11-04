@@ -478,6 +478,60 @@ fn_symlink_if_needed() {
     fi
 }
 
+# Copy or sync conf files (for applications like fx that disallow symlinks for security)
+fn_copy_or_sync_if_needed() {
+    local source="$1"
+    local target="$2"
+    local perms="${3:-0600}"
+    local backup_file
+
+    # Validate paths
+    fn_validate_path "${source}" || return 1
+    fn_validate_path "${target}" || return 1
+
+    # Check if source exists
+    if [[ ! -e "${source}" ]]; then
+        fn_log_error "Source file does not exist: ${source}"
+        return 1
+    fi
+
+    # If target is a symlink, remove it (remedies tools that reject symlinks with durable_path_unsafe)
+    if [[ -L "${target}" ]]; then
+        printf "Removing symlink to replace with regular file: %s\n" "${target}"
+        rm -f "${target}"
+    fi
+
+    # If target is identical, ensure permissions and return
+    if [[ -f "${target}" ]] && cmp -s "${source}" "${target}"; then
+        chmod "${perms}" "${target}" 2>/dev/null || true
+        return 0
+    fi
+
+    # Backup existing differing file
+    if [[ -f "${target}" ]]; then
+        backup_file="${target}.old$(date +%Y%m%d_%H%M%S)"
+        printf "File found: %s ... backing up to %s\n" "${target}" "${backup_file}"
+        if ! mv "${target}" "${backup_file}"; then
+            fn_log_error "Failed to back up ${target}"
+            return 1
+        fi
+    fi
+
+    local target_dir
+    target_dir="$(dirname "${target}")"
+    if [[ ! -d "${target_dir}" ]]; then
+        fn_mkdir_if_needed "${target_dir}" || return 1
+    fi
+
+    printf "Syncing: %s -> %s\n" "${source}" "${target}"
+    if cp "${source}" "${target}" && chmod "${perms}" "${target}"; then
+        return 0
+    else
+        fn_log_error "Failed to sync file: ${source} -> ${target}"
+        return 1
+    fi
+}
+
 fn_rm_on_update_if_needed() {
     # 
     # Arguments:

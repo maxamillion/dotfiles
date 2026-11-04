@@ -413,6 +413,27 @@ personalolgoose() {
     goose "$@"
 }
 
+rhtfx() {
+    if [[ -z "${ENMAAS_KEY}" ]]; then
+        printf "Error: ENMAAS_KEY is not set. Ensure it is defined in ~/.env\n" >&2
+        return 1
+    fi
+
+    # Sync config from repo to ~/.fx/settings.json if missing or changed,
+    # ensuring it remains a regular file with 0600 permissions (avoids fx durable_path_unsafe).
+    local _fx_repo_cfg="${HOME}/dotfiles/fx-settings.json"
+    local _fx_target_cfg="${HOME}/.fx/settings.json"
+    if [[ -f "${_fx_repo_cfg}" ]] && ! cmp -s "${_fx_repo_cfg}" "${_fx_target_cfg}" 2>/dev/null; then
+        mkdir -p "${HOME}/.fx"
+        cp -f "${_fx_repo_cfg}" "${_fx_target_cfg}"
+        chmod 600 "${_fx_target_cfg}"
+    fi
+
+    FX_PROVIDER="${FX_PROVIDER:-enmaas}" \
+    FX_MODEL="${FX_MODEL:-gemini-3.8-flash}" \
+    fx "$@"
+}
+
 cleancontainers() {
     # Clean exited containers
     for container in $(cruntime ps -a | awk '/Exited/{ print $1}')

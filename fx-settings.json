@@ -1,0 +1,152 @@
+{
+  "fast_mode": false,
+  "fast_mode_model_bound": true,
+  "models": {
+    "enmaas": "gemini-3.8-flash"
+  },
+  "provider": "enmaas",
+  "providers": {
+    "enmaas": {
+      "auth": {
+        "env": "ENMAAS_KEY",
+        "type": "bearer"
+      },
+      "base_url": "https://api.enmaas.devshift.net/v1",
+      "model_metadata": {
+        "gemini-3.1-pro-preview": {
+          "context_window": 1048576,
+          "max_output_tokens": 65536,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gemini-3.6-flash": {
+          "context_window": 1048576,
+          "max_output_tokens": 65536,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gemini-3.7-flash": {
+          "context_window": 1048576,
+          "max_output_tokens": 65536,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gemini-3.8-flash": {
+          "context_window": 1048576,
+          "max_output_tokens": 65536,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-4o-mini": {
+          "context_window": 128000,
+          "max_output_tokens": 16384,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5-mini": {
+          "context_window": 400000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.2": {
+          "context_window": 400000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.3-codex": {
+          "context_window": 400000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.4": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.4-mini": {
+          "context_window": 400000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.4-nano": {
+          "context_window": 400000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.5": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.6-luna": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.6-sol": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-5.6-terra": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-6-astra": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-6-luna": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-6-sol": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "gpt-6.1-sol": {
+          "context_window": 272000,
+          "max_output_tokens": 128000,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "rits/deepseek-ai/DeepSeek-V4.1-Flash-1017": {
+          "context_window": 1048576,
+          "max_output_tokens": 262144,
+          "supports_tool_use": true,
+          "supports_vision": true
+        },
+        "rits/zai-org/glm-5-3": {
+          "context_window": 1048576,
+          "max_output_tokens": 65536,
+          "supports_tool_use": true,
+          "supports_vision": false
+        }
+      },
+      "protocol": "openai-chat-completions"
+    }
+  },
+  "statusLine": {
+    "context": true,
+    "session": true,
+    "workspace": true
+  },
+  "ultrafast_mode": false
+}

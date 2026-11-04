@@ -62,6 +62,8 @@ fn_symlink_if_needed "${_DOTFILES_DIR}/goose-config.yaml"    "${HOME}/.config/go
 fn_symlink_if_needed "${_DOTFILES_DIR}/goosehints"            "${HOME}/.config/goose/.goosehints"
 fn_mkdir_if_needed "${HOME}/.config/goose/recipes"
 fn_symlink_if_needed "${_DOTFILES_DIR}/kitty.conf"            "${HOME}/.config/kitty/kitty.conf"
+fn_mkdir_if_needed "${HOME}/.fx"
+fn_copy_or_sync_if_needed "${_DOTFILES_DIR}/fx-settings.json" "${HOME}/.fx/settings.json" "0600"
 
 # Run workstation-specific bootstrap
 _WORKSTATION_SCRIPT="${_DOTFILES_DIR}/bootstrap-workstation.sh"
