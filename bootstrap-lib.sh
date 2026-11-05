@@ -1125,6 +1125,7 @@ fn_system_setup_fedora_el() {
         "cmake"
         "gcc"
         "gcc-c++"
+        "zig"
         "golang"
         "just"
         "rust"
