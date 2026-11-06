@@ -50,6 +50,7 @@ git_repos=(
     "${dev_dir}/fx git@github.com:maxamillion/fx.git https://github.com/vercel-labs/fx.git"
     "${dev_dir}/goose git@github.com:maxamillion/goose.git https://github.com/aaif-goose/goose.git"
     "${dev_dir}/goosetown git@github.com:maxamillion/goosetown.git https://github.com/aaif-goose/goosetown.git"
+    "${dev_dir}/command-center git@github.com:maxamillion/command-center.git https://github.com/jctanner/command-center.git"
     "${dev_dir}/agent-trace git@github.com:maxamillion/agent-trace.git https://github.com/stump-wtf/agent-trace.git"
     "${dev_dir}/tau git@github.com:maxamillion/tau.git https://github.com/huggingface/tau.git"
     "${dev_dir}/openshell git@github.com:maxamillion/OpenShell.git https://github.com/NVIDIA/OpenShell.git"
