@@ -333,12 +333,19 @@ rhtopencode() {
     opencode "$@"
 }
 
-rhtagoose() {
-    # GOOSE_PLANNER_MODEL="claude-sonnet-5" \
-    # GOOSE_EDITOR_MODEL="claude-sonnet-5" \
+rhtasgoose() {
     GOOSE_PROVIDER="gcp_vertex_ai" \
     GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
     GOOSE_MODEL="claude-sonnet-5-5" \
+    GCP_PROJECT_ID="${_rht_vertex_project_id}" \
+    GCP_LOCATION="${_rht_vertex_region}" \
+    goose "$@"
+}
+
+rhtahgoose() {
+    GOOSE_PROVIDER="gcp_vertex_ai" \
+    GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
+    GOOSE_MODEL="claude-haiku-5-5" \
     GCP_PROJECT_ID="${_rht_vertex_project_id}" \
     GCP_LOCATION="${_rht_vertex_region}" \
     goose "$@"
