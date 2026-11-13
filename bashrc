@@ -378,6 +378,17 @@ rhtglmgoose() {
     goose "$@"
 }
 
+rhtmsgoose() {
+    GOOSE_PROVIDER="openai" \
+    GOOSE_MODEL="rits/meta-models/Muse-Spark-Open-816B-A42B-NVFP4" \
+    GOOSE_MAX_TOKENS="65536" \
+    GOOSE_CONTEXT_LIMIT="1000000" \
+    OPENAI_HOST="${_rht_openai_host}" \
+    OPENAI_API_KEY="${ENMAAS_KEY}" \
+    OPENAI_BASE_PATH="v1/chat/completions" \
+    goose "$@"
+}
+
 rhtosgoose() {
     GOOSE_PROVIDER="openai" \
     OPENAI_HOST="${_rht_openai_host}" \
