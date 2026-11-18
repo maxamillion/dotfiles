@@ -358,10 +358,9 @@ rhtggoose() {
     OPENAI_BASE_PATH="v1/chat/completions" \
     OPENAI_HOST="${_rht_openai_host}" \
     OPENAI_API_KEY="${ENMAAS_KEY}" \
-    GOOSE_MODEL="gemini-3.8-flash" \
+    GOOSE_MODEL="gemini-4-hydrogen" \
     GOOSE_MAX_TOKENS="65536" \
     GOOSE_CONTEXT_LIMIT="1048576" \
-    GEMINI3_THINKING_LEVEL="low" \
     GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
     GOOSE_PLANNER_MODEL="gemini-3.8-flash" \
     goose "$@"
