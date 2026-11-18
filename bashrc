@@ -335,7 +335,6 @@ rhtopencode() {
 
 rhtasgoose() {
     GOOSE_PROVIDER="gcp_vertex_ai" \
-    GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
     GOOSE_MODEL="claude-sonnet-5-5" \
     GCP_PROJECT_ID="${_rht_vertex_project_id}" \
     GCP_LOCATION="${_rht_vertex_region}" \
@@ -344,7 +343,6 @@ rhtasgoose() {
 
 rhtahgoose() {
     GOOSE_PROVIDER="gcp_vertex_ai" \
-    GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
     GOOSE_MODEL="claude-haiku-5-5" \
     GCP_PROJECT_ID="${_rht_vertex_project_id}" \
     GCP_LOCATION="${_rht_vertex_region}" \
@@ -352,8 +350,6 @@ rhtahgoose() {
 }
 
 rhtggoose() {
-    # GOOSE_PLANNER_MODEL="claude-sonnet-5" \
-    # GOOSE_EDITOR_MODEL="claude-sonnet-5" \
     GOOSE_PROVIDER="openai" \
     OPENAI_BASE_PATH="v1/chat/completions" \
     OPENAI_HOST="${_rht_openai_host}" \
@@ -361,8 +357,6 @@ rhtggoose() {
     GOOSE_MODEL="gemini-4-hydrogen" \
     GOOSE_MAX_TOKENS="65536" \
     GOOSE_CONTEXT_LIMIT="1048576" \
-    GOOSE_PLANNER_PROVIDER="gcp_vertex_ai" \
-    GOOSE_PLANNER_MODEL="gemini-3.8-flash" \
     goose "$@"
 }
 
@@ -395,7 +389,6 @@ rhtosgoose() {
     GOOSE_MODEL="gpt-6.1-sol" \
     GOOSE_MAX_TOKENS="128000" \
     GOOSE_CONTEXT_LIMIT="1050000" \
-    GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
     GOOSE_THINKING_EFFORT="high" \
     goose "$@"
 }
@@ -407,7 +400,6 @@ rhtolgoose() {
     GOOSE_MODEL="gpt-6-luna" \
     GOOSE_MAX_TOKENS="128000" \
     GOOSE_CONTEXT_LIMIT="1050000" \
-    GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
     GOOSE_THINKING_EFFORT="low" \
     goose "$@"
 }
@@ -425,7 +417,6 @@ personalolgoose() {
     GOOSE_MODEL="gpt-6-luna" \
     GOOSE_MAX_TOKENS="128000" \
     GOOSE_CONTEXT_LIMIT="1050000" \
-    GOOSE_PLANNER_CONTEXT_LIMIT="1050000" \
     GOOSE_THINKING_EFFORT="low" \
     goose "$@"
 }
